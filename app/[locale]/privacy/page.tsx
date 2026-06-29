@@ -78,7 +78,7 @@ export default function PrivacyPolicyPage() {
           </h1>
           <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
             Every file you convert on EveryFileConvert stays on your device. Our entire platform is engineered so
-            that no file data ever reaches our — or anyone else's — servers.
+            that no file data ever reaches our — or anyone else&apos;s — servers.
           </p>
           <p className="text-sm text-slate-500 mt-6">Last updated: {lastUpdated}</p>
         </div>
@@ -89,9 +89,9 @@ export default function PrivacyPolicyPage() {
         <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-2xl p-8 mb-12">
           <h2 className="text-xl font-bold text-emerald-400 mb-3">Our Core Privacy Commitment</h2>
           <p className="text-slate-300 leading-relaxed text-lg">
-            "We do NOT upload your files to any server. All image, audio, video, and PDF processing happens
+            &quot;We do NOT upload your files to any server. All image, audio, video, and PDF processing happens
             entirely inside your browser via client-side technologies. Your data never leaves your device. No
-            logs, no history, and 100% security."
+            logs, no history, and 100% security.&quot;
           </p>
         </div>
 
@@ -128,7 +128,7 @@ export default function PrivacyPolicyPage() {
           <PolicySection title="2. How File Conversion Works">
             <p>
               All conversion operations are performed client-side using WebAssembly and JavaScript running in
-              your browser. When you select a file, it is loaded into your browser's local memory (RAM). The
+              your browser. When you select a file, it is loaded into your browser&apos;s local memory (RAM). The
               conversion engine — compiled to WebAssembly — processes the file entirely within that memory
               space. The output file is then made available for download directly from your browser. At no point
               is any file data transmitted over the network to our servers or any third-party service.

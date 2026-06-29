@@ -83,7 +83,7 @@ export default function TermsOfServicePage() {
         <div className="space-y-10 text-slate-400">
           <TermsSection title="1. Acceptance of Terms">
             <p>
-              By accessing or using EveryFileConvert (the "Service"), you agree to be bound by these Terms of
+              By accessing or using EveryFileConvert (the &quot;Service&quot;), you agree to be bound by these Terms of
               Service. If you do not agree to these terms, please do not use the Service. We reserve the right
               to update these terms at any time; continued use of the Service constitutes acceptance of any
               revised terms.
@@ -94,7 +94,7 @@ export default function TermsOfServicePage() {
             <p>
               EveryFileConvert is a free online file conversion platform. Users can convert files across video,
               audio, image, document, PDF, and e-book formats directly in their web browser. The service is
-              provided "as is" without any server-side restrictions. All file processing occurs client-side;
+              provided &quot;as is&quot; without any server-side restrictions. All file processing occurs client-side;
               no files are uploaded to our servers.
             </p>
           </TermsSection>
@@ -119,7 +119,7 @@ export default function TermsOfServicePage() {
               </li>
             </ul>
             <p className="mt-3">
-              These limits exist because conversions run in-browser and are constrained by your device's
+              These limits exist because conversions run in-browser and are constrained by your device&apos;s
               available RAM and processing capacity, not by a server queue.
             </p>
           </TermsSection>
@@ -146,7 +146,7 @@ export default function TermsOfServicePage() {
 
           <TermsSection title="6. Disclaimer of Warranties">
             <p>
-              The Service is provided "as is" and "as available" without warranties of any kind, express or
+              The Service is provided &quot;as is&quot; and &quot;as available&quot; without warranties of any kind, express or
               implied, including but not limited to merchantability, fitness for a particular purpose, or
               non-infringement. We do not guarantee that the Service will be uninterrupted, error-free, or
               produce a specific conversion result.

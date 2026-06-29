@@ -56,7 +56,6 @@ export function getDictionarySync(locale: Locale): Record<string, unknown> {
   }
   // Fallback: load inline
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const dict = require(`../../locales/${locale}.json`);
     dictCache.set(locale, dict);
     return dict;

@@ -99,7 +99,32 @@ BreadcrumbList JSON-LD added to 9 category hub pages:
 
 Logical hierarchy (3-level for tools, 2-level for hub pages) reflects the navigation structure.
 
-## Updated Prioritised Backlog
+## Phase 5A — Code Quality, Stability & Production Validation (Completed)
+
+### Task 1 & 2 — TypeScript
+- **Status: CLEAN** — `npx tsc --noEmit` exits 0 with no output.
+- The previously-observed HomeClient.tsx warnings were only visible during incremental compilation in the previous session; the full project type-check is clean.
+
+### Task 3 — ESLint
+Fixed 3 files with `react/no-unescaped-entities` errors (introduced by Phase 4B):
+- `app/not-found.tsx` — `you're` → `you&apos;re`, `doesn't` → `doesn&apos;t`
+- `app/[locale]/privacy/page.tsx` — `else's` → `else&apos;s`, opening/closing `"` → `&quot;`, `browser's` → `browser&apos;s`
+- `app/[locale]/terms/page.tsx` — `"Service"` → `&quot;Service&quot;`, `"as is"` / `"as available"` → `&quot;`, `device's` → `device&apos;s`
+- `lib/i18n/config.ts` — Removed invalid `// eslint-disable-next-line @typescript-eslint/no-require-imports` comment (plugin not installed, comment caused the error itself)
+
+All remaining ESLint output is pre-existing **Warnings** only (in untouched converter components) — zero Errors.
+
+### Task 4 — Production Build
+- **Status: PASS** — `npm run build` succeeds. BUILD_ID generated. Only warning is pre-existing `node-fetch` optional `encoding` module (irrelevant to runtime).
+
+### Task 5 — Runtime Stability
+All routes return HTTP 200:
+`/`, `/en`, `/en/png-to-jpg`, `/en/image-converter`, `/en/pdf-tools`, `/en/ebook-converter`, `/en/about`, `/en/privacy`, `/en/terms`, `/en/view`, `/en/view/pdf`, `/en/tools/image-cropper`, `/tr/png-to-jpg`, `/robots.txt`, `/image-sitemap.xml`
+
+### Task 6 — Safe Code Cleanup
+- Removed unused eslint-disable comment in `lib/i18n/config.ts`
+- No unused imports found in Phase 4B-modified files
+
 
 ### P0 — Complete
 - ✅ robots.txt
