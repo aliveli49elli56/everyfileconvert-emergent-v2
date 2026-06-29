@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 200 98% 46%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 200 98% 46%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+@layer utilities {
+  .gradient-text {
+    @apply bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent;
+  }
+
+  .gradient-bg {
+    @apply bg-gradient-to-r from-blue-600 to-cyan-500;
+  }
+
+  .glass {
+    @apply bg-white/80 backdrop-blur-lg border border-white/20;
+  }
+}
+
+@layer components {
+  .hero-gradient {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 25%, #f0fdf4 50%, #fefce8 75%, #fff1f2 100%);
+  }
+
+  .drop-zone {
+    @apply relative flex flex-col items-center justify-center p-12 border-2 border-dashed rounded-2xl cursor-pointer transition-all duration-300;
+  }
+
+  .drop-zone:hover {
+    @apply border-cyan-400 bg-cyan-50/50;
+  }
+
+  .drop-zone.active {
+    @apply border-cyan-500 bg-cyan-50;
+  }
+
+  .format-badge {
+    @apply inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-md uppercase tracking-wide;
+  }
+
+  .format-badge.video {
+    @apply bg-violet-100 text-violet-700;
+  }
+
+  .format-badge.audio {
+    @apply bg-rose-100 text-rose-700;
+  }
+
+  .format-badge.image {
+    @apply bg-emerald-100 text-emerald-700;
+  }
+
+  .format-badge.document {
+    @apply bg-amber-100 text-amber-700;
+  }
+
+  .category-card {
+    @apply relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+  }
+
+  .category-card::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.05) 0%, rgba(34, 211, 238, 0.05) 100%);
+  }
+
+  .category-card:hover::before {
+    @apply opacity-100;
+  }
+}
+
+@layer utilities {
+  .ad-safe-margin {
+    @apply my-8 py-4;
+  }
+
+  .download-safe-zone {
+    @apply py-8 my-2;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}

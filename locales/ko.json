@@ -1,0 +1,203 @@
+{
+  "converters": {
+    "titles": [
+      "변환기",
+      "변환 프로그램",
+      "파일 변환기",
+      "변환"
+    ],
+    "features": [
+      "무료, 온라인 및 무제한",
+      "온라인 무료 변환",
+      "온라인 및 무료",
+      "빠른 온라인 변환"
+    ]
+  },
+  "image_resizer": {
+    "titles": [
+      "이미지 크기 조정",
+      "이미지 크기 축소기",
+      "사진 해상도 변경",
+      "온라인 이미지 크기 조정기"
+    ],
+    "features": [
+      "화질 손상 없음",
+      "일괄 이미지 크기 조정",
+      "빠르고 무료",
+      "무손실 크기 조정"
+    ]
+  },
+  "image_crop": {
+    "titles": [
+      "온라인 이미지 자르기",
+      "이미지 자르기 도구",
+      "사진 크로퍼",
+      "온라인 이미지 커터"
+    ],
+    "features": [
+      "브라우저에서 쉽게 자르기",
+      "무료 및 무제한",
+      "업로드 불필요"
+    ]
+  },
+  "compress_audio": {
+    "titles": [
+      "오디오 압축",
+      "MP3 크기 축소",
+      "오디오 파일 압축기",
+      "온라인 오디오 압축"
+    ],
+    "features": [
+      "화질 손상 없음",
+      "온라인 오디오 크기 축소",
+      "무료 및 빠름"
+    ]
+  },
+  "global_privacy": [
+    "브라우저 내 안전한 처리",
+    "서버 업로드 없음",
+    "개인 정보 보호 중심 변환"
+  ],
+  "nav": {
+    "home": "홈",
+    "video": "동영상",
+    "audio": "오디오",
+    "image": "이미지",
+    "pdf": "PDF",
+    "ebook": "전자책",
+    "howItWorks": "작동 방식",
+    "startConverting": "변환 시작"
+  },
+  "hero": {
+    "badge": "형식 - 변환",
+    "title": "모든 파일 변환",
+    "titleHighlight": "즉시",
+    "subtitle": "브라우저에서 직접 동영상, 오디오, 이미지, 문서를 변환합니다. 업로드 없음, 완전한 프라이버시.",
+    "uploadBtn": "파일 업로드",
+    "browseBtn": "도구 탐색",
+    "filesConverted": "파일 변환됨"
+  },
+  "categories": {
+    "imageConverter": "이미지 변환기",
+    "imageConverterDesc": "PNG, JPG, WebP, GIF, SVG 등 형식 간 변환",
+    "videoConverter": "동영상 변환기",
+    "videoConverterDesc": "MP4, WebM, AVI, MOV, MKV 및 기타 형식 변환",
+    "audioConverter": "오디오 변환기",
+    "audioConverterDesc": "MP3, WAV, FLAC, AAC, OGG 오디오 파일 변환",
+    "pdfTools": "PDF 도구",
+    "pdfToolsDesc": "PDF 파일 변환, 병합, 분할 및 압축",
+    "imageResizer": "이미지 크기 조정기",
+    "imageResizerDesc": "화질을 유지하면서 이미지를 원하는 크기로 조정",
+    "backgroundRemover": "배경 제거기",
+    "backgroundRemoverDesc": "AI로 이미지에서 배경을 즉시 제거",
+    "ebookConverter": "전자책 변환기",
+    "ebookConverterDesc": "EPUB, MOBI, AZW3을 PDF, TXT, HTML 등으로 온라인 변환",
+    "getStarted": "시작하기",
+    "onlineViewer": "온라인 뷰어",
+    "onlineViewerDesc": "브라우저에서 직접 75개 이상의 파일 형식을 열고 볼 수 있습니다. 설치 불필요."
+  },
+  "features": {
+    "private": "100% 비공개",
+    "privateDesc": "파일이 기기를 절대 벗어나지 않습니다. 모든 처리가 브라우저에서 로컬로 이루어집니다.",
+    "fast": "번개처럼 빠름",
+    "fastDesc": "업로드 지연 없음. WebAssembly 기술로 파일을 즉시 변환합니다.",
+    "secure": "안전",
+    "secureDesc": "파일이 어떤 서버에도 저장되지 않습니다. 완전한 데이터 개인 정보 보호."
+  },
+  "allInOne": "올인원 파일 도구",
+  "allInOneDesc": "파일 변환 및 편집 도구 모음에서 선택하세요",
+  "supportedFormats": "지원 형식",
+  "supportedFormatsDesc": "동영상, 오디오, 이미지, 벡터, CAD 및 문서 카테고리에서 {count}가지 파일 형식을 지원합니다",
+  "readyToConvert": "변환할 준비가 되었나요?",
+  "readyToConvertDesc": "지금 바로 파일 변환을 시작하세요. 회원가입 필요 없음, 제한 없음.",
+  "converter": {
+    "convertTo": "변환 대상:",
+    "moreFormats": "더 많은 형식...",
+    "converting": "변환 중...",
+    "conversionComplete": "변환 완료!",
+    "cancel": "취소",
+    "download": "다운로드",
+    "selectFormat": "형식 선택",
+    "dropFile": ".{ext} 파일을 여기에 놓으세요",
+    "dropSubtitle": "또는 기기에서 파일을 찾으려면 클릭하세요",
+    "accepts": ".{ext} 파일 허용",
+    "fileSizeExceeds": "파일 크기가 제한을 초과합니다",
+    "conversionFailed": "변환 실패. 다른 형식이나 파일을 사용해 보세요.",
+    "downloadFailed": "파일 다운로드 실패",
+    "noFormatSelected": "출력 형식이 선택되지 않았습니다"
+  },
+  "trustSignals": {
+    "private": "100% 비공개",
+    "privateDesc": "파일이 기기를 절대 벗어나지 않습니다",
+    "instant": "즉시",
+    "instantDesc": "브라우저 내 처리",
+    "noAccount": "계정 불필요",
+    "noAccountDesc": "회원가입 불필요"
+  },
+  "howItWorks": "{IN}을 온라인에서 {OUT}으로 변환하는 방법",
+  "howItWorksSingle": "{IN} 파일 변환 방법",
+  "steps": {
+    "upload": "위의 드롭 영역을 사용하여 .{ext} 파일을 업로드하거나 클릭하여 탐색",
+    "selectFormat": "사용 가능한 옵션에서 대상 형식 선택",
+    "converts": "파일이 브라우저 내에서 완전히 .{out} 형식으로 자동 변환됩니다",
+    "download": "변환된 파일 다운로드 — 계정이나 이메일 불필요",
+    "convertsSingle": "파일이 브라우저 내에서 선택한 형식으로 자동 변환됩니다"
+  },
+  "faq": {
+    "title": "자주 묻는 질문",
+    "q1": "{IN}을 온라인에서 무료로 {OUT}으로 어떻게 변환하나요?",
+    "a1": "드롭 영역을 사용하여 {inputName} 파일을 업로드하세요. 파일이 브라우저에서 즉시 {outputName} 형식으로 변환됩니다. 데스크톱: 최대 500MB, 모바일: 최대 200MB.",
+    "q2": "{IN}을 온라인에서 {OUT}으로 변환하는 것이 안전하고 비공개인가요?",
+    "a2": "완전히. 변환기가 100% 브라우저에서 실행되므로 {IN} 파일이 기기를 절대 벗어나지 않습니다.",
+    "q3": "{IN}에서 {OUT} 변환의 최대 파일 크기는 얼마인가요?",
+    "a3": "데스크톱: 최대 500MB. 모바일: 최대 200MB. 모든 처리가 브라우저에서 로컬로 이루어집니다.",
+    "q1single": "온라인에서 {IN} 파일을 어떻게 변환하나요?",
+    "a1single": "{inputName} 파일을 업로드하고 대상 형식을 선택하면 즉시 변환됩니다. 데스크톱: 최대 500MB, 모바일: 최대 200MB.",
+    "q2single": "{IN} 파일 온라인 변환이 안전한가요?",
+    "a2single": "완전히. 변환기가 100% 브라우저에서 실행됩니다. 파일이 기기를 절대 벗어나지 않습니다.",
+    "q3single": "{IN} 변환의 최대 파일 크기는 얼마인가요?",
+    "a3single": "데스크톱: 최대 500MB. 모바일: 최대 200MB."
+  },
+  "popularConversions": "인기 변환",
+  "allTools": "모든 {category} 도구",
+  "viewAllTools": "모든 {category} 도구 보기",
+  "breadcrumb": {
+    "home": "홈",
+    "tools": "{category} 도구",
+    "converter": "{IN}에서 {OUT} 변환기",
+    "singleConverter": "{IN} 변환기"
+  },
+  "footer": {
+    "description": "브라우저에서 직접 모든 파일 형식을 변환합니다. 서버에 업로드하지 않음, 개인 정보 걱정 없음.",
+    "product": "제품",
+    "popularConversions": "인기 변환",
+    "company": "회사",
+    "rights": "모든 권리 보유.",
+    "clientSide": "100% 클라이언트 측 처리",
+    "noServer": "서버 업로드 없음",
+    "videoConverter": "동영상 변환기",
+    "audioConverter": "오디오 변환기",
+    "imageConverter": "이미지 변환기",
+    "documentConverter": "문서 변환기",
+    "aboutUs": "회사 소개",
+    "privacyPolicy": "개인정보 처리방침",
+    "termsOfService": "서비스 약관",
+    "contact": "연락처"
+  },
+  "meta": {
+    "homeTitle": "EveryFileConvert - 무료 온라인 파일 변환기 | 동영상, 오디오, 이미지 및 문서 변환",
+    "homeDesc": "브라우저에서 모든 파일 형식을 즉시 변환합니다. 데스크톱: 최대 500MB, 모바일: 최대 200MB. 100% 클라이언트 측 처리.",
+    "conversionTitle": "{IN} {OUT} 변환기 | 온라인 무료 변환 - EveryFileConvert",
+    "conversionDesc1": "최고의 온라인 {IN}에서 {OUT} 변환기. 데스크톱: 최대 500MB, 모바일: 최대 200MB. 서버 업로드 없음, 브라우저에서 직접.",
+    "conversionDesc2": "{inputName}을 온라인에서 몇 초 만에 {outputName}으로 변환. 데스크톱: 500MB, 모바일: 200MB. 안전하고 빠르고 무료.",
+    "conversionDesc3": "{IN}을 온라인에서 {OUT}으로 변환하는 가장 좋은 방법. 데스크톱: 500MB, 모바일: 200MB. 설치 없음, 회원가입 없음.",
+    "singleTitle": "{IN} 변환기 - 온라인 여러 형식으로 변환 | EveryFileConvert",
+    "singleDesc": "최고의 온라인 {inputName} 변환기. 데스크톱: 최대 500MB, 모바일: 최대 200MB. 100% 비공개, 안전, 무료.",
+    "resizerTitle": "온라인 이미지 크기 조정 - 무료 및 빠름 | EveryFileConvert",
+    "resizerDesc": "온라인에서 무료로 이미지 크기를 조정합니다. 데스크톱: 최대 500MB, 모바일: 최대 200MB. 서버 업로드 없음.",
+    "cropTitle": "온라인 이미지 자르기 - 무료 도구 | EveryFileConvert",
+    "cropDesc": "온라인에서 무료로 이미지를 자릅니다. 데스크톱: 최대 500MB, 모바일: 최대 200MB.",
+    "compressAudioTitle": "온라인 오디오 압축 - 무료 MP3 크기 축소기 | EveryFileConvert",
+    "compressAudioDesc": "온라인에서 무료로 오디오 파일을 압축합니다. 데스크톱: 최대 500MB, 모바일: 최대 200MB. 품질 손상 없음."
+  }
+}

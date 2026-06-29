@@ -1,0 +1,203 @@
+{
+  "converters": {
+    "titles": [
+      "Converter",
+      "Conversion Tool",
+      "File Converter",
+      "Convert"
+    ],
+    "features": [
+      "Free, Online & Unlimited",
+      "Convert Online for Free",
+      "Online & Free",
+      "Fast Online Conversion"
+    ]
+  },
+  "image_resizer": {
+    "titles": [
+      "Image Resizer",
+      "Image Size Reducer",
+      "Photo Resolution Changer",
+      "Resize Images Online"
+    ],
+    "features": [
+      "Without Quality Loss",
+      "Bulk Image Resizing",
+      "Fast & Free",
+      "Lossless Resize"
+    ]
+  },
+  "image_crop": {
+    "titles": [
+      "Crop Image Online",
+      "Image Cropping Tool",
+      "Photo Cropper",
+      "Online Image Cutter"
+    ],
+    "features": [
+      "Easy Browser Cropping",
+      "Free & Unlimited",
+      "No Upload Required"
+    ]
+  },
+  "compress_audio": {
+    "titles": [
+      "Audio Compressor",
+      "MP3 Size Reducer",
+      "Audio File Compressor",
+      "Compress Audio Online"
+    ],
+    "features": [
+      "Without Quality Loss",
+      "Online Audio Size Reducer",
+      "Free & Fast"
+    ]
+  },
+  "global_privacy": [
+    "Secure In-Browser Processing",
+    "No Server Upload",
+    "Privacy-First Conversion"
+  ],
+  "nav": {
+    "home": "Home",
+    "video": "Video",
+    "audio": "Audio",
+    "image": "Image",
+    "pdf": "PDF",
+    "ebook": "eBook",
+    "howItWorks": "How It Works",
+    "startConverting": "Start Converting"
+  },
+  "hero": {
+    "badge": "Formats - Conversions",
+    "title": "Convert Any File",
+    "titleHighlight": "Instantly",
+    "subtitle": "Transform videos, audio, images, and documents directly in your browser. No uploads, complete privacy.",
+    "uploadBtn": "Upload a File",
+    "browseBtn": "Browse Tools",
+    "filesConverted": "files converted"
+  },
+  "categories": {
+    "imageConverter": "Image Converter",
+    "imageConverterDesc": "Convert between PNG, JPG, WebP, GIF, SVG and more",
+    "videoConverter": "Video Converter",
+    "videoConverterDesc": "Convert MP4, WebM, AVI, MOV, MKV and other formats",
+    "audioConverter": "Audio Converter",
+    "audioConverterDesc": "Convert MP3, WAV, FLAC, AAC, OGG audio files",
+    "pdfTools": "PDF Tools",
+    "pdfToolsDesc": "Convert, merge, split, and compress PDF files",
+    "imageResizer": "Image Resizer",
+    "imageResizerDesc": "Resize images to any dimension while keeping quality",
+    "backgroundRemover": "Background Remover",
+    "backgroundRemoverDesc": "Remove backgrounds from images instantly with AI",
+    "ebookConverter": "E-Book Converter",
+    "ebookConverterDesc": "Convert EPUB, MOBI, AZW3 to PDF, TXT, HTML and more Online",
+    "getStarted": "Get Started",
+    "onlineViewer": "Online Viewer",
+    "onlineViewerDesc": "Open and view 75+ file formats directly in your browser instantly. No installation required."
+  },
+  "features": {
+    "private": "100% Private",
+    "privateDesc": "Files never leave your device. All processing happens locally in your browser.",
+    "fast": "Lightning Fast",
+    "fastDesc": "No upload delays. Convert files instantly with WebAssembly technology.",
+    "secure": "Secure",
+    "secureDesc": "Your files are never stored on any server. Complete data privacy."
+  },
+  "allInOne": "All-In-One File Tools",
+  "allInOneDesc": "Choose from our comprehensive suite of file conversion and editing tools",
+  "supportedFormats": "Supported Formats",
+  "supportedFormatsDesc": "We support {count} different file formats across video, audio, image, vector, CAD, and document categories",
+  "readyToConvert": "Ready to Convert?",
+  "readyToConvertDesc": "Start converting your files now. No registration required, no limits.",
+  "converter": {
+    "convertTo": "Convert to:",
+    "moreFormats": "More formats...",
+    "converting": "Converting...",
+    "conversionComplete": "Conversion Complete!",
+    "cancel": "Cancel",
+    "download": "Download",
+    "selectFormat": "Select a format",
+    "dropFile": "Drop your .{ext} file here",
+    "dropSubtitle": "or click to browse from your device",
+    "accepts": "Accepts .{ext} files",
+    "fileSizeExceeds": "File size exceeds limit",
+    "conversionFailed": "Conversion failed. Please try a different format or file.",
+    "downloadFailed": "Failed to download file",
+    "noFormatSelected": "No output format selected"
+  },
+  "trustSignals": {
+    "private": "100% Private",
+    "privateDesc": "Files never leave your device",
+    "instant": "Instant",
+    "instantDesc": "In-browser processing",
+    "noAccount": "No Account",
+    "noAccountDesc": "No sign-up required"
+  },
+  "howItWorks": "How to Convert {IN} to {OUT} Online",
+  "howItWorksSingle": "How to Convert {IN} Files",
+  "steps": {
+    "upload": "Upload your .{ext} file using the drop zone above or click to browse",
+    "selectFormat": "Select your target format from the available options",
+    "converts": "Your file converts automatically to .{out} format entirely within your browser",
+    "download": "Download your converted file — no account or email needed",
+    "convertsSingle": "Your file converts automatically to your chosen format entirely within your browser"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "q1": "How do I convert {IN} to {OUT} online for free?",
+    "a1": "Upload your {inputName} file using the drop zone above. Your file is instantly converted to {outputName} format right inside your browser using client-side processing — no account, no software, and no cost. When conversion is complete, click Download to save your {OUT} file.",
+    "q2": "Is converting {IN} to {OUT} online safe and private?",
+    "a2": "Completely. Our converter runs 100% in your browser using local processing, so your {IN} file never leaves your device or touches any external server. We do not store, access, or transmit your files at any point.",
+    "q3": "What is the maximum file size for {IN} to {OUT} conversion?",
+    "a3": "Desktop: up to 500 MB. Mobile: up to 200 MB. All processing happens locally in your browser — your files are never uploaded to any server.",
+    "q1single": "How do I convert {IN} files online?",
+    "a1single": "Upload your {inputName} file using the drop zone above. Choose your target format from the selector, and your file converts instantly right inside your browser. When conversion is complete, click Download to save your file.",
+    "q2single": "Is converting {IN} files online safe and private?",
+    "a2single": "Completely. Our converter runs 100% in your browser, so your {IN} file never leaves your device or touches any external server. We do not store, access, or transmit your files.",
+    "q3single": "What is the maximum file size for {IN} conversion?",
+    "a3single": "Desktop: up to 500 MB. Mobile: up to 200 MB. All processing happens locally in your browser — your files are never uploaded to any server."
+  },
+  "popularConversions": "Popular Conversions",
+  "allTools": "All {category} tools",
+  "viewAllTools": "View all {category} tools",
+  "breadcrumb": {
+    "home": "Home",
+    "tools": "{category} Tools",
+    "converter": "{IN} to {OUT} Converter",
+    "singleConverter": "{IN} Converter"
+  },
+  "footer": {
+    "description": "Convert any file format directly in your browser. No uploads to servers, no privacy concerns. Your files stay on your device.",
+    "product": "Product",
+    "popularConversions": "Popular Conversions",
+    "company": "Company",
+    "rights": "All rights reserved.",
+    "clientSide": "100% Client-Side Processing",
+    "noServer": "No Server Uploads",
+    "videoConverter": "Video Converter",
+    "audioConverter": "Audio Converter",
+    "imageConverter": "Image Converter",
+    "documentConverter": "Document Converter",
+    "aboutUs": "About Us",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "contact": "Contact"
+  },
+  "meta": {
+    "homeTitle": "EveryFileConvert - Free Online File Converter | Convert Video, Audio, Image & Documents",
+    "homeDesc": "Convert any file format instantly in your browser. Support for 42+ formats including MP4, MP3, PNG, PDF and more. 100% client-side processing — your files never leave your device. Desktop: up to 500 MB, Mobile: up to 200 MB.",
+    "conversionTitle": "Convert {IN} to {OUT} Online - Free & Secure | EveryFileConvert",
+    "conversionDesc1": "Free online {IN} to {OUT} converter. Convert {inputName} files to {outputName} format instantly in your browser — no account needed. Desktop: up to 500 MB, Mobile: up to 200 MB. Your files are processed locally for maximum privacy.",
+    "conversionDesc2": "Convert {inputName} to {outputName} Online in seconds. Our powerful online converter transforms {IN} files to {OUT} format without uploading to any server. Desktop: up to 500 MB, Mobile: up to 200 MB. Secure, fast, and completely free.",
+    "conversionDesc3": "Best online tool to convert {IN} to {OUT} format. Turn your {inputName} files into {outputName} instantly. Desktop: up to 500 MB, Mobile: up to 200 MB. No installation, no registration, 100% client-side processing.",
+    "singleTitle": "{IN} Converter - Convert to Multiple Formats Online | EveryFileConvert",
+    "singleDesc": "Best online {inputName} converter. Convert to multiple formats instantly in your browser — no account needed. Desktop: up to 500 MB, Mobile: up to 200 MB. 100% private, secure, and free.",
+    "resizerTitle": "Image Resizer Online - Free & Fast | EveryFileConvert",
+    "resizerDesc": "Resize images online for free. Desktop: up to 500 MB, Mobile: up to 200 MB. No upload to any server — all processing happens in your browser. Fast, free, and secure image resizing tool.",
+    "cropTitle": "Crop Image Online - Free Image Cropping Tool | EveryFileConvert",
+    "cropDesc": "Crop images online for free. Desktop: up to 500 MB, Mobile: up to 200 MB. Easy browser-based cropping — no upload to any server required.",
+    "compressAudioTitle": "Compress Audio Online - Free MP3 Size Reducer | EveryFileConvert",
+    "compressAudioDesc": "Compress audio files online for free. Desktop: up to 500 MB, Mobile: up to 200 MB. Reduce MP3, WAV, and other audio file sizes without quality loss — all in your browser."
+  }
+}

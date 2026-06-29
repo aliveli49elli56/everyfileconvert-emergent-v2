@@ -1,0 +1,203 @@
+{
+  "converters": {
+    "titles": [
+      "Dönüştürücü",
+      "Dönüştürme Programı",
+      "Çevirici",
+      "Dönüştür"
+    ],
+    "features": [
+      "Ücretsiz, Çevrimiçi ve Sınırsız",
+      "Çevrimiçi Olarak Ücretsiz Dönüştürün",
+      "Online ve Ücretsiz",
+      "Hızlı Online Dönüşüm"
+    ]
+  },
+  "image_resizer": {
+    "titles": [
+      "Görsel Yeniden Boyutlandırma",
+      "Resim Boyutu Küçültme",
+      "Fotoğraf Çözünürlük Değiştirme",
+      "Online Resim Boyutlandırıcı"
+    ],
+    "features": [
+      "Kalite Kaybı Olmadan",
+      "Toplu Resim Boyutlandırma",
+      "Hızlı ve Ücretsiz",
+      "Kayıpsız Boyutlandırma"
+    ]
+  },
+  "image_crop": {
+    "titles": [
+      "Resim Kırpma Online",
+      "Görsel Kesme Aracı",
+      "Fotoğraf Kırpıcı",
+      "Online Resim Kesici"
+    ],
+    "features": [
+      "Tarayıcıda Kolay Kırpma",
+      "Ücretsiz ve Sınırsız",
+      "Yükleme Gerekmez"
+    ]
+  },
+  "compress_audio": {
+    "titles": [
+      "Ses Sıkıştırma",
+      "MP3 Boyutu Küçültme",
+      "Ses Dosyası Sıkıştırıcı",
+      "Çevrimiçi Ses Sıkıştır"
+    ],
+    "features": [
+      "Kaliteden Ödün Vermeden",
+      "Online Ses Boyutu Azaltma",
+      "Ücretsiz ve Hızlı"
+    ]
+  },
+  "global_privacy": [
+    "Tarayıcıda Güvenli İşlem",
+    "Sunucuya Yükleme Yok",
+    "Gizlilik Odaklı Dönüştürme"
+  ],
+  "nav": {
+    "home": "Ana Sayfa",
+    "video": "Video",
+    "audio": "Ses",
+    "image": "Görsel",
+    "pdf": "PDF",
+    "ebook": "e-Kitap",
+    "howItWorks": "Nasıl Çalışır",
+    "startConverting": "Dönüştürmeye Başla"
+  },
+  "hero": {
+    "badge": "Format - Dönüşüm",
+    "title": "Her Dosyayı",
+    "titleHighlight": "Anında Dönüştür",
+    "subtitle": "Video, ses, görsel ve belgeleri doğrudan tarayıcınızda dönüştürün. Yükleme yok, tam gizlilik.",
+    "uploadBtn": "Dosya Yükle",
+    "browseBtn": "Araçlara Göz At",
+    "filesConverted": "dosya dönüştürüldü"
+  },
+  "categories": {
+    "imageConverter": "Görsel Dönüştürücü",
+    "imageConverterDesc": "PNG, JPG, WebP, GIF, SVG ve daha fazlası arasında dönüştürün",
+    "videoConverter": "Video Dönüştürücü",
+    "videoConverterDesc": "MP4, WebM, AVI, MOV, MKV ve diğer formatları dönüştürün",
+    "audioConverter": "Ses Dönüştürücü",
+    "audioConverterDesc": "MP3, WAV, FLAC, AAC, OGG ses dosyalarını dönüştürün",
+    "pdfTools": "PDF Araçları",
+    "pdfToolsDesc": "PDF dosyalarını dönüştürün, birleştirin, bölün ve sıkıştırın",
+    "imageResizer": "Resim Boyutlandırıcı",
+    "imageResizerDesc": "Görüntüleri kaliteyi koruyarak istediğiniz boyuta getirin",
+    "backgroundRemover": "Arkaplan Kaldırıcı",
+    "backgroundRemoverDesc": "Yapay zeka ile görsellerden arka planları anında kaldırın",
+    "ebookConverter": "e-Kitap Dönüştürücü",
+    "ebookConverterDesc": "EPUB, MOBI, AZW3 dosyalarını PDF, TXT, HTML ve daha fazlasına Çevrimiçi Dönüştürün",
+    "getStarted": "Başla",
+    "onlineViewer": "Online Görüntüleyici",
+    "onlineViewerDesc": "75+ dosya formatını tarayıcınızda anında görüntüleyin. Kurulum gerekmez."
+  },
+  "features": {
+    "private": "%100 Gizli",
+    "privateDesc": "Dosyalar cihazınızı terk etmez. Tüm işlemler tarayıcınızda yerel olarak gerçekleşir.",
+    "fast": "Şimşek Hızında",
+    "fastDesc": "Yükleme gecikmesi yok. WebAssembly teknolojisiyle dosyaları anında dönüştürün.",
+    "secure": "Güvenli",
+    "secureDesc": "Dosyalarınız hiçbir sunucuda saklanmaz. Tam veri gizliliği."
+  },
+  "allInOne": "Her Şey Bir Arada Dosya Araçları",
+  "allInOneDesc": "Kapsamlı dosya dönüştürme ve düzenleme araç paketimizden seçin",
+  "supportedFormats": "Desteklenen Formatlar",
+  "supportedFormatsDesc": "Video, ses, görsel, vektör, CAD ve belge kategorilerinde {count} farklı dosya formatını destekliyoruz",
+  "readyToConvert": "Dönüştürmeye Hazır mısınız?",
+  "readyToConvertDesc": "Dosyalarınızı hemen dönüştürmeye başlayın. Kayıt gerekmez, sınır yok.",
+  "converter": {
+    "convertTo": "Dönüştür:",
+    "moreFormats": "Daha fazla format...",
+    "converting": "Dönüştürülüyor...",
+    "conversionComplete": "Dönüştürme Tamamlandı!",
+    "cancel": "İptal",
+    "download": "İndir",
+    "selectFormat": "Format seçin",
+    "dropFile": ".{ext} dosyanızı buraya bırakın",
+    "dropSubtitle": "veya cihazınızdan taramak için tıklayın",
+    "accepts": ".{ext} dosyaları kabul eder",
+    "fileSizeExceeds": "Dosya boyutu sınırı aştı",
+    "conversionFailed": "Dönüştürme başarısız. Lütfen farklı bir format veya dosya deneyin.",
+    "downloadFailed": "Dosya indirilemedi",
+    "noFormatSelected": "Çıktı formatı seçilmedi"
+  },
+  "trustSignals": {
+    "private": "%100 Gizli",
+    "privateDesc": "Dosyalar cihazınızı terk etmez",
+    "instant": "Anında",
+    "instantDesc": "Tarayıcıda işleme",
+    "noAccount": "Hesap Gerekmez",
+    "noAccountDesc": "Kayıt gerekmez"
+  },
+  "howItWorks": "{IN} dosyasını {OUT} formatına çevirmek için nasıl yapılır",
+  "howItWorksSingle": "{IN} Dosyalarını Nasıl Dönüştürürüm",
+  "steps": {
+    "upload": ".{ext} dosyanızı yukarıdaki bırakma alanına yükleyin veya taramak için tıklayın",
+    "selectFormat": "Mevcut seçeneklerden hedef formatınızı seçin",
+    "converts": "Dosyanız tarayıcınızda .{out} formatına otomatik olarak dönüştürülür",
+    "download": "Dönüştürülen dosyayı indirin — hesap veya e-posta gerekmez",
+    "convertsSingle": "Dosyanız tarayıcınızda seçtiğiniz formata otomatik olarak dönüştürülür"
+  },
+  "faq": {
+    "title": "Sıkça Sorulan Sorular",
+    "q1": "{IN} dosyasını ücretsiz olarak {OUT} formatına nasıl çeviririm?",
+    "a1": "Yukarıdaki bırakma alanını kullanarak {inputName} dosyanızı yükleyin. Dosyanız tarayıcınızda istemci taraflı işleme kullanılarak {outputName} formatına anında dönüştürülür — hesap, yazılım ve maliyet gerekmez. Dönüştürme tamamlandığında {OUT} dosyanızı kaydetmek için İndir'e tıklayın.",
+    "q2": "{IN} dosyasını {OUT} formatına çevirmek çevrimiçi olarak güvenli ve özel midir?",
+    "a2": "Kesinlikle. Dönüştürücümüz tarayıcınızda %100 çalışır; {IN} dosyanız cihazınızı hiçbir zaman terk etmez. Dosyalarınızı hiçbir noktada depolamıyor, erişmiyor veya iletmiyoruz.",
+    "q3": "{IN} ile {OUT} dönüştürmesi için maksimum dosya boyutu nedir?",
+    "a3": "Masaüstü: 500 MB'a kadar. Mobil: 200 MB'a kadar. Tüm işlemler tarayıcınızda yerel olarak gerçekleşir — dosyalarınız hiçbir sunucuya yüklenmez.",
+    "q1single": "{IN} dosyalarını çevrimiçi nasıl dönüştürürüm?",
+    "a1single": "Yukarıdaki bırakma alanını kullanarak {inputName} dosyanızı yükleyin. Seçiciden hedef formatınızı seçin; dosyanız tarayıcınızda anında dönüştürülür. Tamamlandığında dosyayı kaydetmek için İndir'e tıklayın.",
+    "q2single": "{IN} dosyalarını çevrimiçi dönüştürmek güvenli ve özel midir?",
+    "a2single": "Kesinlikle. Dönüştürücümüz tarayıcınızda %100 çalışır; {IN} dosyanız cihazınızı hiçbir zaman terk etmez. Dosyalarınızı depolamıyor, erişmiyor veya iletmiyoruz.",
+    "q3single": "{IN} dönüştürmesi için maksimum dosya boyutu nedir?",
+    "a3single": "Masaüstü: 500 MB'a kadar. Mobil: 200 MB'a kadar. Tüm işlemler tarayıcınızda yerel olarak gerçekleşir — dosyalarınız hiçbir sunucuya yüklenmez."
+  },
+  "popularConversions": "Popüler Dönüşümler",
+  "allTools": "Tüm {category} araçları",
+  "viewAllTools": "Tüm {category} araçlarını görüntüle",
+  "breadcrumb": {
+    "home": "Ana Sayfa",
+    "tools": "{category} Araçları",
+    "converter": "{IN} - {OUT} Dönüştürücü",
+    "singleConverter": "{IN} Dönüştürücü"
+  },
+  "footer": {
+    "description": "Her türlü dosya formatını doğrudan tarayıcınızda dönüştürün. Sunuculara yükleme yok, gizlilik endişesi yok. Dosyalarınız cihazınızda kalır.",
+    "product": "Ürün",
+    "popularConversions": "Popüler Dönüşümler",
+    "company": "Şirket",
+    "rights": "Tüm hakları saklıdır.",
+    "clientSide": "%100 İstemci Tarafında İşleme",
+    "noServer": "Sunucuya Yükleme Yok",
+    "videoConverter": "Video Dönüştürücü",
+    "audioConverter": "Ses Dönüştürücü",
+    "imageConverter": "Görsel Dönüştürücü",
+    "documentConverter": "Belge Dönüştürücü",
+    "aboutUs": "Hakkımızda",
+    "privacyPolicy": "Gizlilik Politikası",
+    "termsOfService": "Kullanım Şartları",
+    "contact": "İletişim"
+  },
+  "meta": {
+    "homeTitle": "EveryFileConvert - Ücretsiz Online Dosya Dönüştürücü | Video, Ses, Görsel ve Belge Dönüştür",
+    "homeDesc": "Herhangi bir dosya formatını tarayıcınızda anında dönüştürün. MP4, MP3, PNG, PDF dahil 42'den fazla format desteği. Masaüstünde 500 MB'a, mobilde 200 MB'a kadar dosyaları sunucuya yüklemeden tamamen tarayıcınızda güvenle dönüştürün.",
+    "conversionTitle": "{IN} {OUT} Dönüştürücü | Çevrimiçi Olarak Ücretsiz Dönüştürün - EveryFileConvert",
+    "conversionDesc1": "En iyi çevrimiçi {IN} ile {OUT} dönüştürme aracı. Masaüstünüzde 500 MB'a, mobilde 200 MB'a kadar dosyaları sunucuya yüklemeden, tamamen tarayıcınızda güvenle dönüştürün.",
+    "conversionDesc2": "{inputName} dosyasını {outputName} formatına çevrimiçi olarak saniyeler içinde dönüştürün. Masaüstünde 500 MB, mobilde 200 MB sınırı. Güvenli, hızlı ve tamamen ücretsiz.",
+    "conversionDesc3": "{IN} dosyasını {OUT} formatına çevirmenin en iyi çevrimiçi yolu. Masaüstünde 500 MB, mobilde 200 MB sınırı. Kurulum gerekmez, kayıt gerekmez, %100 tarayıcı tabanlı.",
+    "singleTitle": "{IN} Dönüştürücü - Birden Fazla Formata Çevrimiçi Dönüştür | EveryFileConvert",
+    "singleDesc": "En iyi çevrimiçi {inputName} dönüştürücü. Masaüstünde 500 MB'a, mobilde 200 MB'a kadar dosyaları tarayıcınızda anında birden fazla formata dönüştürün. %100 gizli, güvenli ve ücretsiz.",
+    "resizerTitle": "Online Resim Boyutlandırıcı - Ücretsiz ve Hızlı | EveryFileConvert",
+    "resizerDesc": "Resimleri çevrimiçi ücretsiz boyutlandırın. Masaüstünde 500 MB'a, mobilde 200 MB'a kadar. Hiçbir sunucuya yükleme yapılmaz — tüm işlemler tarayıcınızda gerçekleşir.",
+    "cropTitle": "Online Resim Kırpma - Ücretsiz Görsel Kesme Aracı | EveryFileConvert",
+    "cropDesc": "Resimleri çevrimiçi ücretsiz kırpın. Masaüstünde 500 MB'a, mobilde 200 MB'a kadar. Hiçbir sunucuya yükleme gerektirmez.",
+    "compressAudioTitle": "Çevrimiçi Ses Sıkıştırma - Ücretsiz MP3 Boyutu Küçültme | EveryFileConvert",
+    "compressAudioDesc": "Ses dosyalarını çevrimiçi ücretsiz sıkıştırın. Masaüstünde 500 MB'a, mobilde 200 MB'a kadar. Kalite kaybı olmadan MP3, WAV ve diğer ses dosyalarını tarayıcınızda küçültün."
+  }
+}

@@ -1,0 +1,203 @@
+{
+  "converters": {
+    "titles": [
+      "Konverterare",
+      "Konverteringsprogram",
+      "Filkonverterare",
+      "Konvertera"
+    ],
+    "features": [
+      "Gratis, Online och Obegränsat",
+      "Konvertera online gratis",
+      "Online och Gratis",
+      "Snabb onlinekonvertering"
+    ]
+  },
+  "image_resizer": {
+    "titles": [
+      "Ändra bildstorlek",
+      "Bildstorlekminskning",
+      "Ändra fotoupplösning",
+      "Online bildstorlekminskning"
+    ],
+    "features": [
+      "Utan kvalitetsförlust",
+      "Batch-ändring av bildstorlek",
+      "Snabbt och Gratis",
+      "Förlustfri storleksändring"
+    ]
+  },
+  "image_crop": {
+    "titles": [
+      "Beskär bild online",
+      "Bildbeskärningsverktyg",
+      "Fotobeskärare",
+      "Online bildklippare"
+    ],
+    "features": [
+      "Enkel webbläsarbeskärning",
+      "Gratis och Obegränsat",
+      "Ingen uppladdning krävs"
+    ]
+  },
+  "compress_audio": {
+    "titles": [
+      "Komprimera ljud",
+      "MP3-storleksminskning",
+      "Ljudfilskompressor",
+      "Komprimera ljud online"
+    ],
+    "features": [
+      "Utan kvalitetsförlust",
+      "Online ljudstorleksminskning",
+      "Gratis och Snabbt"
+    ]
+  },
+  "global_privacy": [
+    "Säker behandling i webbläsaren",
+    "Ingen serveruppladdning",
+    "Integritetsfokuserad konvertering"
+  ],
+  "nav": {
+    "home": "Hem",
+    "video": "Video",
+    "audio": "Ljud",
+    "image": "Bild",
+    "pdf": "PDF",
+    "ebook": "E-bok",
+    "howItWorks": "Hur det fungerar",
+    "startConverting": "Börja konvertera"
+  },
+  "hero": {
+    "badge": "Format - Konverteringar",
+    "title": "Konvertera vilken fil som helst",
+    "titleHighlight": "Omedelbart",
+    "subtitle": "Omvandla videor, ljud, bilder och dokument direkt i din webbläsare. Inga uppladdningar, full integritet.",
+    "uploadBtn": "Ladda upp fil",
+    "browseBtn": "Bläddra bland verktyg",
+    "filesConverted": "filer konverterade"
+  },
+  "categories": {
+    "imageConverter": "Bildkonverterare",
+    "imageConverterDesc": "Konvertera mellan PNG, JPG, WebP, GIF, SVG och mer",
+    "videoConverter": "Videokonverterare",
+    "videoConverterDesc": "Konvertera MP4, WebM, AVI, MOV, MKV och andra format",
+    "audioConverter": "Ljudkonverterare",
+    "audioConverterDesc": "Konvertera MP3, WAV, FLAC, AAC, OGG-ljudfiler",
+    "pdfTools": "PDF-verktyg",
+    "pdfToolsDesc": "Konvertera, sammanfoga, dela och komprimera PDF-filer",
+    "imageResizer": "Bildstorleksändare",
+    "imageResizerDesc": "Ändra storlek på bilder till vilken dimension som helst med bibehållen kvalitet",
+    "backgroundRemover": "Bakgrundsborttagare",
+    "backgroundRemoverDesc": "Ta bort bakgrunder från bilder omedelbart med AI",
+    "ebookConverter": "E-bokskonverterare",
+    "ebookConverterDesc": "Konvertera EPUB, MOBI, AZW3 till PDF, TXT, HTML och mer Online",
+    "getStarted": "Kom igång",
+    "onlineViewer": "Online Visare",
+    "onlineViewerDesc": "Öppna och visa 75+ filformat direkt i din webbläsare. Ingen installation krävs."
+  },
+  "features": {
+    "private": "100% Privat",
+    "privateDesc": "Filer lämnar aldrig din enhet. All bearbetning sker lokalt i din webbläsare.",
+    "fast": "Blixtsnabbt",
+    "fastDesc": "Inga uppladdningsfördröjningar. Konvertera filer omedelbart med WebAssembly-teknik.",
+    "secure": "Säkert",
+    "secureDesc": "Dina filer lagras aldrig på någon server. Fullständig dataintegritet."
+  },
+  "allInOne": "Allt-i-ett filverktyg",
+  "allInOneDesc": "Välj bland vår omfattande svit av filkonverterings- och redigeringsverktyg",
+  "supportedFormats": "Stödda format",
+  "supportedFormatsDesc": "Vi stöder {count} olika filformat för video, ljud, bild, vektor, CAD och dokument",
+  "readyToConvert": "Redo att konvertera?",
+  "readyToConvertDesc": "Börja konvertera dina filer nu. Ingen registrering krävs, inga begränsningar.",
+  "converter": {
+    "convertTo": "Konvertera till:",
+    "moreFormats": "Fler format...",
+    "converting": "Konverterar...",
+    "conversionComplete": "Konvertering klar!",
+    "cancel": "Avbryt",
+    "download": "Ladda ner",
+    "selectFormat": "Välj format",
+    "dropFile": "Släpp din .{ext}-fil här",
+    "dropSubtitle": "eller klicka för att bläddra från din enhet",
+    "accepts": "Accepterar .{ext}-filer",
+    "fileSizeExceeds": "Filstorleken överstiger gränsen",
+    "conversionFailed": "Konvertering misslyckades. Prova ett annat format eller fil.",
+    "downloadFailed": "Det gick inte att ladda ner filen",
+    "noFormatSelected": "Inget utdataformat valt"
+  },
+  "trustSignals": {
+    "private": "100% Privat",
+    "privateDesc": "Filer lämnar aldrig din enhet",
+    "instant": "Omedelbart",
+    "instantDesc": "Bearbetning i webbläsaren",
+    "noAccount": "Inget konto",
+    "noAccountDesc": "Ingen registrering krävs"
+  },
+  "howItWorks": "Hur man konverterar {IN} till {OUT} online",
+  "howItWorksSingle": "Hur man konverterar {IN}-filer",
+  "steps": {
+    "upload": "Ladda upp din .{ext}-fil med hjälp av slippzonen ovan eller klicka för att bläddra",
+    "selectFormat": "Välj ditt målformat från tillgängliga alternativ",
+    "converts": "Din fil konverteras automatiskt till .{out}-format helt i din webbläsare",
+    "download": "Ladda ner din konverterade fil — inget konto eller e-post krävs",
+    "convertsSingle": "Din fil konverteras automatiskt till det valda formatet i din webbläsare"
+  },
+  "faq": {
+    "title": "Vanliga frågor",
+    "q1": "Hur konverterar jag {IN} till {OUT} online gratis?",
+    "a1": "Ladda upp din {inputName}-fil med hjälp av slippzonen. Din fil konverteras omedelbart till {outputName}-format i webbläsaren. Dator: upp till 500 MB, Mobil: upp till 200 MB.",
+    "q2": "Är det säkert och privat att konvertera {IN} till {OUT} online?",
+    "a2": "Fullständigt. Vår konverterare körs 100% i din webbläsare, så din {IN}-fil lämnar aldrig din enhet.",
+    "q3": "Vad är den maximala filstorleken för konvertering av {IN} till {OUT}?",
+    "a3": "Dator: upp till 500 MB. Mobil: upp till 200 MB. All bearbetning sker lokalt i din webbläsare.",
+    "q1single": "Hur konverterar jag {IN}-filer online?",
+    "a1single": "Ladda upp din {inputName}-fil, välj målformat och filen konverteras omedelbart. Dator: upp till 500 MB, Mobil: upp till 200 MB.",
+    "q2single": "Är det säkert att konvertera {IN}-filer online?",
+    "a2single": "Fullständigt. Vår konverterare körs 100% i webbläsaren. Filen lämnar aldrig din enhet.",
+    "q3single": "Vad är den maximala filstorleken för {IN}-konvertering?",
+    "a3single": "Dator: upp till 500 MB. Mobil: upp till 200 MB."
+  },
+  "popularConversions": "Populära konverteringar",
+  "allTools": "Alla {category}-verktyg",
+  "viewAllTools": "Visa alla {category}-verktyg",
+  "breadcrumb": {
+    "home": "Hem",
+    "tools": "{category}-verktyg",
+    "converter": "Konverterare {IN} till {OUT}",
+    "singleConverter": "Konverterare {IN}"
+  },
+  "footer": {
+    "description": "Konvertera vilket filformat som helst direkt i din webbläsare. Inga uppladdningar till servrar, inga integritetsproblem.",
+    "product": "Produkt",
+    "popularConversions": "Populära konverteringar",
+    "company": "Företag",
+    "rights": "Alla rättigheter förbehållna.",
+    "clientSide": "100% klientsidesbearbetning",
+    "noServer": "Ingen serveruppladdning",
+    "videoConverter": "Videokonverterare",
+    "audioConverter": "Ljudkonverterare",
+    "imageConverter": "Bildkonverterare",
+    "documentConverter": "Dokumentkonverterare",
+    "aboutUs": "Om oss",
+    "privacyPolicy": "Integritetspolicy",
+    "termsOfService": "Användarvillkor",
+    "contact": "Kontakt"
+  },
+  "meta": {
+    "homeTitle": "EveryFileConvert - Gratis onlinefilkonverterare | Konvertera Video, Ljud, Bild & Dokument",
+    "homeDesc": "Konvertera vilket filformat som helst omedelbart i din webbläsare. Dator: upp till 500 MB, Mobil: upp till 200 MB. 100% klientsidesbearbetning.",
+    "conversionTitle": "Konverterare {IN} {OUT} | Konvertera online gratis - EveryFileConvert",
+    "conversionDesc1": "Bästa online-konverteraren {IN} till {OUT}. Dator: upp till 500 MB, Mobil: upp till 200 MB. Ingen serveruppladdning, direkt i webbläsaren.",
+    "conversionDesc2": "Konvertera {inputName} till {outputName} online på sekunder. Dator: 500 MB, Mobil: 200 MB. Säkert, snabbt och gratis.",
+    "conversionDesc3": "Bästa sättet att konvertera {IN} till {OUT} online. Dator: 500 MB, Mobil: 200 MB. Ingen installation, ingen registrering.",
+    "singleTitle": "Konverterare {IN} - Konvertera till flera format online | EveryFileConvert",
+    "singleDesc": "Bästa online-konverteraren {inputName}. Dator: upp till 500 MB, Mobil: upp till 200 MB. 100% privat, säkert och gratis.",
+    "resizerTitle": "Ändra bildstorlek online - Gratis och Snabbt | EveryFileConvert",
+    "resizerDesc": "Ändra storlek på bilder online gratis. Dator: upp till 500 MB, Mobil: upp till 200 MB. Ingen serveruppladdning.",
+    "cropTitle": "Beskär bild online - Gratis verktyg | EveryFileConvert",
+    "cropDesc": "Beskär bilder online gratis. Dator: upp till 500 MB, Mobil: upp till 200 MB.",
+    "compressAudioTitle": "Komprimera ljud online - Gratis MP3-storleksminskning | EveryFileConvert",
+    "compressAudioDesc": "Komprimera ljudfiler online gratis. Dator: upp till 500 MB, Mobil: upp till 200 MB. Utan kvalitetsförlust."
+  }
+}

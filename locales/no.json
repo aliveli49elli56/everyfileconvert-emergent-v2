@@ -1,0 +1,203 @@
+{
+  "converters": {
+    "titles": [
+      "Konverter",
+      "Konverteringsverktøy",
+      "Filkonverter",
+      "Konvertér"
+    ],
+    "features": [
+      "Gratis, Online og Ubegrenset",
+      "Konvertér online gratis",
+      "Online og Gratis",
+      "Rask onlinekonvertering"
+    ]
+  },
+  "image_resizer": {
+    "titles": [
+      "Endre bildestørrelse",
+      "Bildestørrelsesreduserer",
+      "Endre fotoupplösning",
+      "Endre bildestørrelse online"
+    ],
+    "features": [
+      "Uten kvalitetstap",
+      "Batch-endring av bildestørrelse",
+      "Raskt og Gratis",
+      "Tapsfri størrelsesendring"
+    ]
+  },
+  "image_crop": {
+    "titles": [
+      "Beskjær bilde online",
+      "Bildebesk jæringsverktøy",
+      "Fotobeskjærer",
+      "Online bildebesk jærer"
+    ],
+    "features": [
+      "Enkel nettleserbeskjæring",
+      "Gratis og Ubegrenset",
+      "Ingen opplasting nødvendig"
+    ]
+  },
+  "compress_audio": {
+    "titles": [
+      "Lydkompressor",
+      "MP3-størrelsesreduserer",
+      "Lydfil-kompressor",
+      "Komprimer lyd online"
+    ],
+    "features": [
+      "Uten kvalitetstap",
+      "Online lydstørrelsesreduserer",
+      "Gratis og Raskt"
+    ]
+  },
+  "global_privacy": [
+    "Sikker behandling i nettleser",
+    "Ingen serveropplasting",
+    "Personvernfokusert konvertering"
+  ],
+  "nav": {
+    "home": "Hjem",
+    "video": "Video",
+    "audio": "Lyd",
+    "image": "Bilde",
+    "pdf": "PDF",
+    "ebook": "E-bok",
+    "howItWorks": "Slik fungerer det",
+    "startConverting": "Start konvertering"
+  },
+  "hero": {
+    "badge": "Formater - Konverteringer",
+    "title": "Konvertér hvilken som helst fil",
+    "titleHighlight": "Øyeblikkelig",
+    "subtitle": "Transformer videoer, lyd, bilder og dokumenter direkte i nettleseren din. Ingen opplastinger, fullstendig personvern.",
+    "uploadBtn": "Last opp en fil",
+    "browseBtn": "Bla gjennom verktøy",
+    "filesConverted": "filer konvertert"
+  },
+  "categories": {
+    "imageConverter": "Bildekonverter",
+    "imageConverterDesc": "Konvertér mellom PNG, JPG, WebP, GIF, SVG og mer",
+    "videoConverter": "Videokonverter",
+    "videoConverterDesc": "Konvertér MP4, WebM, AVI, MOV, MKV og andre formater",
+    "audioConverter": "Lydkonverter",
+    "audioConverterDesc": "Konvertér MP3, WAV, FLAC, AAC, OGG lydfiler",
+    "pdfTools": "PDF-verktøy",
+    "pdfToolsDesc": "Konvertér, slå sammen, del opp og komprimer PDF-filer",
+    "imageResizer": "Bildestørrelsesendrer",
+    "imageResizerDesc": "Endre bildestørrelse til enhver dimensjon med bevart kvalitet",
+    "backgroundRemover": "Bakgrunnsfjerner",
+    "backgroundRemoverDesc": "Fjern bakgrunner fra bilder øyeblikkelig med AI",
+    "ebookConverter": "E-bokkonverter",
+    "ebookConverterDesc": "Konvertér EPUB, MOBI, AZW3 til PDF, TXT, HTML og mer online",
+    "getStarted": "Kom i gang",
+    "onlineViewer": "Online Fremviser",
+    "onlineViewerDesc": "Åpne og vis 75+ filformater direkte i nettleseren din. Ingen installasjon nødvendig."
+  },
+  "features": {
+    "private": "100% Privat",
+    "privateDesc": "Filer forlater aldri enheten din. All behandling skjer lokalt i nettleseren din.",
+    "fast": "Lynraskt",
+    "fastDesc": "Ingen opplastingsforsinkelser. Konvertér filer øyeblikkelig med WebAssembly-teknologi.",
+    "secure": "Sikkert",
+    "secureDesc": "Filene dine lagres aldri på noen server. Fullstendig databeskyttelse."
+  },
+  "allInOne": "Alt-i-ett filverktøy",
+  "allInOneDesc": "Velg fra vår omfattende suite av filkonverterings- og redigeringsverktøy",
+  "supportedFormats": "Støttede formater",
+  "supportedFormatsDesc": "Vi støtter {count} forskjellige filformater på tvers av video, lyd, bilde, vektor, CAD og dokumentkategorier",
+  "readyToConvert": "Klar til å konvertere?",
+  "readyToConvertDesc": "Begynn å konvertere filene dine nå. Ingen registrering kreves, ingen begrensninger.",
+  "converter": {
+    "convertTo": "Konvertér til:",
+    "moreFormats": "Flere formater...",
+    "converting": "Konverterer...",
+    "conversionComplete": "Konvertering fullført!",
+    "cancel": "Avbryt",
+    "download": "Last ned",
+    "selectFormat": "Velg et format",
+    "dropFile": "Slipp .{ext}-filen din her",
+    "dropSubtitle": "eller klikk for å bla gjennom fra enheten din",
+    "accepts": "Aksepterer .{ext}-filer",
+    "fileSizeExceeds": "Filstørrelse overskrider grensen",
+    "conversionFailed": "Konvertering mislyktes. Prøv et annet format eller fil.",
+    "downloadFailed": "Kunne ikke laste ned filen",
+    "noFormatSelected": "Intet utdataformat valgt"
+  },
+  "trustSignals": {
+    "private": "100% Privat",
+    "privateDesc": "Filer forlater aldri enheten din",
+    "instant": "Øyeblikkelig",
+    "instantDesc": "Nettleserbasert behandling",
+    "noAccount": "Ingen konto",
+    "noAccountDesc": "Ingen registrering kreves"
+  },
+  "howItWorks": "Slik konverteres {IN} til {OUT} online",
+  "howItWorksSingle": "Slik konverteres {IN}-filer",
+  "steps": {
+    "upload": "Last opp .{ext}-filen din ved hjelp av dropzonen ovenfor eller klikk for å bla gjennom",
+    "selectFormat": "Velg målformatet ditt fra de tilgjengelige alternativene",
+    "converts": "Filen din konverteres automatisk til .{out}-format helt i nettleseren din",
+    "download": "Last ned den konverterte filen — ingen konto eller e-post nødvendig",
+    "convertsSingle": "Filen din konverteres automatisk til det valgte formatet helt i nettleseren din"
+  },
+  "faq": {
+    "title": "Ofte stilte spørsmål",
+    "q1": "Hvordan konverterer jeg {IN} til {OUT} online gratis?",
+    "a1": "Last opp {inputName}-filen din ved hjelp av dropzonen ovenfor. Filen din konverteres øyeblikkelig til {outputName}-format direkte i nettleseren din — ingen konto, ingen programvare og ingen kostnad.",
+    "q2": "Er konvertering av {IN} til {OUT} online trygt og privat?",
+    "a2": "Fullstendig. Konverteren vår kjører 100% i nettleseren din, så {IN}-filen din forlater aldri enheten din eller berører noen ekstern server.",
+    "q3": "Hva er maksimal filstørrelse for {IN} til {OUT}-konvertering?",
+    "a3": "Desktop: opptil 500 MB. Mobil: opptil 200 MB. All behandling skjer lokalt i nettleseren din.",
+    "q1single": "Hvordan konverterer jeg {IN}-filer online?",
+    "a1single": "Last opp {inputName}-filen din ved hjelp av dropzonen. Velg målformatet ditt, og filen din konverteres øyeblikkelig i nettleseren din.",
+    "q2single": "Er konvertering av {IN}-filer online trygt og privat?",
+    "a2single": "Fullstendig. Konverteren vår kjører 100% i nettleseren din, så {IN}-filen din forlater aldri enheten din.",
+    "q3single": "Hva er maksimal filstørrelse for {IN}-konvertering?",
+    "a3single": "Desktop: opptil 500 MB. Mobil: opptil 200 MB. All behandling skjer lokalt i nettleseren din."
+  },
+  "popularConversions": "Populære konverteringer",
+  "allTools": "Alle {category}-verktøy",
+  "viewAllTools": "Se alle {category}-verktøy",
+  "breadcrumb": {
+    "home": "Hjem",
+    "tools": "{category}-verktøy",
+    "converter": "{IN} til {OUT}-konverter",
+    "singleConverter": "{IN}-konverter"
+  },
+  "footer": {
+    "description": "Konvertér ethvert filformat direkte i nettleseren din. Ingen opplastinger til servere, ingen bekymringer om personvern.",
+    "product": "Produkt",
+    "popularConversions": "Populære konverteringer",
+    "company": "Selskap",
+    "rights": "Alle rettigheter forbeholdt.",
+    "clientSide": "100% Klientbasert behandling",
+    "noServer": "Ingen serveropplastinger",
+    "videoConverter": "Videokonverter",
+    "audioConverter": "Lydkonverter",
+    "imageConverter": "Bildekonverter",
+    "documentConverter": "Dokumentkonverter",
+    "aboutUs": "Om oss",
+    "privacyPolicy": "Personvernpolicy",
+    "termsOfService": "Tjenestevilkår",
+    "contact": "Kontakt"
+  },
+  "meta": {
+    "homeTitle": "EveryFileConvert - Gratis Online Filkonverter | Konvertér Video, Lyd, Bilde og Dokumenter",
+    "homeDesc": "Konvertér ethvert filformat øyeblikkelig i nettleseren din. Støtte for 42+ formater inkl. MP4, MP3, PNG, PDF og mer. 100% klientbasert behandling — filene dine forlater aldri enheten din.",
+    "conversionTitle": "Konvertér {IN} til {OUT} Online - Gratis og Sikkert | EveryFileConvert",
+    "conversionDesc1": "Gratis online {IN} til {OUT}-konverter. Konvertér {inputName}-filer til {outputName}-format øyeblikkelig i nettleseren din — ingen konto nødvendig.",
+    "conversionDesc2": "Konvertér {inputName} til {outputName} online på sekunder. Vår kraftige onlinekonverter transformerer {IN}-filer til {OUT}-format uten opplasting til noen server.",
+    "conversionDesc3": "Beste onlineverktøy for å konvertere {IN} til {OUT}-format. Gjør {inputName}-filene dine til {outputName} øyeblikkelig. Ingen installasjon, ingen registrering.",
+    "singleTitle": "{IN}-konverter - Konvertér til Flere Formater Online | EveryFileConvert",
+    "singleDesc": "Beste online {inputName}-konverter. Konvertér til flere formater øyeblikkelig i nettleseren din — ingen konto nødvendig.",
+    "resizerTitle": "Endre bildestørrelse online - Gratis og Raskt | EveryFileConvert",
+    "resizerDesc": "Endre bildestørrelse online gratis. Ingen opplasting til noen server — all behandling skjer i nettleseren din.",
+    "cropTitle": "Beskjær bilde online - Gratis bildebesk jæringsverktøy | EveryFileConvert",
+    "cropDesc": "Beskjær bilder online gratis. Enkel nettleserbeskjæring — ingen opplasting til noen server nødvendig.",
+    "compressAudioTitle": "Komprimer lyd online - Gratis MP3-størrelsesreduserer | EveryFileConvert",
+    "compressAudioDesc": "Komprimer lydfiler online gratis. Reduser MP3, WAV og andre lydfilstørrelser uten kvalitetstap."
+  }
+}

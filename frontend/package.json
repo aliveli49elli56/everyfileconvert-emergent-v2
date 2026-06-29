@@ -1,0 +1,9 @@
+{
+  "name": "frontend-bridge",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "cd /app && yarn dev --port 3000 --hostname 0.0.0.0",
+    "build": "echo ok"
+  }
+}

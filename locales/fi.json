@@ -1,0 +1,203 @@
+{
+  "converters": {
+    "titles": [
+      "Muunnin",
+      "Muunnostyökalu",
+      "Tiedostomuunnin",
+      "Muunna"
+    ],
+    "features": [
+      "Ilmainen, Verkossa ja Rajoittamaton",
+      "Muunna verkossa ilmaiseksi",
+      "Verkossa ja Ilmainen",
+      "Nopea verkkomuunnos"
+    ]
+  },
+  "image_resizer": {
+    "titles": [
+      "Kuvan koon muuttaja",
+      "Kuvan koon pienentäjä",
+      "Valokuvan resoluution muuttaja",
+      "Muuta kuvan kokoa verkossa"
+    ],
+    "features": [
+      "Ilman laadun heikkenemistä",
+      "Eräkuvan koon muuttaminen",
+      "Nopeasti ja Ilmaiseksi",
+      "Häviötön koon muuttaminen"
+    ]
+  },
+  "image_crop": {
+    "titles": [
+      "Rajaa kuva verkossa",
+      "Kuvanrajaustyökalu",
+      "Valokuvan rajaaja",
+      "Verkossa kuvanrajaaja"
+    ],
+    "features": [
+      "Helppo selainrajaus",
+      "Ilmainen ja Rajoittamaton",
+      "Ei latausta tarvita"
+    ]
+  },
+  "compress_audio": {
+    "titles": [
+      "Äänikompressori",
+      "MP3-koon pienentäjä",
+      "Äänitiedostokompressori",
+      "Pakkaa ääni verkossa"
+    ],
+    "features": [
+      "Ilman laadun heikkenemistä",
+      "Verkossa äänenkoon pienentäjä",
+      "Ilmainen ja Nopea"
+    ]
+  },
+  "global_privacy": [
+    "Turvallinen selainprosessointi",
+    "Ei palvelinlatausta",
+    "Yksityisyyteen keskittyvä muunnos"
+  ],
+  "nav": {
+    "home": "Koti",
+    "video": "Video",
+    "audio": "Ääni",
+    "image": "Kuva",
+    "pdf": "PDF",
+    "ebook": "E-kirja",
+    "howItWorks": "Miten se toimii",
+    "startConverting": "Aloita muuntaminen"
+  },
+  "hero": {
+    "badge": "Formaatit - Muunnokset",
+    "title": "Muunna mikä tahansa tiedosto",
+    "titleHighlight": "Välittömästi",
+    "subtitle": "Muunna videot, äänet, kuvat ja asiakirjat suoraan selaimessasi. Ei latauksia, täydellinen yksityisyys.",
+    "uploadBtn": "Lataa tiedosto",
+    "browseBtn": "Selaa työkaluja",
+    "filesConverted": "tiedostoa muunnettu"
+  },
+  "categories": {
+    "imageConverter": "Kuvamuunnin",
+    "imageConverterDesc": "Muunna PNG-, JPG-, WebP-, GIF-, SVG-muotojen ja muiden välillä",
+    "videoConverter": "Videomuunnin",
+    "videoConverterDesc": "Muunna MP4, WebM, AVI, MOV, MKV ja muita formaatteja",
+    "audioConverter": "Äänimuunnin",
+    "audioConverterDesc": "Muunna MP3, WAV, FLAC, AAC, OGG äänitiedostoja",
+    "pdfTools": "PDF-työkalut",
+    "pdfToolsDesc": "Muunna, yhdistä, jaa ja pakkaa PDF-tiedostoja",
+    "imageResizer": "Kuvan koon muuttaja",
+    "imageResizerDesc": "Muuta kuvan koko mihin tahansa kokoon laatu säilyttäen",
+    "backgroundRemover": "Taustan poistaja",
+    "backgroundRemoverDesc": "Poista kuvien tausta välittömästi tekoälyn avulla",
+    "ebookConverter": "E-kirjamuunnin",
+    "ebookConverterDesc": "Muunna EPUB, MOBI, AZW3 PDF:ksi, TXT:ksi, HTML:ksi ja lisää verkossa",
+    "getStarted": "Aloita",
+    "onlineViewer": "Online-katseluohjelma",
+    "onlineViewerDesc": "Avaa ja katso 75+ tiedostomuotoa suoraan selaimessasi. Ei asennusta."
+  },
+  "features": {
+    "private": "100% Yksityinen",
+    "privateDesc": "Tiedostot eivät koskaan poistu laitteeltasi. Kaikki käsittely tapahtuu paikallisesti selaimessasi.",
+    "fast": "Salamannopea",
+    "fastDesc": "Ei latausviiveitä. Muunna tiedostot välittömästi WebAssembly-teknologialla.",
+    "secure": "Turvallinen",
+    "secureDesc": "Tiedostojasi ei koskaan tallenneta millekään palvelimelle. Täydellinen tietosuoja."
+  },
+  "allInOne": "Kaikkiaan tiedostotyökalut",
+  "allInOneDesc": "Valitse kattavasta tiedostomuunnos- ja muokkaustyökalujen valikoimastamme",
+  "supportedFormats": "Tuetut formaatit",
+  "supportedFormatsDesc": "Tuemme {count} erilaista tiedostoformaattia video-, ääni-, kuva-, vektori-, CAD- ja asiakirjakategorioissa",
+  "readyToConvert": "Valmis muuntamaan?",
+  "readyToConvertDesc": "Aloita tiedostojen muuntaminen nyt. Rekisteröintiä ei tarvita, ei rajoituksia.",
+  "converter": {
+    "convertTo": "Muunna muotoon:",
+    "moreFormats": "Lisää formaatteja...",
+    "converting": "Muunnetaan...",
+    "conversionComplete": "Muunnos valmis!",
+    "cancel": "Peruuta",
+    "download": "Lataa",
+    "selectFormat": "Valitse formaatti",
+    "dropFile": "Pudota .{ext}-tiedostosi tähän",
+    "dropSubtitle": "tai napsauta selataksesi laitteeltasi",
+    "accepts": "Hyväksyy .{ext}-tiedostoja",
+    "fileSizeExceeds": "Tiedostokoko ylittää rajan",
+    "conversionFailed": "Muunnos epäonnistui. Kokeile eri formaattia tai tiedostoa.",
+    "downloadFailed": "Tiedoston lataaminen epäonnistui",
+    "noFormatSelected": "Tulosformaattia ei ole valittu"
+  },
+  "trustSignals": {
+    "private": "100% Yksityinen",
+    "privateDesc": "Tiedostot eivät koskaan poistu laitteeltasi",
+    "instant": "Välitön",
+    "instantDesc": "Selainpohjainen käsittely",
+    "noAccount": "Ei tiliä",
+    "noAccountDesc": "Rekisteröintiä ei tarvita"
+  },
+  "howItWorks": "Kuinka muuntaa {IN} muotoon {OUT} verkossa",
+  "howItWorksSingle": "Kuinka muuntaa {IN}-tiedostoja",
+  "steps": {
+    "upload": "Lataa .{ext}-tiedostosi yllä olevaan pudotusalueeseen tai napsauta selataksesi",
+    "selectFormat": "Valitse kohdeformaattisi käytettävissä olevista vaihtoehdoista",
+    "converts": "Tiedostosi muunnetaan automaattisesti .{out}-muotoon kokonaan selaimessasi",
+    "download": "Lataa muunnettu tiedosto — ei tarvita tiliä tai sähköpostia",
+    "convertsSingle": "Tiedostosi muunnetaan automaattisesti valittuun formaattiin kokonaan selaimessasi"
+  },
+  "faq": {
+    "title": "Usein kysytyt kysymykset",
+    "q1": "Kuinka muunnan {IN} muotoon {OUT} verkossa ilmaiseksi?",
+    "a1": "Lataa {inputName}-tiedostosi yllä olevan pudotusalueen avulla. Tiedostosi muunnetaan välittömästi {outputName}-muotoon suoraan selaimessasi — ei tiliä, ei ohjelmistoa eikä kustannuksia.",
+    "q2": "Onko {IN}:n muuntaminen {OUT}:ksi verkossa turvallista ja yksityistä?",
+    "a2": "Täysin. Muuntimemme toimii 100% selaimessasi, joten {IN}-tiedostosi ei koskaan poistu laitteeltasi tai koske ulkoiseen palvelimeen.",
+    "q3": "Mikä on enimmäistiedostokoko {IN}:n muuntamiseen {OUT}:ksi?",
+    "a3": "Pöytätietokone: enintään 500 Mt. Mobiili: enintään 200 Mt. Kaikki käsittely tapahtuu paikallisesti selaimessasi.",
+    "q1single": "Kuinka muunnan {IN}-tiedostoja verkossa?",
+    "a1single": "Lataa {inputName}-tiedostosi pudotusalueen avulla. Valitse kohdeformaattisi, ja tiedostosi muunnetaan välittömästi selaimessasi.",
+    "q2single": "Onko {IN}-tiedostojen muuntaminen verkossa turvallista ja yksityistä?",
+    "a2single": "Täysin. Muuntimemme toimii 100% selaimessasi, joten {IN}-tiedostosi ei koskaan poistu laitteeltasi.",
+    "q3single": "Mikä on enimmäistiedostokoko {IN}:n muuntamiseen?",
+    "a3single": "Pöytätietokone: enintään 500 Mt. Mobiili: enintään 200 Mt. Kaikki käsittely tapahtuu paikallisesti selaimessasi."
+  },
+  "popularConversions": "Suositut muunnokset",
+  "allTools": "Kaikki {category}-työkalut",
+  "viewAllTools": "Näytä kaikki {category}-työkalut",
+  "breadcrumb": {
+    "home": "Koti",
+    "tools": "{category}-työkalut",
+    "converter": "{IN}–{OUT}-muunnin",
+    "singleConverter": "{IN}-muunnin"
+  },
+  "footer": {
+    "description": "Muunna mikä tahansa tiedostoformaatti suoraan selaimessasi. Ei palvelinlatauksia, ei yksityisyyshuolia.",
+    "product": "Tuote",
+    "popularConversions": "Suositut muunnokset",
+    "company": "Yritys",
+    "rights": "Kaikki oikeudet pidätetään.",
+    "clientSide": "100% Asiakaspuolen käsittely",
+    "noServer": "Ei palvelinlatauksia",
+    "videoConverter": "Videomuunnin",
+    "audioConverter": "Äänimuunnin",
+    "imageConverter": "Kuvamuunnin",
+    "documentConverter": "Asiakirjamuunnin",
+    "aboutUs": "Meistä",
+    "privacyPolicy": "Tietosuojakäytäntö",
+    "termsOfService": "Käyttöehdot",
+    "contact": "Yhteystiedot"
+  },
+  "meta": {
+    "homeTitle": "EveryFileConvert - Ilmainen Verkossa Tiedostomuunnin | Muunna Video, Ääni, Kuva ja Asiakirjat",
+    "homeDesc": "Muunna mikä tahansa tiedostoformaatti välittömästi selaimessasi. Tuki 42+ formaatille mukaan lukien MP4, MP3, PNG, PDF ja lisää. 100% asiakaspuolen käsittely — tiedostosi eivät koskaan poistu laitteeltasi.",
+    "conversionTitle": "Muunna {IN} muotoon {OUT} verkossa - Ilmainen ja Turvallinen | EveryFileConvert",
+    "conversionDesc1": "Ilmainen verkossa {IN}–{OUT}-muunnin. Muunna {inputName}-tiedostoja {outputName}-muotoon välittömästi selaimessasi — ei tiliä tarvita.",
+    "conversionDesc2": "Muunna {inputName} muotoon {outputName} verkossa sekunneissa. Tehokas verkkomuuntimemme muuntaa {IN}-tiedostoja {OUT}-muotoon ilman palvelinlatausta.",
+    "conversionDesc3": "Paras verkkotyökalu {IN}-tiedostojen muuntamiseen {OUT}-muotoon. Muunna {inputName}-tiedostosi {outputName}:ksi välittömästi. Ei asennusta, ei rekisteröintiä.",
+    "singleTitle": "{IN}-muunnin - Muunna useisiin formaatteihin verkossa | EveryFileConvert",
+    "singleDesc": "Paras verkossa {inputName}-muunnin. Muunna useisiin formaatteihin välittömästi selaimessasi — ei tiliä tarvita.",
+    "resizerTitle": "Muuta kuvan koko verkossa - Ilmainen ja Nopea | EveryFileConvert",
+    "resizerDesc": "Muuta kuvan koko verkossa ilmaiseksi. Ei latausta millekään palvelimelle — kaikki käsittely tapahtuu selaimessasi.",
+    "cropTitle": "Rajaa kuva verkossa - Ilmainen kuvanrajaustyökalu | EveryFileConvert",
+    "cropDesc": "Rajaa kuvia verkossa ilmaiseksi. Helppo selainrajaus — ei tarvita palvelinlatausta.",
+    "compressAudioTitle": "Pakkaa ääni verkossa - Ilmainen MP3-koon pienentäjä | EveryFileConvert",
+    "compressAudioDesc": "Pakkaa äänitiedostoja verkossa ilmaiseksi. Pienennä MP3-, WAV- ja muiden äänitiedostojen kokoa ilman laadun heikkenemistä."
+  }
+}

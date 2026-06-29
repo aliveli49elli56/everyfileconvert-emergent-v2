@@ -1,0 +1,203 @@
+{
+  "converters": {
+    "titles": [
+      "Konvertáló",
+      "Konverziós eszköz",
+      "Fájlkonvertáló",
+      "Konvertálás"
+    ],
+    "features": [
+      "Ingyenes, Online és Korlátlan",
+      "Online konvertálás ingyen",
+      "Online és Ingyenes",
+      "Gyors online konvertálás"
+    ]
+  },
+  "image_resizer": {
+    "titles": [
+      "Képméret-módosító",
+      "Képméret-csökkentő",
+      "Fotófelbontás-változtató",
+      "Képméret módosítása online"
+    ],
+    "features": [
+      "Minőségromlás nélkül",
+      "Kötegelt képméret-módosítás",
+      "Gyors és Ingyenes",
+      "Veszteségmentes átméretezés"
+    ]
+  },
+  "image_crop": {
+    "titles": [
+      "Kép vágása online",
+      "Képvágó eszköz",
+      "Fotóvágó",
+      "Online képvágó"
+    ],
+    "features": [
+      "Egyszerű böngészős vágás",
+      "Ingyenes és Korlátlan",
+      "Nem szükséges feltöltés"
+    ]
+  },
+  "compress_audio": {
+    "titles": [
+      "Hangkompresszor",
+      "MP3 méretcsökkentő",
+      "Hangfájl-kompresszor",
+      "Hang tömörítése online"
+    ],
+    "features": [
+      "Minőségromlás nélkül",
+      "Online hangméret-csökkentő",
+      "Ingyenes és Gyors"
+    ]
+  },
+  "global_privacy": [
+    "Biztonságos böngészős feldolgozás",
+    "Nincs szerverféltöltés",
+    "Adatvédelem-központú konvertálás"
+  ],
+  "nav": {
+    "home": "Főoldal",
+    "video": "Videó",
+    "audio": "Hang",
+    "image": "Kép",
+    "pdf": "PDF",
+    "ebook": "E-könyv",
+    "howItWorks": "Hogyan működik",
+    "startConverting": "Konvertálás indítása"
+  },
+  "hero": {
+    "badge": "Formátumok - Konverziók",
+    "title": "Bármely fájl konvertálása",
+    "titleHighlight": "Azonnal",
+    "subtitle": "Videók, hangok, képek és dokumentumok átalakítása közvetlenül a böngészőben. Nincs feltöltés, teljes adatvédelem.",
+    "uploadBtn": "Fájl feltöltése",
+    "browseBtn": "Eszközök böngészése",
+    "filesConverted": "konvertált fájl"
+  },
+  "categories": {
+    "imageConverter": "Képkonvertáló",
+    "imageConverterDesc": "Konvertálás PNG, JPG, WebP, GIF, SVG és további formátumok között",
+    "videoConverter": "Videókonvertáló",
+    "videoConverterDesc": "MP4, WebM, AVI, MOV, MKV és más formátumok konvertálása",
+    "audioConverter": "Hangkonvertáló",
+    "audioConverterDesc": "MP3, WAV, FLAC, AAC, OGG hangfájlok konvertálása",
+    "pdfTools": "PDF-eszközök",
+    "pdfToolsDesc": "PDF-fájlok konvertálása, összefűzése, felosztása és tömörítése",
+    "imageResizer": "Képméret-módosító",
+    "imageResizerDesc": "Képek átméretezése bármely méretűre, minőség megőrzésével",
+    "backgroundRemover": "Háttéreltávolító",
+    "backgroundRemoverDesc": "Képek hátterének eltávolítása azonnal AI segítségével",
+    "ebookConverter": "E-könyvkonvertáló",
+    "ebookConverterDesc": "EPUB, MOBI, AZW3 konvertálása PDF-be, TXT-be, HTML-be és tovább online",
+    "getStarted": "Kezdés",
+    "onlineViewer": "Online Megjelenítő",
+    "onlineViewerDesc": "Nyisson meg és tekintsen meg 75+ fájlformátumot közvetlenül a böngészőjében. Telepítés nélkül."
+  },
+  "features": {
+    "private": "100% Privát",
+    "privateDesc": "A fájlok soha nem hagyják el az eszközét. Az összes feldolgozás helyileg a böngészőjében történik.",
+    "fast": "Villámgyors",
+    "fastDesc": "Nincs feltöltési késés. Fájlok azonnali konvertálása WebAssembly technológiával.",
+    "secure": "Biztonságos",
+    "secureDesc": "A fájljait soha nem tároljuk semmilyen szerveren. Teljes adatvédelem."
+  },
+  "allInOne": "Mindent-egy-helyen fájleszközök",
+  "allInOneDesc": "Válasszon átfogó fájlkonvertálási és szerkesztési eszközeink kínálatából",
+  "supportedFormats": "Támogatott formátumok",
+  "supportedFormatsDesc": "Támogatunk {count} különböző fájlformátumot videó, hang, kép, vektor, CAD és dokumentum kategóriákban",
+  "readyToConvert": "Készen áll a konvertálásra?",
+  "readyToConvertDesc": "Kezdje el a fájlok konvertálását most. Nincs regisztráció, nincsenek korlátok.",
+  "converter": {
+    "convertTo": "Konvertálás erre:",
+    "moreFormats": "További formátumok...",
+    "converting": "Konvertálás...",
+    "conversionComplete": "Konvertálás kész!",
+    "cancel": "Mégse",
+    "download": "Letöltés",
+    "selectFormat": "Válasszon formátumot",
+    "dropFile": "Ejtse ide .{ext} fájlját",
+    "dropSubtitle": "vagy kattintson az eszközről való böngészéshez",
+    "accepts": ".{ext} fájlokat fogad el",
+    "fileSizeExceeds": "A fájlméret meghaladja a korlátot",
+    "conversionFailed": "Konvertálás sikertelen. Próbáljon más formátumot vagy fájlt.",
+    "downloadFailed": "A fájl letöltése sikertelen",
+    "noFormatSelected": "Nincs kimeneti formátum kiválasztva"
+  },
+  "trustSignals": {
+    "private": "100% Privát",
+    "privateDesc": "A fájlok soha nem hagyják el az eszközét",
+    "instant": "Azonnali",
+    "instantDesc": "Böngészős feldolgozás",
+    "noAccount": "Nincs fiók",
+    "noAccountDesc": "Nincs regisztráció szükséges"
+  },
+  "howItWorks": "Hogyan konvertáljuk a {IN}-t {OUT}-ra online",
+  "howItWorksSingle": "Hogyan konvertáljuk a {IN} fájlokat",
+  "steps": {
+    "upload": "Töltse fel .{ext} fájlját a fenti feltöltési zónával vagy kattintson a böngészéshez",
+    "selectFormat": "Válassza ki a célformátumot az elérhető lehetőségek közül",
+    "converts": "A fájlja automatikusan .{out} formátumra konvertálódik teljesen a böngészőjében",
+    "download": "Töltse le a konvertált fájlt — nincs szükség fiókra vagy e-mailre",
+    "convertsSingle": "A fájlja automatikusan a kiválasztott formátumra konvertálódik teljesen a böngészőjében"
+  },
+  "faq": {
+    "title": "Gyakran ismételt kérdések",
+    "q1": "Hogyan konvertálhatom a {IN}-t {OUT}-ra online ingyen?",
+    "a1": "Töltse fel {inputName} fájlját a fenti feltöltési zóna segítségével. A fájlja azonnal {outputName} formátumra konvertálódik közvetlenül a böngészőjében — nincs szükség fiókra, szoftverre vagy költségre.",
+    "q2": "Biztonságos és privát-e a {IN} {OUT}-ra való online konvertálása?",
+    "a2": "Teljesen. Konvertálónk 100%-ban a böngészőjében fut, így {IN} fájlja soha nem hagyja el az eszközét és nem érint semmilyen külső szervert.",
+    "q3": "Mi a maximális fájlméret a {IN}-ből {OUT}-ba való konvertáláshoz?",
+    "a3": "Asztali: legfeljebb 500 MB. Mobil: legfeljebb 200 MB. Az összes feldolgozás helyileg a böngészőjében történik.",
+    "q1single": "Hogyan konvertálhatom a {IN} fájlokat online?",
+    "a1single": "Töltse fel {inputName} fájlját a feltöltési zóna segítségével. Válassza ki a célformátumot, és a fájlja azonnal konvertálódik a böngészőjében.",
+    "q2single": "Biztonságos és privát-e a {IN} fájlok online konvertálása?",
+    "a2single": "Teljesen. Konvertálónk 100%-ban a böngészőjében fut, így {IN} fájlja soha nem hagyja el az eszközét.",
+    "q3single": "Mi a maximális fájlméret a {IN} konvertálásához?",
+    "a3single": "Asztali: legfeljebb 500 MB. Mobil: legfeljebb 200 MB. Az összes feldolgozás helyileg a böngészőjében történik."
+  },
+  "popularConversions": "Népszerű konverziók",
+  "allTools": "Minden {category} eszköz",
+  "viewAllTools": "Az összes {category} eszköz megtekintése",
+  "breadcrumb": {
+    "home": "Főoldal",
+    "tools": "{category} eszközök",
+    "converter": "{IN}-ból {OUT}-ba konvertáló",
+    "singleConverter": "{IN} konvertáló"
+  },
+  "footer": {
+    "description": "Bármely fájlformátum konvertálása közvetlenül a böngészőben. Nincs szerverfeltöltés, nincs adatvédelmi aggály.",
+    "product": "Termék",
+    "popularConversions": "Népszerű konverziók",
+    "company": "Vállalat",
+    "rights": "Minden jog fenntartva.",
+    "clientSide": "100% Kliens oldali feldolgozás",
+    "noServer": "Nincs szerverfeltöltés",
+    "videoConverter": "Videókonvertáló",
+    "audioConverter": "Hangkonvertáló",
+    "imageConverter": "Képkonvertáló",
+    "documentConverter": "Dokumentumkonvertáló",
+    "aboutUs": "Rólunk",
+    "privacyPolicy": "Adatvédelmi irányelvek",
+    "termsOfService": "Felhasználási feltételek",
+    "contact": "Kapcsolat"
+  },
+  "meta": {
+    "homeTitle": "EveryFileConvert - Ingyenes Online Fájlkonvertáló | Videó, Hang, Kép és Dokumentumok Konvertálása",
+    "homeDesc": "Bármely fájlformátum azonnali konvertálása a böngészőben. 42+ formátum támogatása, köztük MP4, MP3, PNG, PDF és több. 100% kliens oldali feldolgozás — a fájljai soha nem hagyják el az eszközét.",
+    "conversionTitle": "{IN}-ból {OUT}-ba online konvertálás - Ingyenes és Biztonságos | EveryFileConvert",
+    "conversionDesc1": "Ingyenes online {IN}-ból {OUT}-ba konvertáló. {inputName} fájlok azonnali konvertálása {outputName} formátumra a böngészőben — nincs szükség fiókra.",
+    "conversionDesc2": "{inputName} konvertálása {outputName}-ra online másodpercek alatt. Hatékony online konvertálónk {IN} fájlokat alakít át {OUT} formátumba szerverfeltöltés nélkül.",
+    "conversionDesc3": "A legjobb online eszköz {IN} fájlok {OUT} formátumra konvertálásához. {inputName} fájlok azonnali átalakítása {outputName}-ra. Nincs telepítés, nincs regisztráció.",
+    "singleTitle": "{IN} konvertáló - Konvertálás több formátumra online | EveryFileConvert",
+    "singleDesc": "A legjobb online {inputName} konvertáló. Konvertálás több formátumra azonnal a böngészőben — nincs szükség fiókra.",
+    "resizerTitle": "Képméret módosítása online - Ingyenes és Gyors | EveryFileConvert",
+    "resizerDesc": "Képméret módosítása online ingyen. Nincs feltöltés semmilyen szerverre — az összes feldolgozás a böngészőjében történik.",
+    "cropTitle": "Kép vágása online - Ingyenes képvágó eszköz | EveryFileConvert",
+    "cropDesc": "Képek vágása online ingyen. Egyszerű böngészős vágás — nincs szükség szerverfeltöltésre.",
+    "compressAudioTitle": "Hang tömörítése online - Ingyenes MP3 méretcsökkentő | EveryFileConvert",
+    "compressAudioDesc": "Hangfájlok tömörítése online ingyen. MP3, WAV és más hangfájlméretek csökkentése minőségromlás nélkül."
+  }
+}

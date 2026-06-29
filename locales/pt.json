@@ -1,0 +1,203 @@
+{
+  "converters": {
+    "titles": [
+      "Conversor",
+      "Programa de conversão",
+      "Conversor de arquivos",
+      "Converter"
+    ],
+    "features": [
+      "Grátis, Online e Ilimitado",
+      "Converter online gratuitamente",
+      "Online e Gratuito",
+      "Conversão online rápida"
+    ]
+  },
+  "image_resizer": {
+    "titles": [
+      "Redimensionar imagem",
+      "Redutor de tamanho de imagem",
+      "Alterar resolução de foto",
+      "Redimensionador de imagens online"
+    ],
+    "features": [
+      "Sem perda de qualidade",
+      "Redimensionamento em lote",
+      "Rápido e Gratuito",
+      "Redimensionamento sem perdas"
+    ]
+  },
+  "image_crop": {
+    "titles": [
+      "Recortar imagem online",
+      "Ferramenta de recorte de imagem",
+      "Cortador de fotos",
+      "Cortador de imagens online"
+    ],
+    "features": [
+      "Recorte fácil no navegador",
+      "Grátis e Ilimitado",
+      "Sem upload necessário"
+    ]
+  },
+  "compress_audio": {
+    "titles": [
+      "Comprimir áudio",
+      "Redutor de tamanho MP3",
+      "Compressor de arquivos de áudio",
+      "Comprimir áudio online"
+    ],
+    "features": [
+      "Sem perda de qualidade",
+      "Redução de tamanho de áudio online",
+      "Grátis e Rápido"
+    ]
+  },
+  "global_privacy": [
+    "Processamento seguro no navegador",
+    "Sem upload para servidor",
+    "Conversão focada em privacidade"
+  ],
+  "nav": {
+    "home": "Início",
+    "video": "Vídeo",
+    "audio": "Áudio",
+    "image": "Imagem",
+    "pdf": "PDF",
+    "ebook": "E-Book",
+    "howItWorks": "Como funciona",
+    "startConverting": "Começar a converter"
+  },
+  "hero": {
+    "badge": "Formatos - Conversões",
+    "title": "Converter qualquer arquivo",
+    "titleHighlight": "Instantaneamente",
+    "subtitle": "Transforme vídeos, áudio, imagens e documentos diretamente no seu navegador. Sem uploads, privacidade completa.",
+    "uploadBtn": "Fazer upload de arquivo",
+    "browseBtn": "Explorar ferramentas",
+    "filesConverted": "arquivos convertidos"
+  },
+  "categories": {
+    "imageConverter": "Conversor de imagens",
+    "imageConverterDesc": "Converter entre PNG, JPG, WebP, GIF, SVG e mais",
+    "videoConverter": "Conversor de vídeo",
+    "videoConverterDesc": "Converter MP4, WebM, AVI, MOV, MKV e outros formatos",
+    "audioConverter": "Conversor de áudio",
+    "audioConverterDesc": "Converter arquivos de áudio MP3, WAV, FLAC, AAC, OGG",
+    "pdfTools": "Ferramentas PDF",
+    "pdfToolsDesc": "Converter, mesclar, dividir e comprimir arquivos PDF",
+    "imageResizer": "Redimensionador de imagens",
+    "imageResizerDesc": "Redimensionar imagens para qualquer dimensão mantendo a qualidade",
+    "backgroundRemover": "Removedor de fundo",
+    "backgroundRemoverDesc": "Remover fundos de imagens instantaneamente com IA",
+    "ebookConverter": "Conversor de e-books",
+    "ebookConverterDesc": "Converter EPUB, MOBI, AZW3 para PDF, TXT, HTML e mais Online",
+    "getStarted": "Começar",
+    "onlineViewer": "Visualizador Online",
+    "onlineViewerDesc": "Abra e visualize 75+ formatos de arquivo diretamente no seu navegador. Sem instalação."
+  },
+  "features": {
+    "private": "100% Privado",
+    "privateDesc": "Os arquivos nunca saem do seu dispositivo. Todo o processamento ocorre localmente no seu navegador.",
+    "fast": "Ultrarrápido",
+    "fastDesc": "Sem atrasos de upload. Converta arquivos instantaneamente com tecnologia WebAssembly.",
+    "secure": "Seguro",
+    "secureDesc": "Seus arquivos nunca são armazenados em nenhum servidor. Privacidade completa de dados."
+  },
+  "allInOne": "Ferramentas de arquivo tudo em um",
+  "allInOneDesc": "Escolha entre nossa suite completa de ferramentas de conversão e edição de arquivos",
+  "supportedFormats": "Formatos suportados",
+  "supportedFormatsDesc": "Suportamos {count} formatos de arquivo diferentes para vídeo, áudio, imagem, vetorial, CAD e documento",
+  "readyToConvert": "Pronto para converter?",
+  "readyToConvertDesc": "Comece a converter seus arquivos agora. Sem registro necessário, sem limites.",
+  "converter": {
+    "convertTo": "Converter para:",
+    "moreFormats": "Mais formatos...",
+    "converting": "Convertendo...",
+    "conversionComplete": "Conversão concluída!",
+    "cancel": "Cancelar",
+    "download": "Baixar",
+    "selectFormat": "Selecionar formato",
+    "dropFile": "Solte seu arquivo .{ext} aqui",
+    "dropSubtitle": "ou clique para procurar no seu dispositivo",
+    "accepts": "Aceita arquivos .{ext}",
+    "fileSizeExceeds": "O tamanho do arquivo excede o limite",
+    "conversionFailed": "Falha na conversão. Tente um formato ou arquivo diferente.",
+    "downloadFailed": "Falha ao baixar arquivo",
+    "noFormatSelected": "Nenhum formato de saída selecionado"
+  },
+  "trustSignals": {
+    "private": "100% Privado",
+    "privateDesc": "Os arquivos nunca saem do seu dispositivo",
+    "instant": "Instantâneo",
+    "instantDesc": "Processamento no navegador",
+    "noAccount": "Sem conta",
+    "noAccountDesc": "Sem registro necessário"
+  },
+  "howItWorks": "Como converter {IN} para {OUT} online",
+  "howItWorksSingle": "Como converter arquivos {IN}",
+  "steps": {
+    "upload": "Faça upload do seu arquivo .{ext} usando a zona de soltar acima ou clique para procurar",
+    "selectFormat": "Selecione seu formato de destino entre as opções disponíveis",
+    "converts": "Seu arquivo é convertido automaticamente para o formato .{out} inteiramente no seu navegador",
+    "download": "Baixe seu arquivo convertido — sem conta ou e-mail necessários",
+    "convertsSingle": "Seu arquivo é convertido automaticamente para o formato escolhido no seu navegador"
+  },
+  "faq": {
+    "title": "Perguntas frequentes",
+    "q1": "Como converter {IN} para {OUT} online gratuitamente?",
+    "a1": "Faça upload do seu arquivo {inputName} usando a zona de soltar. Seu arquivo é convertido instantaneamente para o formato {outputName} no seu navegador. Desktop: até 500 MB, Mobile: até 200 MB.",
+    "q2": "A conversão online de {IN} para {OUT} é segura e privada?",
+    "a2": "Completamente. Nosso conversor funciona 100% no seu navegador, então seu arquivo {IN} nunca sai do seu dispositivo.",
+    "q3": "Qual é o tamanho máximo de arquivo para conversão de {IN} para {OUT}?",
+    "a3": "Desktop: até 500 MB. Mobile: até 200 MB. Todo o processamento ocorre localmente no seu navegador.",
+    "q1single": "Como converter arquivos {IN} online?",
+    "a1single": "Faça upload do seu arquivo {inputName}. Escolha o formato de destino e seu arquivo é convertido instantaneamente. Desktop: até 500 MB, Mobile: até 200 MB.",
+    "q2single": "A conversão de arquivos {IN} online é segura?",
+    "a2single": "Completamente. Nosso conversor funciona 100% no seu navegador. Seu arquivo nunca sai do seu dispositivo.",
+    "q3single": "Qual é o tamanho máximo para conversão de {IN}?",
+    "a3single": "Desktop: até 500 MB. Mobile: até 200 MB."
+  },
+  "popularConversions": "Conversões populares",
+  "allTools": "Todas as ferramentas de {category}",
+  "viewAllTools": "Ver todas as ferramentas de {category}",
+  "breadcrumb": {
+    "home": "Início",
+    "tools": "Ferramentas {category}",
+    "converter": "Conversor {IN} para {OUT}",
+    "singleConverter": "Conversor {IN}"
+  },
+  "footer": {
+    "description": "Converta qualquer formato de arquivo diretamente no seu navegador. Sem uploads para servidores, sem preocupações com privacidade.",
+    "product": "Produto",
+    "popularConversions": "Conversões populares",
+    "company": "Empresa",
+    "rights": "Todos os direitos reservados.",
+    "clientSide": "Processamento 100% no lado do cliente",
+    "noServer": "Sem upload para servidor",
+    "videoConverter": "Conversor de vídeo",
+    "audioConverter": "Conversor de áudio",
+    "imageConverter": "Conversor de imagens",
+    "documentConverter": "Conversor de documentos",
+    "aboutUs": "Sobre nós",
+    "privacyPolicy": "Política de privacidade",
+    "termsOfService": "Termos de serviço",
+    "contact": "Contato"
+  },
+  "meta": {
+    "homeTitle": "EveryFileConvert - Conversor de arquivos gratuito online | Converter Vídeo, Áudio, Imagem e Documentos",
+    "homeDesc": "Converta qualquer formato de arquivo instantaneamente no seu navegador. Desktop: até 500 MB, Mobile: até 200 MB. Processamento 100% do lado do cliente.",
+    "conversionTitle": "Conversor {IN} {OUT} | Converter online gratuitamente - EveryFileConvert",
+    "conversionDesc1": "Melhor conversor online de {IN} para {OUT}. Desktop: até 500 MB, Mobile: até 200 MB. Sem upload, diretamente no navegador.",
+    "conversionDesc2": "Converter {inputName} para {outputName} online em segundos. Desktop: 500 MB, Mobile: 200 MB. Seguro, rápido e gratuito.",
+    "conversionDesc3": "A melhor forma de converter {IN} para {OUT} online. Desktop: 500 MB, Mobile: 200 MB. Sem instalação, sem registro.",
+    "singleTitle": "Conversor {IN} - Converter para múltiplos formatos online | EveryFileConvert",
+    "singleDesc": "Melhor conversor {inputName} online. Desktop: até 500 MB, Mobile: até 200 MB. 100% privado, seguro e gratuito.",
+    "resizerTitle": "Redimensionar imagem online - Grátis e Rápido | EveryFileConvert",
+    "resizerDesc": "Redimensione imagens online gratuitamente. Desktop: até 500 MB, Mobile: até 200 MB. Sem upload para servidor.",
+    "cropTitle": "Recortar imagem online - Ferramenta gratuita | EveryFileConvert",
+    "cropDesc": "Recorte imagens online gratuitamente. Desktop: até 500 MB, Mobile: até 200 MB.",
+    "compressAudioTitle": "Comprimir áudio online - Redutor MP3 gratuito | EveryFileConvert",
+    "compressAudioDesc": "Comprima arquivos de áudio online gratuitamente. Desktop: até 500 MB, Mobile: até 200 MB. Sem perda de qualidade."
+  }
+}

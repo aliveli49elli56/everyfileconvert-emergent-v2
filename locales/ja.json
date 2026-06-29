@@ -1,0 +1,203 @@
+{
+  "converters": {
+    "titles": [
+      "コンバーター",
+      "変換プログラム",
+      "ファイルコンバーター",
+      "変換"
+    ],
+    "features": [
+      "無料・オンライン・無制限",
+      "オンラインで無料変換",
+      "オンライン・無料",
+      "高速オンライン変換"
+    ]
+  },
+  "image_resizer": {
+    "titles": [
+      "画像リサイズ",
+      "画像サイズ縮小",
+      "写真解像度変更",
+      "オンライン画像リサイザー"
+    ],
+    "features": [
+      "品質劣化なし",
+      "一括画像リサイズ",
+      "高速・無料",
+      "ロスレスリサイズ"
+    ]
+  },
+  "image_crop": {
+    "titles": [
+      "オンライン画像切り抜き",
+      "画像トリミングツール",
+      "写真クロッパー",
+      "オンライン画像カッター"
+    ],
+    "features": [
+      "ブラウザで簡単トリミング",
+      "無料・無制限",
+      "アップロード不要"
+    ]
+  },
+  "compress_audio": {
+    "titles": [
+      "音声圧縮",
+      "MP3サイズ縮小",
+      "音声ファイル圧縮",
+      "オンライン音声圧縮"
+    ],
+    "features": [
+      "品質劣化なし",
+      "オンライン音声サイズ削減",
+      "無料・高速"
+    ]
+  },
+  "global_privacy": [
+    "ブラウザ内での安全な処理",
+    "サーバーへのアップロードなし",
+    "プライバシー重視の変換"
+  ],
+  "nav": {
+    "home": "ホーム",
+    "video": "動画",
+    "audio": "音声",
+    "image": "画像",
+    "pdf": "PDF",
+    "ebook": "電子書籍",
+    "howItWorks": "使い方",
+    "startConverting": "変換を始める"
+  },
+  "hero": {
+    "badge": "フォーマット - 変換",
+    "title": "あらゆるファイルを",
+    "titleHighlight": "即座に変換",
+    "subtitle": "動画、音声、画像、ドキュメントをブラウザで直接変換。アップロード不要、完全プライバシー。",
+    "uploadBtn": "ファイルをアップロード",
+    "browseBtn": "ツールを見る",
+    "filesConverted": "ファイル変換済み"
+  },
+  "categories": {
+    "imageConverter": "画像コンバーター",
+    "imageConverterDesc": "PNG、JPG、WebP、GIF、SVGなど多数のフォーマット間で変換",
+    "videoConverter": "動画コンバーター",
+    "videoConverterDesc": "MP4、WebM、AVI、MOV、MKVなど多数のフォーマットを変換",
+    "audioConverter": "音声コンバーター",
+    "audioConverterDesc": "MP3、WAV、FLAC、AAC、OGGの音声ファイルを変換",
+    "pdfTools": "PDFツール",
+    "pdfToolsDesc": "PDFファイルの変換、結合、分割、圧縮",
+    "imageResizer": "画像リサイザー",
+    "imageResizerDesc": "画質を保ちながら任意のサイズに画像をリサイズ",
+    "backgroundRemover": "背景削除",
+    "backgroundRemoverDesc": "AIで画像の背景を即座に削除",
+    "ebookConverter": "電子書籍コンバーター",
+    "ebookConverterDesc": "EPUB、MOBI、AZW3をPDF、TXT、HTMLなどにオンラインで変換",
+    "getStarted": "始める",
+    "onlineViewer": "オンラインビューアー",
+    "onlineViewerDesc": "75以上のファイル形式をブラウザで直接表示。インストール不要。"
+  },
+  "features": {
+    "private": "100%プライベート",
+    "privateDesc": "ファイルはデバイスを離れません。すべての処理がブラウザ内でローカルに行われます。",
+    "fast": "超高速",
+    "fastDesc": "アップロード遅延なし。WebAssembly技術でファイルを即座に変換。",
+    "secure": "セキュア",
+    "secureDesc": "あなたのファイルはいかなるサーバーにも保存されません。完全なデータプライバシー。"
+  },
+  "allInOne": "オールインワン ファイルツール",
+  "allInOneDesc": "包括的なファイル変換・編集ツールスイートから選択",
+  "supportedFormats": "対応フォーマット",
+  "supportedFormatsDesc": "動画、音声、画像、ベクター、CAD、ドキュメントカテゴリーで{count}種類のファイルフォーマットに対応",
+  "readyToConvert": "変換する準備はできましたか？",
+  "readyToConvertDesc": "今すぐファイルの変換を開始しましょう。登録不要、制限なし。",
+  "converter": {
+    "convertTo": "変換先：",
+    "moreFormats": "その他のフォーマット...",
+    "converting": "変換中...",
+    "conversionComplete": "変換完了！",
+    "cancel": "キャンセル",
+    "download": "ダウンロード",
+    "selectFormat": "フォーマットを選択",
+    "dropFile": ".{ext}ファイルをここにドロップ",
+    "dropSubtitle": "またはクリックしてデバイスから選択",
+    "accepts": ".{ext}ファイルを受け付け",
+    "fileSizeExceeds": "ファイルサイズが上限を超えています",
+    "conversionFailed": "変換に失敗しました。別のフォーマットまたはファイルをお試しください。",
+    "downloadFailed": "ファイルのダウンロードに失敗しました",
+    "noFormatSelected": "出力フォーマットが選択されていません"
+  },
+  "trustSignals": {
+    "private": "100%プライベート",
+    "privateDesc": "ファイルはデバイスを離れません",
+    "instant": "即座",
+    "instantDesc": "ブラウザ内処理",
+    "noAccount": "アカウント不要",
+    "noAccountDesc": "登録不要"
+  },
+  "howItWorks": "{IN}を{OUT}にオンライン変換する方法",
+  "howItWorksSingle": "{IN}ファイルの変換方法",
+  "steps": {
+    "upload": "上のドロップゾーンで.{ext}ファイルをアップロード、またはクリックして選択",
+    "selectFormat": "利用可能なオプションからターゲットフォーマットを選択",
+    "converts": "ファイルはブラウザ内で完全に.{out}フォーマットに自動変換",
+    "download": "変換されたファイルをダウンロード — アカウントやメール不要",
+    "convertsSingle": "ファイルはブラウザ内で選択したフォーマットに自動変換"
+  },
+  "faq": {
+    "title": "よくある質問",
+    "q1": "{IN}を{OUT}にオンラインで無料変換するには？",
+    "a1": "ドロップゾーンを使って{inputName}ファイルをアップロードしてください。ファイルはブラウザ内で即座に{outputName}フォーマットに変換されます。デスクトップ：最大500MB、モバイル：最大200MB。",
+    "q2": "{IN}を{OUT}にオンライン変換するのは安全ですか？",
+    "a2": "完全に安全です。コンバーターはブラウザ内で100%動作するため、{IN}ファイルはデバイスを離れません。",
+    "q3": "{IN}から{OUT}への変換の最大ファイルサイズは？",
+    "a3": "デスクトップ：最大500MB。モバイル：最大200MB。すべての処理がブラウザ内でローカルに行われます。",
+    "q1single": "{IN}ファイルをオンラインで変換するには？",
+    "a1single": "{inputName}ファイルをアップロードし、ターゲットフォーマットを選択すると即座に変換されます。デスクトップ：最大500MB、モバイル：最大200MB。",
+    "q2single": "{IN}ファイルのオンライン変換は安全ですか？",
+    "a2single": "完全に安全です。コンバーターはブラウザ内で100%動作します。ファイルはデバイスを離れません。",
+    "q3single": "{IN}変換の最大ファイルサイズは？",
+    "a3single": "デスクトップ：最大500MB。モバイル：最大200MB。"
+  },
+  "popularConversions": "人気の変換",
+  "allTools": "すべての{category}ツール",
+  "viewAllTools": "すべての{category}ツールを見る",
+  "breadcrumb": {
+    "home": "ホーム",
+    "tools": "{category}ツール",
+    "converter": "{IN}から{OUT}コンバーター",
+    "singleConverter": "{IN}コンバーター"
+  },
+  "footer": {
+    "description": "ブラウザで直接あらゆるファイルフォーマットを変換。サーバーへのアップロードなし、プライバシーの心配なし。",
+    "product": "製品",
+    "popularConversions": "人気の変換",
+    "company": "会社",
+    "rights": "全著作権所有。",
+    "clientSide": "100%クライアントサイド処理",
+    "noServer": "サーバーアップロードなし",
+    "videoConverter": "動画コンバーター",
+    "audioConverter": "音声コンバーター",
+    "imageConverter": "画像コンバーター",
+    "documentConverter": "ドキュメントコンバーター",
+    "aboutUs": "会社概要",
+    "privacyPolicy": "プライバシーポリシー",
+    "termsOfService": "利用規約",
+    "contact": "お問い合わせ"
+  },
+  "meta": {
+    "homeTitle": "EveryFileConvert - 無料オンラインファイルコンバーター | 動画・音声・画像・ドキュメント変換",
+    "homeDesc": "ブラウザで即座にあらゆるファイルフォーマットを変換。デスクトップ：最大500MB、モバイル：最大200MB。100%クライアントサイド処理。",
+    "conversionTitle": "{IN} {OUT} コンバーター | オンライン無料変換 - EveryFileConvert",
+    "conversionDesc1": "最高の{IN}から{OUT}へのオンラインコンバーター。デスクトップ：最大500MB、モバイル：最大200MB。サーバーアップロードなし、ブラウザで直接変換。",
+    "conversionDesc2": "{inputName}を{outputName}にオンラインで数秒変換。デスクトップ：500MB、モバイル：200MB。安全、高速、完全無料。",
+    "conversionDesc3": "{IN}を{OUT}に変換する最良のオンライン方法。デスクトップ：500MB、モバイル：200MB。インストール・登録不要。",
+    "singleTitle": "{IN}コンバーター - 複数フォーマットにオンライン変換 | EveryFileConvert",
+    "singleDesc": "最高の{inputName}オンラインコンバーター。デスクトップ：最大500MB、モバイル：最大200MB。100%プライベート、安全、無料。",
+    "resizerTitle": "オンライン画像リサイズ - 無料・高速 | EveryFileConvert",
+    "resizerDesc": "画像をオンラインで無料リサイズ。デスクトップ：最大500MB、モバイル：最大200MB。サーバーアップロードなし。",
+    "cropTitle": "オンライン画像切り抜き - 無料ツール | EveryFileConvert",
+    "cropDesc": "画像をオンラインで無料切り抜き。デスクトップ：最大500MB、モバイル：最大200MB。",
+    "compressAudioTitle": "オンライン音声圧縮 - 無料MP3サイズ縮小 | EveryFileConvert",
+    "compressAudioDesc": "音声ファイルをオンラインで無料圧縮。デスクトップ：最大500MB、モバイル：最大200MB。品質劣化なし。"
+  }
+}

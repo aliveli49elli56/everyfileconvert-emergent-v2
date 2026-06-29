@@ -1,0 +1,203 @@
+{
+  "converters": {
+    "titles": [
+      "Converter",
+      "Conversieprogramma",
+      "Bestandsconverter",
+      "Converteren"
+    ],
+    "features": [
+      "Gratis, Online en Onbeperkt",
+      "Online gratis converteren",
+      "Online en Gratis",
+      "Snelle online conversie"
+    ]
+  },
+  "image_resizer": {
+    "titles": [
+      "Afbeelding formaat wijzigen",
+      "Afbeeldingsgrootte verkleinen",
+      "Fotoresolutie wijzigen",
+      "Online afbeelding formaat wijzigen"
+    ],
+    "features": [
+      "Zonder kwaliteitsverlies",
+      "Batch afbeeldingen formaat wijzigen",
+      "Snel en Gratis",
+      "Verliesloze formaat wijziging"
+    ]
+  },
+  "image_crop": {
+    "titles": [
+      "Afbeelding online bijsnijden",
+      "Afbeelding bijsnijdtool",
+      "Foto bijsnijder",
+      "Online afbeelding cutter"
+    ],
+    "features": [
+      "Eenvoudig bijsnijden in browser",
+      "Gratis en Onbeperkt",
+      "Geen upload vereist"
+    ]
+  },
+  "compress_audio": {
+    "titles": [
+      "Audio comprimeren",
+      "MP3 formaat verkleinen",
+      "Audio bestandscompressor",
+      "Audio online comprimeren"
+    ],
+    "features": [
+      "Zonder kwaliteitsverlies",
+      "Online audiogrootte verkleinen",
+      "Gratis en Snel"
+    ]
+  },
+  "global_privacy": [
+    "Veilige verwerking in browser",
+    "Geen server upload",
+    "Privacygericht converteren"
+  ],
+  "nav": {
+    "home": "Home",
+    "video": "Video",
+    "audio": "Audio",
+    "image": "Afbeelding",
+    "pdf": "PDF",
+    "ebook": "E-Book",
+    "howItWorks": "Hoe het werkt",
+    "startConverting": "Begin met converteren"
+  },
+  "hero": {
+    "badge": "Formaten - Conversies",
+    "title": "Elk bestand converteren",
+    "titleHighlight": "Onmiddellijk",
+    "subtitle": "Transformeer video's, audio, afbeeldingen en documenten direct in uw browser. Geen uploads, volledige privacy.",
+    "uploadBtn": "Bestand uploaden",
+    "browseBtn": "Tools bekijken",
+    "filesConverted": "bestanden geconverteerd"
+  },
+  "categories": {
+    "imageConverter": "Afbeeldingsconverter",
+    "imageConverterDesc": "Converteren tussen PNG, JPG, WebP, GIF, SVG en meer",
+    "videoConverter": "Videoconverter",
+    "videoConverterDesc": "MP4, WebM, AVI, MOV, MKV en andere formaten converteren",
+    "audioConverter": "Audioconverter",
+    "audioConverterDesc": "MP3, WAV, FLAC, AAC, OGG audiobestanden converteren",
+    "pdfTools": "PDF-tools",
+    "pdfToolsDesc": "PDF-bestanden converteren, samenvoegen, splitsen en comprimeren",
+    "imageResizer": "Afbeelding formaat wijziger",
+    "imageResizerDesc": "Afbeeldingen naar elke afmeting aanpassen met behoud van kwaliteit",
+    "backgroundRemover": "Achtergrond verwijderen",
+    "backgroundRemoverDesc": "Achtergronden uit afbeeldingen onmiddellijk verwijderen met AI",
+    "ebookConverter": "E-book converter",
+    "ebookConverterDesc": "EPUB, MOBI, AZW3 naar PDF, TXT, HTML en meer Online converteren",
+    "getStarted": "Aan de slag",
+    "onlineViewer": "Online Viewer",
+    "onlineViewerDesc": "Open en bekijk 75+ bestandsformaten direct in uw browser. Geen installatie vereist."
+  },
+  "features": {
+    "private": "100% Privé",
+    "privateDesc": "Bestanden verlaten uw apparaat nooit. Alle verwerking vindt lokaal plaats in uw browser.",
+    "fast": "Bliksemnel",
+    "fastDesc": "Geen uploadvertragingen. Converteer bestanden onmiddellijk met WebAssembly-technologie.",
+    "secure": "Veilig",
+    "secureDesc": "Uw bestanden worden nooit opgeslagen op een server. Volledige gegevensprivacy."
+  },
+  "allInOne": "Alles-in-één bestandstools",
+  "allInOneDesc": "Kies uit onze uitgebreide suite van bestandsconversie- en bewerkingstools",
+  "supportedFormats": "Ondersteunde formaten",
+  "supportedFormatsDesc": "Wij ondersteunen {count} verschillende bestandsformaten voor video, audio, afbeelding, vector, CAD en document",
+  "readyToConvert": "Klaar om te converteren?",
+  "readyToConvertDesc": "Begin nu met het converteren van uw bestanden. Geen registratie vereist, geen limieten.",
+  "converter": {
+    "convertTo": "Converteren naar:",
+    "moreFormats": "Meer formaten...",
+    "converting": "Converteren...",
+    "conversionComplete": "Conversie voltooid!",
+    "cancel": "Annuleren",
+    "download": "Downloaden",
+    "selectFormat": "Formaat selecteren",
+    "dropFile": "Zet uw .{ext}-bestand hier neer",
+    "dropSubtitle": "of klik om te bladeren vanaf uw apparaat",
+    "accepts": "Accepteert .{ext}-bestanden",
+    "fileSizeExceeds": "Bestandsgrootte overschrijdt de limiet",
+    "conversionFailed": "Conversie mislukt. Probeer een ander formaat of bestand.",
+    "downloadFailed": "Bestand downloaden mislukt",
+    "noFormatSelected": "Geen uitvoerformaat geselecteerd"
+  },
+  "trustSignals": {
+    "private": "100% Privé",
+    "privateDesc": "Bestanden verlaten uw apparaat nooit",
+    "instant": "Onmiddellijk",
+    "instantDesc": "Verwerking in browser",
+    "noAccount": "Geen account",
+    "noAccountDesc": "Geen registratie vereist"
+  },
+  "howItWorks": "Hoe {IN} online naar {OUT} te converteren",
+  "howItWorksSingle": "Hoe {IN}-bestanden te converteren",
+  "steps": {
+    "upload": "Upload uw .{ext}-bestand via de neerzetzone hierboven of klik om te bladeren",
+    "selectFormat": "Selecteer uw doelformaat uit de beschikbare opties",
+    "converts": "Uw bestand wordt automatisch geconverteerd naar het .{out}-formaat volledig in uw browser",
+    "download": "Download uw geconverteerde bestand — geen account of e-mail vereist",
+    "convertsSingle": "Uw bestand wordt automatisch geconverteerd naar het gekozen formaat in uw browser"
+  },
+  "faq": {
+    "title": "Veelgestelde vragen",
+    "q1": "Hoe converteer ik {IN} naar {OUT} online gratis?",
+    "a1": "Upload uw {inputName}-bestand via de neerzetzone. Uw bestand wordt onmiddellijk geconverteerd naar het {outputName}-formaat in uw browser. Desktop: tot 500 MB, Mobiel: tot 200 MB.",
+    "q2": "Is het online converteren van {IN} naar {OUT} veilig en privé?",
+    "a2": "Volledig. Onze converter werkt 100% in uw browser, dus uw {IN}-bestand verlaat uw apparaat nooit.",
+    "q3": "Wat is de maximale bestandsgrootte voor conversie van {IN} naar {OUT}?",
+    "a3": "Desktop: tot 500 MB. Mobiel: tot 200 MB. Alle verwerking vindt lokaal in uw browser plaats.",
+    "q1single": "Hoe converteer ik {IN}-bestanden online?",
+    "a1single": "Upload uw {inputName}-bestand, kies het doelformaat en uw bestand wordt onmiddellijk geconverteerd. Desktop: tot 500 MB, Mobiel: tot 200 MB.",
+    "q2single": "Is het online converteren van {IN}-bestanden veilig?",
+    "a2single": "Volledig. Onze converter werkt 100% in uw browser. Uw bestand verlaat uw apparaat nooit.",
+    "q3single": "Wat is de maximale bestandsgrootte voor {IN}-conversie?",
+    "a3single": "Desktop: tot 500 MB. Mobiel: tot 200 MB."
+  },
+  "popularConversions": "Populaire conversies",
+  "allTools": "Alle {category}-tools",
+  "viewAllTools": "Alle {category}-tools bekijken",
+  "breadcrumb": {
+    "home": "Home",
+    "tools": "{category}-tools",
+    "converter": "{IN} naar {OUT} converter",
+    "singleConverter": "{IN} converter"
+  },
+  "footer": {
+    "description": "Converteer elk bestandsformaat direct in uw browser. Geen uploads naar servers, geen privacyzorgen.",
+    "product": "Product",
+    "popularConversions": "Populaire conversies",
+    "company": "Bedrijf",
+    "rights": "Alle rechten voorbehouden.",
+    "clientSide": "100% client-side verwerking",
+    "noServer": "Geen server upload",
+    "videoConverter": "Videoconverter",
+    "audioConverter": "Audioconverter",
+    "imageConverter": "Afbeeldingsconverter",
+    "documentConverter": "Documentconverter",
+    "aboutUs": "Over ons",
+    "privacyPolicy": "Privacybeleid",
+    "termsOfService": "Servicevoorwaarden",
+    "contact": "Contact"
+  },
+  "meta": {
+    "homeTitle": "EveryFileConvert - Gratis online bestandsconverter | Converteer Video, Audio, Afbeelding & Documenten",
+    "homeDesc": "Converteer elk bestandsformaat onmiddellijk in uw browser. Desktop: tot 500 MB, Mobiel: tot 200 MB. 100% client-side verwerking.",
+    "conversionTitle": "{IN} {OUT} Converter | Online gratis converteren - EveryFileConvert",
+    "conversionDesc1": "Beste online {IN} naar {OUT} converter. Desktop: tot 500 MB, Mobiel: tot 200 MB. Geen server upload, direct in browser.",
+    "conversionDesc2": "{inputName} online in seconden naar {outputName} converteren. Desktop: 500 MB, Mobiel: 200 MB. Veilig, snel en gratis.",
+    "conversionDesc3": "Beste manier om {IN} naar {OUT} online te converteren. Desktop: 500 MB, Mobiel: 200 MB. Geen installatie, geen registratie.",
+    "singleTitle": "{IN} Converter - Online naar meerdere formaten converteren | EveryFileConvert",
+    "singleDesc": "Beste online {inputName} converter. Desktop: tot 500 MB, Mobiel: tot 200 MB. 100% privé, veilig en gratis.",
+    "resizerTitle": "Afbeelding formaat online wijzigen - Gratis & Snel | EveryFileConvert",
+    "resizerDesc": "Afbeeldingen online gratis formaat wijzigen. Desktop: tot 500 MB, Mobiel: tot 200 MB. Geen server upload.",
+    "cropTitle": "Afbeelding online bijsnijden - Gratis tool | EveryFileConvert",
+    "cropDesc": "Afbeeldingen online gratis bijsnijden. Desktop: tot 500 MB, Mobiel: tot 200 MB.",
+    "compressAudioTitle": "Audio online comprimeren - Gratis MP3 grootte verkleiner | EveryFileConvert",
+    "compressAudioDesc": "Audiobestanden online gratis comprimeren. Desktop: tot 500 MB, Mobiel: tot 200 MB. Zonder kwaliteitsverlies."
+  }
+}
