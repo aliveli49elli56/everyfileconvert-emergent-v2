@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { Upload, TriangleAlert as AlertTriangle, ArrowRight, X, ZoomIn, ZoomOut, RotateCcw, Download } from "lucide-react";
 import {
   VIEWER_LIMITS, getViewerByExt, type ViewerCategory,
@@ -11,20 +12,18 @@ type ViewerFormat = { ext: string; name: string; category: ViewerCategory; engin
 import { addToViewHistory } from "./ViewHistory";
 
 // ── Sub-viewer imports (lazy) ──────────────────────────────────────────────
-const PdfViewer  = dynamic(() => import("./viewers/PdfViewer"),  { loading: Spinner });
-const DocViewer  = dynamic(() => import("./viewers/DocViewer"),  { loading: Spinner });
-const SheetViewer = dynamic(() => import("./viewers/SheetViewer"), { loading: Spinner });
-const TextViewer = dynamic(() => import("./viewers/TextViewer"), { loading: Spinner });
-const ImageViewer = dynamic(() => import("./viewers/ImageViewer"), { loading: Spinner });
+const PdfViewer     = dynamic(() => import("./viewers/PdfViewer"),     { loading: Spinner });
+const DocViewer     = dynamic(() => import("./viewers/DocViewer"),     { loading: Spinner });
+const SheetViewer   = dynamic(() => import("./viewers/SheetViewer"),   { loading: Spinner });
+const TextViewer    = dynamic(() => import("./viewers/TextViewer"),    { loading: Spinner });
+const ImageViewer   = dynamic(() => import("./viewers/ImageViewer"),   { loading: Spinner });
 const ArchiveViewer = dynamic(() => import("./viewers/ArchiveViewer"), { loading: Spinner });
-const EmailViewer = dynamic(() => import("./viewers/EmailViewer"), { loading: Spinner });
-const MediaViewer = dynamic(() => import("./viewers/MediaViewer"), { loading: Spinner });
-const EbookViewer = dynamic(() => import("./viewers/EbookViewer"), { loading: Spinner });
-const PptxViewer  = dynamic(() => import("./viewers/PptxViewer"), { loading: Spinner });
-const PsdViewer   = dynamic(() => import("./viewers/PsdViewer"),  { loading: Spinner });
-const CadViewer   = dynamic(() => import("./viewers/CadViewer"),  { loading: Spinner });
-
-import dynamic from "next/dynamic";
+const EmailViewer   = dynamic(() => import("./viewers/EmailViewer"),   { loading: Spinner });
+const MediaViewer   = dynamic(() => import("./viewers/MediaViewer"),   { loading: Spinner });
+const EbookViewer   = dynamic(() => import("./viewers/EbookViewer"),   { loading: Spinner });
+const PptxViewer    = dynamic(() => import("./viewers/PptxViewer"),    { loading: Spinner });
+const PsdViewer     = dynamic(() => import("./viewers/PsdViewer"),     { loading: Spinner });
+const CadViewer     = dynamic(() => import("./viewers/CadViewer"),     { loading: Spinner });
 
 function Spinner() {
   return (

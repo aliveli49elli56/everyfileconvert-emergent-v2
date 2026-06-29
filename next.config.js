@@ -3,6 +3,9 @@ const nextConfig = {
   eslint: { ignoreDuringBuilds: true },
   images: { unoptimized: true },
   transpilePackages: ['node-unrar-js'],
+  experimental: {
+    optimizePackageImports: ['lucide-react'],
+  },
   
   async headers() {
     return [

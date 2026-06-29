@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -18,11 +19,18 @@ import {
   Eye,
 } from "lucide-react";
 import UniversalDropzone from "@/components/UniversalDropzone";
-import FormatSelector from "@/components/FormatSelector";
 import AdSlot from "@/components/ads/ad-slot";
 import { formatRegistry } from "@/lib/registry/format-registry";
 import { conversionRegistry } from "@/lib/registry/conversion-registry";
 import type { Locale } from "@/lib/i18n/config";
+
+// FormatSelector lives below the fold — load it lazily to keep the initial bundle small
+const FormatSelector = dynamic(() => import("@/components/FormatSelector"), {
+  loading: () => (
+    <div className="h-32 w-full rounded-xl bg-slate-100 animate-pulse" aria-hidden="true" />
+  ),
+  ssr: false,
+});
 
 type DictType = Record<string, unknown>;
 

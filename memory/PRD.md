@@ -99,7 +99,30 @@ BreadcrumbList JSON-LD added to 9 category hub pages:
 
 Logical hierarchy (3-level for tools, 2-level for hub pages) reflects the navigation structure.
 
-## Phase 5A — Code Quality, Stability & Production Validation (Completed)
+## Phase 5B — Performance Optimization (Completed)
+
+### Task 1 — Bundle & Import Optimization
+- **`app/[locale]/HomeClient.tsx`**: `FormatSelector` (255-line interactive component, below-the-fold) converted from eager static import to `dynamic(() => import(...), { ssr: false })` with pulse skeleton. Homepage route-specific bundle: **8.32 kB → 7.11 kB** (−14.5%).
+- **`next.config.js`**: Added `experimental.optimizePackageImports: ['lucide-react']` — 97 unique icon imports across the codebase now benefit from Next.js 13.5's barrel-file tree-shaker.
+
+### Task 3 — Next.js / Import Correctness
+- **`components/viewer/FileViewer.tsx`**: Moved `import dynamic from "next/dynamic"` from line 33 (after 12 `dynamic()` calls) to the top of the file — correct import order per ES module spec and Next.js conventions.
+
+### Validated No-Change Items
+- **Task 2 (Re-renders)**: No confirmed unnecessary re-renders. Page-level components render once; interactive converter components already use `useCallback`/`useRef` correctly.
+- **Task 4 (Images)**: `images: { unoptimized: true }` is required by COEP headers for SharedArrayBuffer/FFmpeg.wasm. User-uploaded images are blob URLs — cannot use `next/image`. No change required.
+- **Task 5 (Code Splitting)**: `FileViewer.tsx` already lazy-loads all 12 viewer sub-components. Conversion tool eagerly loaded (it IS the primary feature).
+- **Task 6 (Data fetching)**: App is 100% browser-side processing — no API calls to optimize.
+
+### Build Metrics
+| Metric | Before | After | Delta |
+|---|---|---|---|
+| `/[locale]` route chunk | 8.32 kB | 7.11 kB | −1.21 kB (−14.5%) |
+| `/[locale]` First Load JS | 118 kB | 116 kB | −2 kB |
+| Shared chunks | 80.9 kB | 80.9 kB | unchanged |
+| Build status | PASS | PASS | ✅ |
+
+
 
 ### Task 1 & 2 — TypeScript
 - **Status: CLEAN** — `npx tsc --noEmit` exits 0 with no output.
