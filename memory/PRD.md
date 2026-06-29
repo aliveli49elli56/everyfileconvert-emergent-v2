@@ -159,12 +159,58 @@ All routes return HTTP 200:
 - ✅ Image sitemap
 - ✅ BreadcrumbList JSON-LD on all category hub pages
 
-### P1 — Remaining
+### P1 — Remaining (SEO)
 - Add `noindex` to [locale]-scoped not-found (currently only root not-found covered)
 - Image sitemap: Add per-format representative images if a `/public/format-icons/` directory is created
 - News/article sitemap (if blog added)
 
-### P2 — Future
+### P2 — Future (SEO)
 - Organization schema `logo` ImageObject (once logo available at domain root)
 - SoftwareApplication schema on tool hub pages
 - Pagination/canonical handling for tool lists
+
+---
+
+## Phase 5C — Production Hardening & Runtime Safety Lock (Completed)
+
+### Implemented Feb 2026
+
+#### P0 — Error Boundaries (3 files created)
+
+| File | Role | Notes |
+|---|---|---|
+| `app/error.tsx` | Root error boundary | Catches crashes in non-locale routes |
+| `app/[locale]/error.tsx` | Locale error boundary | Catches crashes in all page routes (most critical) |
+| `app/global-error.tsx` | Global error boundary | Catches root layout crashes; includes `<html><body>` per Next.js spec; uses inline styles for maximum resilience |
+
+All three boundaries:
+- `"use client"` directive
+- Accept `error: Error & { digest?: string }` and `reset: () => void` props
+- Log errors via `useEffect(() => { console.error(error) }, [error])`
+- Display safe fallback UI matching the existing design system (light gradient background, "Try again" + "Back to Home" buttons)
+- No new dependencies introduced
+
+#### P1 — Hydration Safety Audit (All Clear — No changes required)
+
+| File | Issue Checked | Result |
+|---|---|---|
+| `AdvancedStudio.tsx` | `document.createElement` in `handleDownload` | Safe: inside click handler only, never during SSR render |
+| `navbar.tsx` | `window.addEventListener` | Safe: inside `useEffect` with cleanup |
+| `ViewHistory.tsx` | `window.dispatchEvent` calls | Safe: all guarded with `typeof window === "undefined"` |
+| `EbookConverter.tsx` | `window.innerWidth` access | Safe: inside `processFile` callback (user interaction only) |
+| `UniversalConverter.tsx` | `targetEntry` null risk | Safe: guarded with `{targetEntry && ...}` conditional rendering |
+
+#### P2 — fetch/API Safety (Not applicable)
+App is 100% in-browser processing — no server fetch calls in any route.
+
+### Build Validation
+- **`npm run build`**: ✅ PASS — 9,636 static pages generated, exit 0
+- **`npx tsc --noEmit`**: ✅ PASS — zero type errors
+- **Runtime routes**: All routes return HTTP 200 after supervisor restart
+
+### Phase 5C Completion Status
+- ✅ Error boundaries active on all routes (root, locale, global)
+- ✅ Zero hydration warnings introduced
+- ✅ No UI changes made
+- ✅ No broken routes
+- ✅ Build passes cleanly
