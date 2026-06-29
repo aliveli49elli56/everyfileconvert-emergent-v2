@@ -66,8 +66,19 @@ export default async function EbookConverterPage({
   const initialFrom = typeof sp.from === 'string' ? sp.from.toLowerCase() : undefined;
   const initialTo   = typeof sp.to   === 'string' ? sp.to.toLowerCase()   : undefined;
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": `https://everyfileconvert.com/${locale}` },
+      { "@type": "ListItem", "position": 2, "name": "Ebook Converter", "item": `https://everyfileconvert.com/${locale}/ebook-converter` },
+    ],
+  };
+
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10">
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      <div className="mx-auto max-w-3xl px-4 py-10">
       {/* Hero */}
       <div className="mb-8 text-center space-y-2">
         <div className="inline-flex items-center gap-2 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
@@ -111,5 +122,6 @@ export default async function EbookConverterPage({
         </div>
       </section>
     </div>
+    </>
   );
 }

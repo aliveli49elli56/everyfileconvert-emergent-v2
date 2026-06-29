@@ -85,8 +85,19 @@ const trustFeatures = [
 export default async function LocaleAudioConverterPage({ params }: PageProps) {
   const { locale } = await params;
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": `https://everyfileconvert.com/${locale}` },
+      { "@type": "ListItem", "position": 2, "name": "Audio Converter", "item": `https://everyfileconvert.com/${locale}/audio-converter` },
+    ],
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       <section className="py-14 lg:py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-10">
@@ -176,5 +187,6 @@ export default async function LocaleAudioConverterPage({ params }: PageProps) {
         </div>
       </section>
     </div>
+    </>
   );
 }

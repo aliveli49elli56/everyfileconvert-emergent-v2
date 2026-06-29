@@ -9,7 +9,10 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/_next/', '/api/'],
       },
     ],
-    sitemap: 'https://everyfileconvert.com/sitemap/0.xml',
+    sitemap: [
+      'https://everyfileconvert.com/sitemap/0.xml',
+      'https://everyfileconvert.com/image-sitemap.xml',
+    ],
     host: 'https://everyfileconvert.com',
   };
 }

@@ -87,8 +87,20 @@ const trustFeatures = [
 export default async function LocaleImageResizerPage({ params }: PageProps) {
   const { locale } = await params;
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": `https://everyfileconvert.com/${locale}` },
+      { "@type": "ListItem", "position": 2, "name": "Image Converter", "item": `https://everyfileconvert.com/${locale}/image-converter` },
+      { "@type": "ListItem", "position": 3, "name": "Image Resizer", "item": `https://everyfileconvert.com/${locale}/image-resizer` },
+    ],
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       <section className="py-16 lg:py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-12">
@@ -177,5 +189,6 @@ export default async function LocaleImageResizerPage({ params }: PageProps) {
         </div>
       </section>
     </div>
+    </>
   );
 }

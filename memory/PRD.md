@@ -73,24 +73,50 @@ All four pages converted from `export const metadata` to `generateMetadata({ par
 ### Metadata Coverage (Post Phase 4B)
 Every indexable page now exposes: `title`, `description`, `canonical`, `robots`, `openGraph`, `twitter`, `alternates.languages` (17 locales + x-default), `keywords`
 
-## Prioritised Backlog
+### Phase 4B Completion — Tasks Added (Post Phase 4B Initial)
 
-### P0 (Must have)
+#### Task 1 — 404 / Error Page SEO
+- **`/app/app/not-found.tsx`** — Removed `"use client"` (no hooks present, Button/Link are server-component safe); exported `metadata` with `title: '404 — Page Not Found | EveryFileConvert'` and `robots: { index: false, follow: false }`; UI unchanged.
+
+#### Task 2 — Image Sitemap
+- **`/app/app/image-sitemap.xml/route.ts`** (NEW) — Next.js App Router route handler that generates a fully spec-compliant Google Image Sitemap XML. Covers 16 image format families × (1 single-format page + N conversion pages) × 17 locales. Includes `<image:loc>`, `<image:title>`, `<image:caption>` per entry. Cached 24 hours.
+- **`/app/app/robots.ts`** — Updated `sitemap` to `string[]` listing both `sitemap/0.xml` and `image-sitemap.xml`.
+
+#### Task 3 — Breadcrumb JSON-LD for Category Pages
+BreadcrumbList JSON-LD added to 9 category hub pages:
+
+| Page | Breadcrumb Hierarchy |
+|---|---|
+| image-converter | Home → Image Converter |
+| video-converter | Home → Video Converter |
+| audio-converter | Home → Audio Converter |
+| pdf-tools | Home → PDF & Document Tools |
+| ebook-converter | Home → Ebook Converter |
+| image-resizer | Home → Image Converter → Image Resizer |
+| background-remover | Home → Image Converter → Background Remover |
+| image-crop | Home → Image Converter → Image Cropper |
+| compress-audio | Home → Audio Converter → Audio Compressor |
+
+Logical hierarchy (3-level for tools, 2-level for hub pages) reflects the navigation structure.
+
+## Updated Prioritised Backlog
+
+### P0 — Complete
 - ✅ robots.txt
 - ✅ x-default hreflang on all pages
 - ✅ Remove duplicate layout hreflang tags
 - ✅ Dynamic metadata for about/contact/privacy/terms
 - ✅ Fix canonical URL inconsistency (www vs no-www)
+- ✅ 404/error page noindex
+- ✅ Image sitemap
+- ✅ BreadcrumbList JSON-LD on all category hub pages
 
-### P1 (Should have — Phase 4C candidates)
-- Image sitemap (for image-specific SEO)
-- Video sitemap entries
-- Breadcrumb JSON-LD on category hub pages
-- `noindex` for error/404 pages (blocked by `"use client"` in not-found.tsx)
-- News/article sitemap if blog is added
+### P1 — Remaining
+- Add `noindex` to [locale]-scoped not-found (currently only root not-found covered)
+- Image sitemap: Add per-format representative images if a `/public/format-icons/` directory is created
+- News/article sitemap (if blog added)
 
-### P2 (Nice to have)
-- Logo ImageObject in Organization schema
+### P2 — Future
+- Organization schema `logo` ImageObject (once logo available at domain root)
 - SoftwareApplication schema on tool hub pages
-- Canonical handling for paginated content (if added)
-- OpenGraph locale per-page (currently inherited from layout)
+- Pagination/canonical handling for tool lists
