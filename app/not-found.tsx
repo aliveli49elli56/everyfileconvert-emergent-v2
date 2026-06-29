@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Home } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: '404 — Page Not Found | EveryFileConvert',
+  title: { absolute: '404 — Page Not Found | EveryFileConvert' },
   robots: { index: false, follow: false },
 };
 
