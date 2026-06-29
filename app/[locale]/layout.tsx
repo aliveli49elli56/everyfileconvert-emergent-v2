@@ -29,13 +29,16 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
   return {
     metadataBase: new URL('https://everyfileconvert.com'),
-    title: meta?.homeTitle || 'EveryFileConvert - Free Online File Converter',
+    title: {
+      default: meta?.homeTitle || 'EveryFileConvert - Free Online File Converter',
+      template: '%s | EveryFileConvert',
+    },
     description: meta?.homeDesc || 'Convert any file format instantly in your browser.',
     keywords: 'file converter, video converter, audio converter, image converter, pdf converter, free converter, online converter',
     authors: [{ name: 'EveryFileConvert' }],
     creator: 'EveryFileConvert',
     publisher: 'EveryFileConvert',
-    robots: 'index, follow',
+    robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
     openGraph: {
       type: 'website',
       locale: locale === 'zh' ? 'zh_CN' : `${locale}_${locale.toUpperCase()}`,
@@ -44,7 +47,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       title: meta?.homeTitle || 'EveryFileConvert - Free Online File Converter',
       description: meta?.homeDesc || 'Convert any file format instantly in your browser.',
       images: [{
-        url: 'https://images.pexels.com/photo/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1200',
+        url: 'https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1200',
         width: 1200,
         height: 630,
         alt: 'EveryFileConvert - Free Online File Converter',
@@ -54,7 +57,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       card: 'summary_large_image',
       title: meta?.homeTitle || 'EveryFileConvert - Free Online File Converter',
       description: meta?.homeDesc || 'Convert any file format instantly in your browser.',
-      images: ['https://images.pexels.com/photo/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1200'],
+      images: ['https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1200'],
     },
     alternates: {
       canonical: `https://everyfileconvert.com/${locale}`,
@@ -71,15 +74,10 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   }
 
   const rtl = isRTL(locale as Locale);
-  const hreflangs = getHreflangLinks('');
 
   return (
     <html lang={locale} dir={rtl ? 'rtl' : 'ltr'} suppressHydrationWarning>
       <head>
-        {hreflangs.map(({ locale: l, href }) => (
-          <link key={l} rel="alternate" hrefLang={l} href={href} />
-        ))}
-        <link rel="alternate" hrefLang="x-default" href="https://everyfileconvert.com/en" />
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
@@ -97,6 +95,24 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
             gtag('config', 'G-W9Z08BRR2Q');
           `}
         </Script>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "EveryFileConvert",
+              "url": "https://everyfileconvert.com",
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "email": "sponsor@everyfileconvert.com",
+                "contactType": "customer service",
+                "availableLanguage": ["English"]
+              },
+              "sameAs": []
+            })
+          }}
+        />
       </head>
       <body className={`${inter.className} min-h-screen flex flex-col`} suppressHydrationWarning>
         <Navbar locale={locale as Locale} />

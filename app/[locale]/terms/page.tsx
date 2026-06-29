@@ -1,11 +1,25 @@
 import type { Metadata } from "next";
 import { Scale, MonitorSmartphone, Smartphone, CheckCircle2 } from "lucide-react";
+import { locales, getHreflangLinks } from "@/lib/i18n/config";
 
-export const metadata: Metadata = {
-  title: "Terms of Service - EveryFileConvert",
-  description:
-    "Read the Terms of Service for EveryFileConvert. Free online file converter with up to 500 MB on desktop and 200 MB on mobile.",
-};
+export async function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const hreflangs = getHreflangLinks('/terms');
+  return {
+    title: "Terms of Service - EveryFileConvert",
+    description:
+      "Read the Terms of Service for EveryFileConvert. Free online file converter with up to 500 MB on desktop and 200 MB on mobile.",
+    robots: { index: true, follow: true },
+    alternates: {
+      canonical: `https://everyfileconvert.com/${locale}/terms`,
+      languages: Object.fromEntries(hreflangs.map(({ locale: l, href }) => [l, href])),
+    },
+  };
+}
 
 const rules = [
   "Use the service only for lawful purposes and in compliance with applicable laws.",

@@ -2,12 +2,42 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import EbookConverterClient from "@/components/EbookConverterClient";
 import { BookOpen } from "lucide-react";
+import { locales, getHreflangLinks } from "@/lib/i18n/config";
 
-export const metadata: Metadata = {
-  title: "Free Online Ebook Converter | EveryFileConvert",
-  description:
-    "Convert EPUB, MOBI, AZW3, FB2, PDF to any ebook format instantly in your browser — free, private, no account needed.",
-};
+export async function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const hreflangs = getHreflangLinks('/ebook-converter');
+  return {
+    title: "Free Online Ebook Converter | EveryFileConvert",
+    description:
+      "Convert EPUB, MOBI, AZW3, FB2, PDF to any ebook format instantly in your browser — free, private, no account needed.",
+    keywords: "ebook converter, epub to mobi, mobi to epub, epub to pdf, pdf to epub, free ebook converter",
+    robots: { index: true, follow: true },
+    openGraph: {
+      title: "Free Online Ebook Converter | EveryFileConvert",
+      description: "Convert EPUB, MOBI, AZW3, FB2, PDF to any ebook format instantly in your browser.",
+      type: "website",
+      url: `https://everyfileconvert.com/${locale}/ebook-converter`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Free Online Ebook Converter | EveryFileConvert",
+      description: "Convert EPUB, MOBI, AZW3, FB2, PDF to any ebook format — free, private, no account needed.",
+    },
+    alternates: {
+      canonical: `https://everyfileconvert.com/${locale}/ebook-converter`,
+      languages: Object.fromEntries(hreflangs.map(({ locale: l, href }) => [l, href])),
+    },
+  };
+}
 
 const EBOOK_FORMATS = ["EPUB", "MOBI", "AZW3", "FB2", "TXT", "PDF"];
 

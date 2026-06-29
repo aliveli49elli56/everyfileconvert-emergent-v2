@@ -59,6 +59,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       keywords: `${inputUpper} converter, convert ${inputUpper}, ${inputUpper} online converter`,
+      robots: { index: true, follow: true },
       openGraph: {
         title,
         description,
@@ -98,6 +99,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     keywords: `${inputUpper} to ${outputUpper}, convert ${inputUpper} to ${outputUpper} online, free ${inputUpper} to ${outputUpper} converter`,
+    robots: { index: true, follow: true },
     openGraph: {
       title,
       description,
@@ -130,11 +132,19 @@ export default async function ConversionPage({ params }: PageProps) {
         "@context": "https://schema.org",
         "@graph": [
           {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": `https://everyfileconvert.com/${locale}` },
+              { "@type": "ListItem", "position": 2, "name": `${IN} Converter`, "item": `https://everyfileconvert.com/${locale}/${slug}` },
+            ],
+          },
+          {
             "@type": "WebPage",
             "@id": `https://everyfileconvert.com/${locale}/${slug}`,
             url: `https://everyfileconvert.com/${locale}/${slug}`,
             name: `${IN} Converter - Convert to Multiple Formats Online`,
             inLanguage: locale,
+            breadcrumb: { "@id": `https://everyfileconvert.com/${locale}/${slug}#breadcrumb` },
           },
           {
             "@type": "SoftwareApplication",
@@ -144,17 +154,54 @@ export default async function ConversionPage({ params }: PageProps) {
             offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
             url: `https://everyfileconvert.com/${locale}/${slug}`,
           },
+          {
+            "@type": "FAQPage",
+            mainEntity: [
+              {
+                "@type": "Question",
+                name: ((dict.faq as Record<string, string>)?.q1single || `How do I convert ${IN} files online?`).replace(/{IN}/g, IN).replace(/{inputName}/g, pageData.parsedConversion.inputName),
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: ((dict.faq as Record<string, string>)?.a1single || `Upload your ${pageData.parsedConversion.inputName} file using the drop zone. Choose your target format and the file converts instantly in your browser.`).replace(/{IN}/g, IN).replace(/{inputName}/g, pageData.parsedConversion.inputName),
+                },
+              },
+              {
+                "@type": "Question",
+                name: ((dict.faq as Record<string, string>)?.q2single || `Is converting ${IN} files online safe?`).replace(/{IN}/g, IN),
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: ((dict.faq as Record<string, string>)?.a2single || `Completely. Our converter runs 100% in your browser, so your ${IN} file never leaves your device or touches any external server.`).replace(/{IN}/g, IN),
+                },
+              },
+              {
+                "@type": "Question",
+                name: ((dict.faq as Record<string, string>)?.q3single || `What is the maximum file size for ${IN} conversion?`).replace(/{IN}/g, IN),
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: ((dict.faq as Record<string, string>)?.a3single || `Desktop: up to 500 MB. Mobile: up to 200 MB. All processing happens locally in your browser.`).replace(/{IN}/g, IN),
+                },
+              },
+            ],
+          },
         ],
       }
     : {
         "@context": "https://schema.org",
         "@graph": [
           {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": `https://everyfileconvert.com/${locale}` },
+              { "@type": "ListItem", "position": 2, "name": `${IN} to ${OUT} Converter`, "item": `https://everyfileconvert.com/${locale}/${slug}` },
+            ],
+          },
+          {
             "@type": "WebPage",
             "@id": `https://everyfileconvert.com/${locale}/${slug}`,
             url: `https://everyfileconvert.com/${locale}/${slug}`,
             name: `Convert ${IN} to ${OUT} Online - Free & Secure`,
             inLanguage: locale,
+            breadcrumb: { "@id": `https://everyfileconvert.com/${locale}/${slug}#breadcrumb` },
           },
           {
             "@type": "SoftwareApplication",
@@ -169,10 +216,26 @@ export default async function ConversionPage({ params }: PageProps) {
             mainEntity: [
               {
                 "@type": "Question",
-                name: (dict.faq as Record<string, string>)?.q1?.replace(/{IN}/g, IN).replace(/{OUT}/g, OUT || "") || `How do I convert ${IN} to ${OUT}?`,
+                name: ((dict.faq as Record<string, string>)?.q1 || `How do I convert ${IN} to ${OUT} online for free?`).replace(/{IN}/g, IN).replace(/{OUT}/g, OUT || "").replace(/{inputName}/g, pageData.parsedConversion.inputName).replace(/{outputName}/g, pageData.parsedConversion.outputName || ""),
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: (dict.faq as Record<string, string>)?.a1?.replace(/{IN}/g, IN).replace(/{OUT}/g, OUT || "").replace(/{inputName}/g, pageData.parsedConversion.inputName).replace(/{outputName}/g, pageData.parsedConversion.outputName || "") || "",
+                  text: ((dict.faq as Record<string, string>)?.a1 || `Upload your ${pageData.parsedConversion.inputName} file using the drop zone above. Your file is instantly converted to ${pageData.parsedConversion.outputName || OUT} format right inside your browser.`).replace(/{IN}/g, IN).replace(/{OUT}/g, OUT || "").replace(/{inputName}/g, pageData.parsedConversion.inputName).replace(/{outputName}/g, pageData.parsedConversion.outputName || ""),
+                },
+              },
+              {
+                "@type": "Question",
+                name: ((dict.faq as Record<string, string>)?.q2 || `Is converting ${IN} to ${OUT} online safe and private?`).replace(/{IN}/g, IN).replace(/{OUT}/g, OUT || ""),
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: ((dict.faq as Record<string, string>)?.a2 || `Completely. Our converter runs 100% in your browser using local processing, so your ${IN} file never leaves your device or touches any external server.`).replace(/{IN}/g, IN).replace(/{OUT}/g, OUT || ""),
+                },
+              },
+              {
+                "@type": "Question",
+                name: ((dict.faq as Record<string, string>)?.q3 || `What is the maximum file size for ${IN} to ${OUT} conversion?`).replace(/{IN}/g, IN).replace(/{OUT}/g, OUT || ""),
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: ((dict.faq as Record<string, string>)?.a3 || `Desktop: up to 500 MB. Mobile: up to 200 MB. All processing happens locally in your browser — your files are never uploaded to any server.`).replace(/{IN}/g, IN).replace(/{OUT}/g, OUT || ""),
                 },
               },
             ],

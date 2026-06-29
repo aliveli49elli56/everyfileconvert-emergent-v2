@@ -1,11 +1,25 @@
 import type { Metadata } from "next";
 import { Mail, MessageSquare, Handshake, HelpCircle } from "lucide-react";
+import { locales, getHreflangLinks } from "@/lib/i18n/config";
 
-export const metadata: Metadata = {
-  title: "Contact - EveryFileConvert",
-  description:
-    "Get in touch with the EveryFileConvert team for support, sponsorship, or general inquiries at sponsor@everyfileconvert.com.",
-};
+export async function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const hreflangs = getHreflangLinks('/contact');
+  return {
+    title: "Contact - EveryFileConvert",
+    description:
+      "Get in touch with the EveryFileConvert team for support, sponsorship, or general inquiries at sponsor@everyfileconvert.com.",
+    robots: { index: true, follow: true },
+    alternates: {
+      canonical: `https://everyfileconvert.com/${locale}/contact`,
+      languages: Object.fromEntries(hreflangs.map(({ locale: l, href }) => [l, href])),
+    },
+  };
+}
 
 const reasons = [
   {

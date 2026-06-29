@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const BASE_URL = "https://www.everyfileconvert.com";
+const BASE_URL = "https://everyfileconvert.com";
 
 const LOCALES = [
   "en", "tr", "de", "fr", "es", "it", "pt", "ja",

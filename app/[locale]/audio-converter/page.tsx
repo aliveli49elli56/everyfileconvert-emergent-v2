@@ -36,6 +36,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: meta?.audioConverterTitle || "Free Online Audio Converter | EveryFileConvert",
     description: meta?.audioConverterDesc || "Convert MP3, WAV, FLAC, AAC, OGG and 20+ audio formats online. 100% private, no upload required.",
     keywords: "audio converter online, mp3 converter, wav converter, flac to mp3, free audio converter",
+    robots: { index: true, follow: true },
     openGraph: {
       title: meta?.audioConverterTitle || "Free Online Audio Converter",
       description: meta?.audioConverterDesc || "Convert between 20+ audio formats in your browser.",

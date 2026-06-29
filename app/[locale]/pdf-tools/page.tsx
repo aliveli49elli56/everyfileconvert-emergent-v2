@@ -37,6 +37,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: meta?.pdfToolsTitle || "Free Online PDF Tools & Document Converter | EveryFileConvert",
     description: meta?.pdfToolsDesc || "Convert, merge, split, compress and protect PDF files online. 100% private, no upload required.",
     keywords: "pdf converter online, pdf to docx, docx to pdf, pdf merger, pdf compressor, free pdf tools",
+    robots: { index: true, follow: true },
     openGraph: {
       title: meta?.pdfToolsTitle || "Free Online PDF Tools & Document Converter",
       description: meta?.pdfToolsDesc || "Complete PDF toolkit — convert, merge, split, compress.",

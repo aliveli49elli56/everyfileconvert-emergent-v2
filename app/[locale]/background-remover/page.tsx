@@ -33,6 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: meta?.backgroundRemoverTitle || "Free AI Background Remover Online | EveryFileConvert",
     description: meta?.backgroundRemoverDesc || "Remove image backgrounds instantly with AI. No signup needed, 100% private and free.",
     keywords: "background remover online, remove background from image, ai background remover, transparent png maker",
+    robots: { index: true, follow: true },
     openGraph: {
       title: meta?.backgroundRemoverTitle || "Free AI Background Remover Online",
       description: meta?.backgroundRemoverDesc || "Remove image backgrounds instantly with AI.",

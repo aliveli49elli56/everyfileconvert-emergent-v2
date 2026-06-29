@@ -32,6 +32,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: meta?.cropTitle || "Free Online Image Cropper | EveryFileConvert",
     description: meta?.cropDesc || "Crop images online to custom dimensions or aspect ratios. Square, landscape, portrait presets. 100% private, no uploads.",
     keywords: "image crop online, crop image free, image cropper, aspect ratio crop, square crop, portrait crop",
+    robots: { index: true, follow: true },
     openGraph: {
       title: meta?.cropTitle || "Free Online Image Cropper",
       description: meta?.cropDesc || "Crop images to any dimension or aspect ratio online for free.",

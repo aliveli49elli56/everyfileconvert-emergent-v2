@@ -23,17 +23,35 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale, slug } = await params;
   const pageData = getViewerPageData(slug);
-  if (!pageData) return { title: "Viewer Not Found" };
+  if (!pageData) return { title: "Viewer Not Found", robots: { index: false, follow: false } };
 
   const ext = slug.toUpperCase();
   const inputName = pageData.parsedConversion?.inputName || `${ext} File`;
   const hreflangs = getHreflangLinks(`/view/${slug}`);
+  const title = `Free Online ${ext} Viewer — Open ${inputName} Instantly | EveryFileConvert`;
+  const description = `Open and view ${inputName} files directly in your browser. No installation, no account needed. 100% private — your files never leave your device.`;
 
   return {
-    title: `Free Online ${ext} Viewer — Open ${inputName} Instantly | EveryFileConvert`,
-    description: `Open and view ${inputName} files directly in your browser. No installation, no account needed. 100% private — your files never leave your device.`,
-    alternates: { canonical: `https://www.everyfileconvert.com/${locale}/view/${slug}`, languages: Object.fromEntries(hreflangs.map(({ locale: l, href }) => [l, href])) },
+    title,
+    description,
+    robots: { index: true, follow: true },
     keywords: [`${ext} viewer`, `open ${ext} online`, `view ${ext} file`, `${ext} reader online`, `free ${ext} viewer`],
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `https://everyfileconvert.com/${locale}/view/${slug}`,
+      siteName: "EveryFileConvert",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+    alternates: {
+      canonical: `https://everyfileconvert.com/${locale}/view/${slug}`,
+      languages: Object.fromEntries(hreflangs.map(({ locale: l, href }) => [l, href])),
+    },
   };
 }
 
@@ -52,8 +70,73 @@ export default async function ViewerSlugPage({
 
   const dict = await getDictionary(locale as Locale);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": breadcrumbs.map((crumb, i) => ({
+          "@type": "ListItem",
+          "position": i + 1,
+          "name": crumb.label,
+          ...(crumb.href ? { "item": `https://everyfileconvert.com${crumb.href}` } : {}),
+        })),
+      },
+      {
+        "@type": "WebPage",
+        "@id": `https://everyfileconvert.com/${locale}/view/${slug}`,
+        "url": `https://everyfileconvert.com/${locale}/view/${slug}`,
+        "name": `Free Online ${ext} Viewer`,
+        "inLanguage": locale,
+        "breadcrumb": { "@id": `https://everyfileconvert.com/${locale}/view/${slug}#breadcrumb` },
+      },
+      {
+        "@type": "HowTo",
+        "name": `How to view ${ext} files online`,
+        "description": `Step-by-step instructions to open and view ${inputName} files directly in your browser.`,
+        "step": [
+          { "@type": "HowToStep", "position": 1, "name": "Drop your file", "text": `Drag & drop your .${slug} file into the zone, or click to browse.` },
+          { "@type": "HowToStep", "position": 2, "name": "Instant open", "text": "Your file opens instantly — no upload to any server." },
+          { "@type": "HowToStep", "position": 3, "name": "Navigate", "text": "Scroll, zoom, and navigate your document directly in the browser." },
+          { "@type": "HowToStep", "position": 4, "name": "Download", "text": "Download the original file anytime using the Download button." },
+        ],
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": `Is this ${ext} viewer free?`,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": `Yes, completely free. Open any ${ext} file with no limits, no sign-up, and no installation required.`,
+            },
+          },
+          {
+            "@type": "Question",
+            "name": `Is it safe to open ${ext} files here?`,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": `Your ${ext} file is processed entirely inside your browser using client-side JavaScript. It never leaves your device, is never uploaded to a server, and is automatically removed when you close the tab.`,
+            },
+          },
+          {
+            "@type": "Question",
+            "name": `What is the file size limit?`,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": `Up to 50 MB on desktop and 20 MB on mobile. For larger files, use the Convert tool which can process and compress files efficiently.`,
+            },
+          },
+        ],
+      },
+    ],
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-50/50 to-white">
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <div className="min-h-screen bg-gradient-to-b from-sky-50/50 to-white">
       <div className="container mx-auto max-w-5xl px-4 py-8">
         {/* Breadcrumb - Dynamic */}
         <div className="mb-8 flex items-center gap-2 text-sm text-slate-500">
@@ -161,5 +244,6 @@ export default async function ViewerSlugPage({
         </div>
       </div>
     </div>
+    </>
   );
 }

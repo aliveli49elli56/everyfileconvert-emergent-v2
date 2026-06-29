@@ -1,11 +1,25 @@
 import type { Metadata } from "next";
 import { Shield, Zap, Globe, Lock, Cpu, Heart } from "lucide-react";
+import { locales, getHreflangLinks } from "@/lib/i18n/config";
 
-export const metadata: Metadata = {
-  title: "About Us - EveryFileConvert",
-  description:
-    "Learn about EveryFileConvert — the 100% free, browser-based file converter that never uploads your files to any server.",
-};
+export async function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const hreflangs = getHreflangLinks('/about');
+  return {
+    title: "About Us - EveryFileConvert",
+    description:
+      "Learn about EveryFileConvert — the 100% free, browser-based file converter that never uploads your files to any server.",
+    robots: { index: true, follow: true },
+    alternates: {
+      canonical: `https://everyfileconvert.com/${locale}/about`,
+      languages: Object.fromEntries(hreflangs.map(({ locale: l, href }) => [l, href])),
+    },
+  };
+}
 
 const pillars = [
   {

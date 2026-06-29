@@ -36,6 +36,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: meta?.resizerTitle || "Free Online Image Resizer | EveryFileConvert",
     description: meta?.resizerDesc || "Resize images online to any dimension. Custom size, percentage scale, presets for social media. 100% private.",
     keywords: "image resizer online, resize image, crop image, scale image online, free image resizer",
+    robots: { index: true, follow: true },
     openGraph: {
       title: meta?.resizerTitle || "Free Online Image Resizer",
       description: meta?.resizerDesc || "Resize images to any dimension online for free.",

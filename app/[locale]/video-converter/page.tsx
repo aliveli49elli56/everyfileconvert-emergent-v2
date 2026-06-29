@@ -37,6 +37,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: meta?.videoConverterTitle || "Free Online Video Converter | EveryFileConvert",
     description: meta?.videoConverterDesc || "Convert MP4, WebM, AVI, MOV, MKV and 30+ video formats online. 100% private, no upload required.",
     keywords: "video converter online, mp4 converter, webm converter, avi to mp4, free video converter",
+    robots: { index: true, follow: true },
     openGraph: {
       title: meta?.videoConverterTitle || "Free Online Video Converter",
       description: meta?.videoConverterDesc || "Convert between 30+ video formats in your browser.",

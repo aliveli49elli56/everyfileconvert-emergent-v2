@@ -99,9 +99,13 @@ export function pickVariant<T>(arr: T[], seed: string): T {
   return arr[Math.abs(hash) % arr.length];
 }
 
-export function getHreflangLinks(path: string): { locale: Locale; href: string }[] {
-  return locales.map((locale) => ({
-    locale,
-    href: `https://everyfileconvert.com/${locale}${path}`,
-  }));
+export function getHreflangLinks(path: string): { locale: string; href: string }[] {
+  const BASE = 'https://everyfileconvert.com';
+  return [
+    ...locales.map((locale) => ({
+      locale,
+      href: `${BASE}/${locale}${path}`,
+    })),
+    { locale: 'x-default', href: `${BASE}/en${path}` },
+  ];
 }

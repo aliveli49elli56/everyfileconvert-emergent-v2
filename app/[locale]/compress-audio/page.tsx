@@ -31,6 +31,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: meta?.compressAudioTitle || "Free Online Audio Compressor | EveryFileConvert",
     description: meta?.compressAudioDesc || "Compress audio files online by reducing bitrate and file size. MP3, AAC, OGG, FLAC supported. 100% private, no uploads.",
     keywords: "audio compressor online, compress mp3, reduce audio file size, lower bitrate, free audio compressor",
+    robots: { index: true, follow: true },
     openGraph: {
       title: meta?.compressAudioTitle || "Free Online Audio Compressor",
       description: meta?.compressAudioDesc || "Compress and reduce audio file size online for free.",

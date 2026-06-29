@@ -633,6 +633,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: tool.seoTitle,
     description: tool.seoDesc,
+    robots: { index: true, follow: true },
     openGraph: {
       title: tool.seoTitle,
       description: tool.seoDesc,
@@ -657,7 +658,22 @@ export default async function ToolPage({ params }: PageProps) {
   const accentColor = accentColors[tool.badge] || "emerald";
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": `https://everyfileconvert.com/${locale}` },
+              { "@type": "ListItem", "position": 2, "name": tool.parentLabel, "item": `https://everyfileconvert.com/${locale}/${tool.parentPath}` },
+              { "@type": "ListItem", "position": 3, "name": tool.name },
+            ],
+          })
+        }}
+      />
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       <section className="py-14 lg:py-20">
         <div className="container mx-auto px-4">
           {/* Breadcrumb */}
@@ -712,5 +728,6 @@ export default async function ToolPage({ params }: PageProps) {
         </div>
       </section>
     </div>
+    </>
   );
 }

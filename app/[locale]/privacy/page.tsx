@@ -1,11 +1,25 @@
 import type { Metadata } from "next";
 import { ShieldCheck, ServerOff, Eye, FileX, Database, Lock } from "lucide-react";
+import { locales, getHreflangLinks } from "@/lib/i18n/config";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy - EveryFileConvert",
-  description:
-    "EveryFileConvert never uploads your files to any server. All processing happens inside your browser. Read our full privacy policy.",
-};
+export async function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const hreflangs = getHreflangLinks('/privacy');
+  return {
+    title: "Privacy Policy - EveryFileConvert",
+    description:
+      "EveryFileConvert never uploads your files to any server. All processing happens inside your browser. Read our full privacy policy.",
+    robots: { index: true, follow: true },
+    alternates: {
+      canonical: `https://everyfileconvert.com/${locale}/privacy`,
+      languages: Object.fromEntries(hreflangs.map(({ locale: l, href }) => [l, href])),
+    },
+  };
+}
 
 const commitments = [
   {

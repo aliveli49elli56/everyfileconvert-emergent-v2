@@ -16,8 +16,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: meta?.homeTitle,
     description: meta?.homeDesc,
+    robots: { index: true, follow: true },
     openGraph: {
       url: `https://everyfileconvert.com/${locale}`,
+      images: [{
+        url: 'https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1200',
+        width: 1200,
+        height: 630,
+        alt: 'EveryFileConvert - Free Online File Converter',
+      }],
     },
     alternates: {
       canonical: `https://everyfileconvert.com/${locale}`,
@@ -29,5 +36,28 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function LocaleHome({ params }: PageProps) {
   const { locale } = await params;
   const dict = await getDictionary(locale as Locale);
-  return <HomeClient dict={dict} locale={locale as Locale} />;
+
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "EveryFileConvert",
+    "url": "https://everyfileconvert.com",
+    "description": "Free online file converter — convert video, audio, image and document files directly in your browser",
+    "inLanguage": locale,
+    "potentialAction": [{
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": `https://everyfileconvert.com/${locale}/{search_term_string}`
+      },
+      "query-input": "required name=search_term_string"
+    }]
+  };
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
+      <HomeClient dict={dict} locale={locale as Locale} />
+    </>
+  );
 }

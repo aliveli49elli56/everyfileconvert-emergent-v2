@@ -48,6 +48,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     keywords: pageData.keywords.join(', '),
+    robots: { index: true, follow: true },
     openGraph: {
       title,
       description,
@@ -83,6 +84,13 @@ export default async function DynamicToolPage({ params }: PageProps) {
         "@context": "https://schema.org",
         "@graph": [
           {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": `https://everyfileconvert.com/${locale}` },
+              { "@type": "ListItem", "position": 2, "name": `${IN} Converter`, "item": `https://everyfileconvert.com/${locale}/${slugString}` },
+            ],
+          },
+          {
             "@type": "WebPage",
             "@id": `https://everyfileconvert.com/${locale}/${slugString}`,
             url: `https://everyfileconvert.com/${locale}/${slugString}`,
@@ -97,11 +105,47 @@ export default async function DynamicToolPage({ params }: PageProps) {
             offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
             url: `https://everyfileconvert.com/${locale}/${slugString}`,
           },
+          {
+            "@type": "FAQPage",
+            mainEntity: [
+              {
+                "@type": "Question",
+                name: `How do I convert ${IN} files online?`,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: `Upload your ${IN} file using the drop zone. Choose your target format and the file converts instantly in your browser. Files are processed locally — no uploads to any server.`,
+                },
+              },
+              {
+                "@type": "Question",
+                name: `Is converting ${IN} files online safe?`,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: `Completely. Our converter runs 100% in your browser, so your ${IN} file never leaves your device or touches any external server. We do not store, access, or transmit your files.`,
+                },
+              },
+              {
+                "@type": "Question",
+                name: `What is the maximum file size for ${IN} conversion?`,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: `Desktop: up to 500 MB. Mobile: up to 200 MB. All processing happens locally in your browser — your files are never uploaded to any server.`,
+                },
+              },
+            ],
+          },
         ],
       }
     : {
         "@context": "https://schema.org",
         "@graph": [
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": `https://everyfileconvert.com/${locale}` },
+              { "@type": "ListItem", "position": 2, "name": `${IN} to ${OUT} Converter`, "item": `https://everyfileconvert.com/${locale}/${slugString}` },
+            ],
+          },
           {
             "@type": "WebPage",
             "@id": `https://everyfileconvert.com/${locale}/${slugString}`,
@@ -122,10 +166,26 @@ export default async function DynamicToolPage({ params }: PageProps) {
             mainEntity: [
               {
                 "@type": "Question",
-                name: `How do I convert ${IN} to ${OUT}?`,
+                name: `How do I convert ${IN} to ${OUT} online for free?`,
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: `Upload your ${IN} file, and it will automatically convert to ${OUT} format. Files are processed locally in your browser.`,
+                  text: `Upload your ${IN} file, and it will automatically convert to ${OUT} format. Files are processed locally in your browser — no account, no software, and no cost. Click Download to save your ${OUT} file.`,
+                },
+              },
+              {
+                "@type": "Question",
+                name: `Is converting ${IN} to ${OUT} online safe and private?`,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: `Completely. Our converter runs 100% in your browser, so your ${IN} file never leaves your device or touches any external server. We do not store, access, or transmit your files at any point.`,
+                },
+              },
+              {
+                "@type": "Question",
+                name: `What is the maximum file size for ${IN} to ${OUT} conversion?`,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: `Desktop: up to 500 MB. Mobile: up to 200 MB. All processing happens locally in your browser — your files are never uploaded to any server.`,
                 },
               },
             ],

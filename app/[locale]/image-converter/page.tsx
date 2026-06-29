@@ -45,6 +45,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: meta?.imageConverterTitle || "Free Online Image Converter | EveryFileConvert",
     description: meta?.imageConverterDesc || "Convert PNG, JPG, WebP, HEIC and 40+ image formats online. 100% private, no upload required.",
     keywords: "image converter online, png to jpg, webp converter, heic converter, free image converter",
+    robots: { index: true, follow: true },
     openGraph: {
       title: meta?.imageConverterTitle || "Free Online Image Converter",
       description: meta?.imageConverterDesc || "Convert between 40+ image formats in your browser.",

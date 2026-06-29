@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Eye } from "lucide-react";
 import AdSlot from "@/components/ads/ad-slot";
-import { locales, type Locale } from "@/lib/i18n/config";
+import { locales, type Locale, getHreflangLinks } from "@/lib/i18n/config";
 import { formatRegistry } from "@/lib/registry/format-registry";
 import { getViewerCategories } from "@/lib/registry/viewer-registry";
 import ViewerHub from "@/components/viewer/ViewerHub";
@@ -15,10 +15,27 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const totalFormats = formatRegistry.getAll().filter(f => f.viewerEngine).length;
+  const hreflangs = getHreflangLinks('/view');
   return {
     title: `Free Online File Viewer — Open ${totalFormats}+ Formats Instantly | EveryFileConvert`,
     description: `Open and view ${totalFormats}+ file formats directly in your browser — no installation, no account required. View PDF, DOCX, XLSX, images, videos, archives, and more instantly online.`,
-    alternates: { canonical: `https://www.everyfileconvert.com/${locale}/view` },
+    robots: { index: true, follow: true },
+    openGraph: {
+      title: `Free Online File Viewer — Open ${totalFormats}+ Formats Instantly | EveryFileConvert`,
+      description: `Open and view ${totalFormats}+ file formats directly in your browser — no installation, no account required.`,
+      type: "website",
+      url: `https://everyfileconvert.com/${locale}/view`,
+      siteName: "EveryFileConvert",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Free Online File Viewer — Open ${totalFormats}+ Formats Instantly | EveryFileConvert`,
+      description: `Open and view ${totalFormats}+ file formats directly in your browser — no installation, no account required.`,
+    },
+    alternates: {
+      canonical: `https://everyfileconvert.com/${locale}/view`,
+      languages: Object.fromEntries(hreflangs.map(({ locale: l, href }) => [l, href])),
+    },
   };
 }
 
