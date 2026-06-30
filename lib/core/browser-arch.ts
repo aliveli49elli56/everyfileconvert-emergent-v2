@@ -195,39 +195,36 @@ export const LAZY_LIBRARY_MODULES: LazyLibraryModule[] = [
   },
   {
     libraryId: "epub-js",
-    // Phase 6C: install epubjs: yarn add epubjs, then activate real import
-    loader: async () => ({}),
+    loader: async () => import(/* webpackChunkName: "epubjs" */ 'epubjs'),
     bundleSizeBytes: 1024 * 1024,
     requiresCrossOriginIsolation: false,
     requiresWorker: false,
   },
   {
     libraryId: "svgo",
-    // Phase 6C: install svgo, then: import(/* webpackChunkName: "svgo" */ "svgo")
-    loader: async () => ({}),
+    loader: async () => import(/* webpackChunkName: "svgo" */ 'svgo/browser'),
     bundleSizeBytes: 450 * 1024,
     requiresCrossOriginIsolation: false,
     requiresWorker: false,
   },
   {
     libraryId: "opentype-js",
-    // Phase 6C: install opentype.js, then: import(/* webpackChunkName: "opentype" */ "opentype.js")
-    loader: async () => ({}),
+    loader: async () => import(/* webpackChunkName: "opentype-js" */ 'opentype.js'),
     bundleSizeBytes: 300 * 1024,
     requiresCrossOriginIsolation: false,
     requiresWorker: false,
   },
   {
     libraryId: "three-js",
-    // Phase 6C: install three, then: import(/* webpackChunkName: "three" */ "three")
-    loader: async () => ({}),
+    loader: async () => import(/* webpackChunkName: "three" */ 'three'),
     bundleSizeBytes: 600 * 1024,
     requiresCrossOriginIsolation: false,
     requiresWorker: false,
   },
   {
     libraryId: "7zip-wasm",
-    // Phase 6C: install 7zip-wasm
+    // 7zip-wasm is not available on npm. Planned for Phase 6C via server-side processing.
+    // Browser 7z/TAR support is declared as 'future' in capability-matrix.ts.
     loader: async () => ({}),
     bundleSizeBytes: 6 * 1024 * 1024,
     requiresCrossOriginIsolation: false,
@@ -235,40 +232,35 @@ export const LAZY_LIBRARY_MODULES: LazyLibraryModule[] = [
   },
   {
     libraryId: "node-unrar-js",
-    // Phase 6C: install node-unrar-js
-    loader: async () => ({}),
+    loader: async () => import(/* webpackChunkName: "node-unrar-js" */ 'node-unrar-js'),
     bundleSizeBytes: 500 * 1024,
     requiresCrossOriginIsolation: false,
     requiresWorker: true,
   },
   {
     libraryId: "turf-js",
-    // Phase 6C: install @turf/turf
-    loader: async () => ({}),
+    loader: async () => import(/* webpackChunkName: "turf" */ '@turf/turf'),
     bundleSizeBytes: 700 * 1024,
     requiresCrossOriginIsolation: false,
     requiresWorker: false,
   },
   {
     libraryId: "dcmjs",
-    // Phase 6C: install dcmjs
-    loader: async () => ({}),
+    loader: async () => import(/* webpackChunkName: "dcmjs" */ 'dcmjs'),
     bundleSizeBytes: 1.5 * 1024 * 1024,
     requiresCrossOriginIsolation: false,
     requiresWorker: false,
   },
   {
     libraryId: "node-forge",
-    // Phase 6C: install node-forge
-    loader: async () => ({}),
+    loader: async () => import(/* webpackChunkName: "node-forge" */ 'node-forge'),
     bundleSizeBytes: 450 * 1024,
     requiresCrossOriginIsolation: false,
     requiresWorker: false,
   },
   {
     libraryId: "html2canvas",
-    // Phase 6C: install html2canvas
-    loader: async () => ({}),
+    loader: async () => import(/* webpackChunkName: "html2canvas" */ 'html2canvas'),
     bundleSizeBytes: 500 * 1024,
     requiresCrossOriginIsolation: false,
     requiresWorker: false,

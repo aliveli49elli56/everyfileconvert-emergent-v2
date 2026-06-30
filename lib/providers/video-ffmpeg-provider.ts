@@ -206,19 +206,58 @@ export class VideoFFmpegProvider implements IVideoProvider {
   }
 
   async getMetadata(file: File): Promise<{ duration: number; resolution: { w: number; h: number }; fps: number; codec: string }> {
-    try {
-      // Use a short convert probe: try to get stream info via FFmpeg
-      const { VideoAudioEngine } = await import('../engine/VideoAudioEngine');
-      const result = await VideoAudioEngine.process({
-        files: [file],
-        op: 'video:convert',
-        options: { targetFormat: srcExt(file) },
-      });
-      // Extract duration from blob size heuristic (FFmpeg does not expose probe API here)
-      return { duration: -1, resolution: { w: 0, h: 0 }, fps: 0, codec: srcExt(file) };
-    } catch {
-      return { duration: -1, resolution: { w: 0, h: 0 }, fps: 0, codec: srcExt(file) };
-    }
+    // Phase 6B Part 2: Use the browser's native media element for metadata probing.
+    // This is the most reliable browser-side approach — no FFmpeg overhead for metadata-only reads.
+    // FPS is not exposed by HTMLVideoElement; it defaults to 0 (full FFmpeg probe requires server).
+    return new Promise<{ duration: number; resolution: { w: number; h: number }; fps: number; codec: string }>((resolve) => {
+      // Server-side (SSR) fallback
+      if (typeof document === 'undefined') {
+        resolve({ duration: -1, resolution: { w: 0, h: 0 }, fps: 0, codec: srcExt(file) });
+        return;
+      }
+
+      const url = URL.createObjectURL(file);
+      const video = document.createElement('video');
+      video.preload = 'metadata';
+      video.muted = true;
+
+      const cleanup = (): void => {
+        URL.revokeObjectURL(url);
+        video.src = '';
+        video.load();
+      };
+
+      const timeout = setTimeout(() => {
+        cleanup();
+        resolve({ duration: -1, resolution: { w: 0, h: 0 }, fps: 0, codec: srcExt(file) });
+      }, 10000);
+
+      video.onloadedmetadata = () => {
+        clearTimeout(timeout);
+        const result = {
+          duration: isFinite(video.duration) ? video.duration : -1,
+          resolution: {
+            w: video.videoWidth ?? 0,
+            h: video.videoHeight ?? 0,
+          },
+          // HTMLVideoElement does not expose FPS. A future FFmpeg-probe integration
+          // (Phase 6B Part 3 server-side) will populate this field.
+          fps: 0,
+          // MIME type → codec label (best-effort browser heuristic)
+          codec: srcExt(file),
+        };
+        cleanup();
+        resolve(result);
+      };
+
+      video.onerror = () => {
+        clearTimeout(timeout);
+        cleanup();
+        resolve({ duration: -1, resolution: { w: 0, h: 0 }, fps: 0, codec: srcExt(file) });
+      };
+
+      video.src = url;
+    });
   }
 }
 

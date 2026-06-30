@@ -269,3 +269,35 @@ App is 100% in-browser processing — no server fetch calls in any route.
 4. Replace require() with async import() in conversion-service
 5. Registry-backed Worker MIME data (build-time JSON from Format Registry)
 6. FFmpeg Probe metadata in VideoFFmpegProvider.getMetadata()
+
+### Phase 6B Part 2 — COMPLETE (2026-02-15)
+
+**Browser Provider Architecture Completion:**
+- Installed 9 new browser libraries (epubjs, svgo, opentype.js, three, @turf/turf, node-forge, html2canvas, dcmjs; 7zip-wasm not on npm → future stub)
+- Created 6 new browser providers: BrowserDocumentProvider, BrowserArchiveProvider, BrowserEbookProvider, BrowserFontProvider, BrowserVectorProvider, BrowserWebpageProvider
+- All providers fully implement their IXxxProvider interfaces; all library imports are lazy (`await import()`)
+- Removed all `require()` from browser code (`i18n/config.ts` and `conversion-service.ts`)
+- Replaced inline `MIME_MAP` in `image-worker.ts` with `workerMimeFor()` from `worker-mime-data.ts` (registry-derived)
+- Created `lib/engine/capability-matrix.ts` — 70-processor Browser Capability Matrix; statuses: browser-supported, partial, experimental, server-only, future
+- Created `lib/engine/subscription-hooks.ts` — Phase 6B Part 3 extension points (ISubscriptionProvider, IUsageTracker, IDownloadWorkflowProvider); stubs return permissive defaults
+- `VideoFFmpegProvider.getMetadata()` uses native `HTMLVideoElement` probing (duration/resolution; FPS declared as 0 — server FFprobe needed)
+- `resolveNewProvider()` → `resolveNewProviderAsync()` in conversion-service; all 6 new providers registered
+- Provider Selection Engine remains fully metadata-driven; no hardcoding added
+- TypeScript: 0 errors | Build: SUCCESS
+- Report: `/app/memory/phase6b-part2-report.md`
+
+### Phase 6B Part 3 — NOT STARTED
+
+**Prerequisites prepared by Phase 6B Part 2:**
+- `lib/engine/subscription-hooks.ts` defines all required interfaces
+- No provider refactoring required when billing/limits are added
+- Extension points: ISubscriptionProvider, IUsageTracker, IDownloadWorkflowProvider
+
+**Upcoming tasks:**
+- Docker environment — FFmpeg server, LibreOffice server
+- Server-side providers (SharpImageProvider, LibreOfficeProvider, GhostscriptProvider, CalibreProvider, PuppeteerProvider)
+- Subscription system (tiers: free/pro/enterprise)
+- Usage tracking (Redis-backed counters)
+- Cloud storage (S3/GCS for output files)
+- Queue system (BullMQ for async processing)
+- Premium billing (Stripe integration)

@@ -49,22 +49,20 @@ export async function getDictionary(locale: Locale): Promise<Record<string, unkn
   }
 }
 
-// Synchronous getter for server components (requires pre-loading)
+// Synchronous getter — returns from cache only.
+// For server components, call getDictionary() (async) first to populate the cache.
+// Avoid using this without a prior getDictionary() call; it will return {} otherwise.
 export function getDictionarySync(locale: Locale): Record<string, unknown> {
   if (dictCache.has(locale)) {
     return dictCache.get(locale)!;
   }
-  // Fallback: load inline
-  try {
-    const dict = require(`../../locales/${locale}.json`);
-    dictCache.set(locale, dict);
-    return dict;
-  } catch {
-    if (locale !== "en") {
-      return getDictionarySync("en");
-    }
-    return {};
+  // Cache is empty (not yet populated via getDictionary).
+  // Returning empty to avoid require() which is CommonJS-only.
+  // Server components should use await getDictionary(locale) before this.
+  if (locale !== "en") {
+    return getDictionarySync("en");
   }
+  return {};
 }
 
 type NestedObject = Record<string, unknown>;

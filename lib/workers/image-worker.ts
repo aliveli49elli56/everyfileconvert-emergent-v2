@@ -2,6 +2,8 @@
  * lib/workers/image-worker.ts
  *
  * Phase 6B — Image processing Web Worker.
+ * Phase 6B Part 2: MIME resolution now sourced from worker-mime-data.ts
+ * (registry-derived, no inline MIME maps).
  * Uses OffscreenCanvas for all render operations (no DOM access needed).
  * Loaded lazily via: new Worker(new URL('./image-worker.ts', import.meta.url))
  *
@@ -14,6 +16,7 @@
 /* eslint-disable no-restricted-globals */
 
 import type { WorkerRequest, WorkerResponse } from './worker-types';
+import { workerMimeFor } from './worker-mime-data';
 
 // Use a typed reference to the worker global scope without requiring webworker lib
 type WorkerGlobal = {
@@ -23,19 +26,12 @@ type WorkerGlobal = {
 const workerCtx = self as unknown as WorkerGlobal;
 
 // ---------------------------------------------------------------------------
-// MIME RESOLUTION (worker-safe subset — no format-registry import in worker)
+// MIME RESOLUTION — sourced from worker-mime-data (registry-derived)
+// No inline MIME_MAP allowed. All MIME lookups go through workerMimeFor().
 // ---------------------------------------------------------------------------
 
-const MIME_MAP: Record<string, string> = {
-  png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg',
-  webp: 'image/webp', gif: 'image/gif', bmp: 'image/bmp',
-  tiff: 'image/tiff', tif: 'image/tiff', avif: 'image/avif',
-  ico: 'image/x-icon', svg: 'image/svg+xml', heic: 'image/heic',
-  heif: 'image/heif',
-};
-
 function mimeFor(ext: string): string {
-  return MIME_MAP[ext.toLowerCase()] ?? `image/${ext}`;
+  return workerMimeFor(ext);
 }
 
 function outputName(original: string, ext: string): string {

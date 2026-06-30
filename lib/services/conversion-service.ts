@@ -101,7 +101,7 @@ class ConversionService {
 
       // Try new Phase 6A/6B provider implementations
       const selectedCandidate = selectionResult.selected;
-      const pse = selectedCandidate ? this.resolveNewProvider(selectedCandidate.providerId) : null;
+      const pse = selectedCandidate ? await this.resolveNewProviderAsync(selectedCandidate.providerId) : null;
       if (pse) {
         const result = await this.executeWithNewProvider(job, pse, onProgress);
         this.jobResults.set(job.id, result);
@@ -155,20 +155,49 @@ class ConversionService {
   }
 
   /**
-   * Phase 6B: Map PSE provider IDs to new IImageProvider/IVideoProvider implementations.
-   * As more providers are implemented, add them here.
+   * Phase 6B Part 2: Resolve new IBaseProvider implementations via lazy async imports.
+   * All require() replaced with await import() for browser-safe lazy loading.
    */
-  private resolveNewProvider(providerId: string): import('../types/provider-interfaces').IBaseProvider | null {
+  private async resolveNewProviderAsync(providerId: string): Promise<import('../types/provider-interfaces').IBaseProvider | null> {
     try {
       switch (providerId) {
         case 'CanvasApiProvider':
         case 'CanvasImageProvider': {
-          const { imageCanvasProvider } = require('../providers/image-canvas-provider');
+          const { imageCanvasProvider } = await import(/* webpackChunkName: "canvas-provider" */ '../providers/image-canvas-provider');
           return imageCanvasProvider;
         }
         case 'FFmpegWasmProvider': {
-          const { videoFFmpegProvider } = require('../providers/video-ffmpeg-provider');
+          const { videoFFmpegProvider } = await import(/* webpackChunkName: "ffmpeg-provider" */ '../providers/video-ffmpeg-provider');
           return videoFFmpegProvider;
+        }
+        case 'BrowserDocumentProvider': {
+          const { browserDocumentProvider } = await import(/* webpackChunkName: "document-provider" */ '../providers/document-provider');
+          return browserDocumentProvider;
+        }
+        case 'BrowserArchiveProvider':
+        case 'JSZipProvider':
+        case 'UnrarProvider': {
+          const { browserArchiveProvider } = await import(/* webpackChunkName: "archive-provider" */ '../providers/archive-provider');
+          return browserArchiveProvider;
+        }
+        case 'BrowserEbookProvider': {
+          const { browserEbookProvider } = await import(/* webpackChunkName: "ebook-provider" */ '../providers/ebook-provider');
+          return browserEbookProvider;
+        }
+        case 'BrowserFontProvider':
+        case 'OpenTypeProvider': {
+          const { browserFontProvider } = await import(/* webpackChunkName: "font-provider" */ '../providers/font-provider');
+          return browserFontProvider;
+        }
+        case 'BrowserVectorProvider':
+        case 'SVGOProvider': {
+          const { browserVectorProvider } = await import(/* webpackChunkName: "vector-provider" */ '../providers/vector-provider');
+          return browserVectorProvider;
+        }
+        case 'BrowserWebpageProvider':
+        case 'Html2CanvasProvider': {
+          const { browserWebpageProvider } = await import(/* webpackChunkName: "webpage-provider" */ '../providers/webpage-provider');
+          return browserWebpageProvider;
         }
         default:
           return null;
@@ -176,6 +205,11 @@ class ConversionService {
     } catch {
       return null;
     }
+  }
+
+  /** @deprecated Use resolveNewProviderAsync */
+  private resolveNewProvider(_providerId: string): import('../types/provider-interfaces').IBaseProvider | null {
+    return null;
   }
 
   /**
