@@ -8,3 +8,4 @@ export * from './formats';
 export * from './conversion';
 export * from './providers';
 export * from './services';
+export * from './provider-interfaces';

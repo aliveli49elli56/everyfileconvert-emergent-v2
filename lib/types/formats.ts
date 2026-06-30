@@ -7,26 +7,59 @@ import type { LucideIcon } from "lucide-react";
 
 /** Top-level grouping of a format — drives category pages, SEO, and converter routing. */
 export type FormatCategory =
+  // ── Visual ───────────────────────────────────────────────────────────────
   | "image"
   | "raw"
   | "vector"
   | "icon"
+  // ── 3D / Engineering ─────────────────────────────────────────────────────
+  | "3d"
   | "cad"
+  // ── Media ────────────────────────────────────────────────────────────────
   | "video"
   | "audio"
+  // ── Documents ────────────────────────────────────────────────────────────
+  | "pdf"
   | "document"
+  | "spreadsheet"
+  | "presentation"
+  // ── Publishing ───────────────────────────────────────────────────────────
+  | "ebook"
+  // ── Utility ──────────────────────────────────────────────────────────────
   | "archive"
   | "font"
+  // ── Geospatial ───────────────────────────────────────────────────────────
   | "gis"
+  // ── Communication ────────────────────────────────────────────────────────
   | "email"
+  // ── Developer ────────────────────────────────────────────────────────────
   | "code"
-  | "ebook";
+  // ── Web ──────────────────────────────────────────────────────────────────
+  | "webpage"
+  // ── Media Accessibility ──────────────────────────────────────────────────
+  | "subtitle"
+  // ── Security ─────────────────────────────────────────────────────────────
+  | "certificate"
+  // ── Specialised ──────────────────────────────────────────────────────────
+  | "scientific"
+  | "medical"
+  | "disk-image"
+  | "executable"
+  | "other";
 
 /** Processing tier for UI display */
 export type FormatTier = "popular" | "standard" | "advanced" | "niche";
 
 /** Converter page type */
-export type ConverterType = "image" | "video" | "audio" | "document" | "ebook" | "archive" | "cad" | "font";
+export type ConverterType =
+  | "image" | "raw" | "vector" | "icon"
+  | "3d" | "cad"
+  | "video" | "audio"
+  | "pdf" | "document" | "spreadsheet" | "presentation"
+  | "ebook" | "archive" | "font"
+  | "gis" | "email" | "code"
+  | "webpage" | "subtitle" | "certificate"
+  | "scientific" | "medical" | "disk-image" | "executable";
 
 /** Processing engine identifier */
 export type ProcessingEngine =
@@ -41,7 +74,21 @@ export type ProcessingEngine =
   | "premium-api"
   | "font-engine"
   | "gis-engine"
-  | "archive-engine";
+  | "archive-engine"
+  // ── New engines (Phase 6A) ────────────────────────────────────────────────
+  | "3d-engine"
+  | "webpage-engine"
+  | "subtitle-engine"
+  | "certificate-engine"
+  | "scientific-engine"
+  | "medical-engine"
+  | "disk-image-engine"
+  | "spreadsheet-engine"
+  | "ocr-engine"
+  | "vector-engine"
+  | "raw-engine"
+  | "executable-engine"
+  | "email-engine";
 
 /** Viewer engine identifier */
 export type ViewerEngine =
@@ -61,6 +108,14 @@ export type ViewerEngine =
   | "cad"
   | "font"
   | "gis"
+  // ── New viewer engines (Phase 6A) ─────────────────────────────────────────
+  | "3d"
+  | "subtitle"
+  | "certificate"
+  | "medical"
+  | "scientific"
+  | "disk-image"
+  | "webpage"
   | "none";
 
 /** Editor capability level */
@@ -114,6 +169,55 @@ export interface FormatDefinition {
   qualityRating?: number;
   /** Popular conversions from this format */
   popularConversions?: string[];
+
+  // ── Phase 6A: Tool capability metadata ───────────────────────────────────────
+  /** List of supported tool operations for this format (from Processor Registry) */
+  supportedTools?: string[];
+  /** Viewer metadata */
+  viewerMetadata?: ViewerMetadata;
+  /** Performance hints for browser processing */
+  performanceHints?: PerformanceHints;
+  /** Worker support */
+  workerSupported?: boolean;
+  /** Long-tail SEO aliases */
+  seoAliases?: string[];
+}
+
+// ── Phase 6A: New Interfaces ──────────────────────────────────────────────────
+
+/** Tool capability metadata (from Processor Registry) */
+export interface ToolCapability {
+  processorId: string;
+  operationId: string;
+  label: string;
+  description: string;
+  premium: boolean;
+  browserSupported: boolean;
+  workerSupported: boolean;
+}
+
+/** Viewer metadata */
+export interface ViewerMetadata {
+  component?: string;
+  renderer?: string;
+  supportsZoom?: boolean;
+  supportsThumbnails?: boolean;
+  supportsSearch?: boolean;
+  supportsAnnotations?: boolean;
+  supportsPageNavigation?: boolean;
+  supportedBrowsers?: string[];
+}
+
+/** Performance hints for browser processing */
+export interface PerformanceHints {
+  estimatedMemoryMB?: number;
+  estimatedCPU?: 'low' | 'medium' | 'high' | 'very-high';
+  supportsStreaming?: boolean;
+  supportsChunking?: boolean;
+  supportsWorker?: boolean;
+  requiresGPU?: boolean;
+  lazyLoadLibrary?: boolean;
+  chunkSizeMB?: number;
 }
 
 /** Category metadata for UI */

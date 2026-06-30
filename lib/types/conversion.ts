@@ -7,7 +7,7 @@ import type { FormatDefinition } from './formats';
 
 /** All supported conversion operations */
 export type ConversionOperation =
-  // Image
+  // ── Image ─────────────────────────────────────────────────────────────────
   | 'image:convert'
   | 'image:crop'
   | 'image:resize'
@@ -18,7 +18,17 @@ export type ConversionOperation =
   | 'image:watermark'
   | 'image:color-adjust'
   | 'image:ocr'
-  // Video
+  | 'image:metadata-remove'
+  | 'image:background-remove'
+  | 'image:upscale'
+  // ── RAW ───────────────────────────────────────────────────────────────────
+  | 'raw:develop'
+  | 'raw:convert'
+  // ── Vector ────────────────────────────────────────────────────────────────
+  | 'vector:convert'
+  | 'vector:optimize'
+  | 'vector:rasterize'
+  // ── Video ─────────────────────────────────────────────────────────────────
   | 'video:convert'
   | 'video:trim'
   | 'video:compress'
@@ -29,7 +39,7 @@ export type ConversionOperation =
   | 'video:reverse'
   | 'video:subtitle'
   | 'video:merge'
-  // Audio
+  // ── Audio ─────────────────────────────────────────────────────────────────
   | 'audio:convert'
   | 'audio:trim'
   | 'audio:compress'
@@ -37,7 +47,8 @@ export type ConversionOperation =
   | 'audio:merge'
   | 'audio:speed'
   | 'audio:pitch'
-  // PDF
+  | 'audio:volume'
+  // ── PDF ───────────────────────────────────────────────────────────────────
   | 'pdf:merge'
   | 'pdf:split'
   | 'pdf:compress'
@@ -47,15 +58,93 @@ export type ConversionOperation =
   | 'pdf:to-word'
   | 'pdf:watermark'
   | 'pdf:page-numbers'
-  // Document
+  | 'pdf:ocr'
+  | 'pdf:to-image'
+  // ── Document ──────────────────────────────────────────────────────────────
   | 'doc:to-pdf'
   | 'doc:to-text'
   | 'doc:convert'
-  // Ebook
-  | 'ebook:convert';
+  | 'doc:extract-images'
+  // ── Spreadsheet ───────────────────────────────────────────────────────────
+  | 'spreadsheet:convert'
+  | 'spreadsheet:to-pdf'
+  | 'spreadsheet:merge'
+  | 'spreadsheet:to-json'
+  | 'spreadsheet:filter'
+  // ── Presentation ──────────────────────────────────────────────────────────
+  | 'presentation:convert'
+  | 'presentation:to-pdf'
+  | 'presentation:extract-images'
+  // ── Ebook ─────────────────────────────────────────────────────────────────
+  | 'ebook:convert'
+  | 'ebook:extract-images'
+  // ── Archive ───────────────────────────────────────────────────────────────
+  | 'archive:compress'
+  | 'archive:extract'
+  | 'archive:convert'
+  | 'archive:list'
+  // ── Font ──────────────────────────────────────────────────────────────────
+  | 'font:convert'
+  | 'font:subset'
+  | 'font:preview'
+  | 'font:metadata'
+  // ── GIS ───────────────────────────────────────────────────────────────────
+  | 'gis:convert'
+  | 'gis:project'
+  | 'gis:simplify'
+  // ── Email ─────────────────────────────────────────────────────────────────
+  | 'email:convert'
+  | 'email:extract'
+  // ── Code / Data ───────────────────────────────────────────────────────────
+  | 'code:convert'
+  | 'code:format'
+  | 'code:minify'
+  // ── Webpage ───────────────────────────────────────────────────────────────
+  | 'webpage:to-pdf'
+  | 'webpage:screenshot'
+  | 'webpage:full-screenshot'
+  | 'webpage:to-text'
+  | 'webpage:to-markdown'
+  | 'webpage:to-image'
+  // ── Subtitle ──────────────────────────────────────────────────────────────
+  | 'subtitle:convert'
+  | 'subtitle:sync'
+  | 'subtitle:translate'
+  // ── Certificate ───────────────────────────────────────────────────────────
+  | 'certificate:convert'
+  | 'certificate:inspect'
+  | 'certificate:extract-key'
+  // ── 3D ────────────────────────────────────────────────────────────────────
+  | '3d:convert'
+  | '3d:compress'
+  | '3d:optimize'
+  | '3d:preview'
+  // ── CAD ───────────────────────────────────────────────────────────────────
+  | 'cad:convert'
+  | 'cad:to-pdf'
+  | 'cad:preview'
+  // ── OCR ───────────────────────────────────────────────────────────────────
+  | 'ocr:recognize'
+  | 'ocr:pdf-to-text'
+  // ── Scientific ────────────────────────────────────────────────────────────
+  | 'scientific:convert'
+  | 'scientific:visualize'
+  // ── Medical ───────────────────────────────────────────────────────────────
+  | 'medical:convert'
+  | 'medical:anonymize'
+  // ── Disk Image ────────────────────────────────────────────────────────────
+  | 'disk:convert'
+  | 'disk:extract';
 
 /** Conversion domain */
-export type ConversionDomain = 'image' | 'video' | 'audio' | 'pdf' | 'doc' | 'ebook';
+export type ConversionDomain =
+  | 'image' | 'raw' | 'vector'
+  | 'video' | 'audio'
+  | 'pdf' | 'doc' | 'spreadsheet' | 'presentation'
+  | 'ebook' | 'archive' | 'font'
+  | 'gis' | 'email' | 'code'
+  | 'webpage' | 'subtitle' | 'certificate'
+  | 'scientific' | 'medical' | 'disk' | '3d' | 'cad';
 
 /** Conversion options - all possible parameters */
 export interface ConversionOptions {
