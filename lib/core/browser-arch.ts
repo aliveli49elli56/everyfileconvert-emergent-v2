@@ -223,11 +223,19 @@ export const LAZY_LIBRARY_MODULES: LazyLibraryModule[] = [
   },
   {
     libraryId: "7zip-wasm",
-    // 7zip-wasm is not available on npm. Planned for Phase 6C via server-side processing.
-    // Browser 7z/TAR support is declared as 'future' in capability-matrix.ts.
-    loader: async () => ({}),
+    // npm: 7z-wasm@1.2.0 (installed)
+    // Imports the 7-Zip WASM module factory — does NOT initialize WASM.
+    // WASM binary (7zz.wasm) is served from /public/wasm/7zz.wasm.
+    // SevenZipEngine (Phase 6C) calls factory({ locateFile: path => `/wasm/${path}` })
+    // to fully initialize the engine. This loader registers infrastructure only.
+    loader: async (): Promise<object> => {
+      if (typeof window === 'undefined') return {};
+      // Import the factory function. WASM does not load until factory() is called.
+      const mod = await import(/* webpackChunkName: "7z-wasm" */ '7z-wasm');
+      return { factory: mod.default, status: 'infrastructure-registered' };
+    },
     bundleSizeBytes: 6 * 1024 * 1024,
-    requiresCrossOriginIsolation: false,
+    requiresCrossOriginIsolation: true, // SharedArrayBuffer needed for multi-threaded mode
     requiresWorker: true,
   },
   {

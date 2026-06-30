@@ -286,7 +286,32 @@ App is 100% in-browser processing — no server fetch calls in any route.
 - TypeScript: 0 errors | Build: SUCCESS
 - Report: `/app/memory/phase6b-part2-report.md`
 
-### Phase 6B Part 3 — NOT STARTED
+### 7zip-wasm Infrastructure Integration (2026-02-15)
+
+**Scope:** Architecture infrastructure only. No archive processing refactored. No fake support added.
+
+**Changes:**
+- Installed `7z-wasm@1.2.0` (correct npm package for 7-Zip in WASM)
+- Created `lib/engine/archive-capability.ts` — authoritative format-level archive capability registry
+  - Every archive format (zip, rar, 7z, tar, gz, bz2, xz, cab, iso, dmg, zst, lzma, lz4) has:
+    - `libraryId`, `npmPackage`, `browserStatus`, per-operation statuses (extract/create/list/test)
+    - Truthful status: `supported` | `partial` | `future` | `server-only`
+  - zip: supported (JSZip); rar: partial (node-unrar-js, no create); 7z/tar/gz/bz2/xz/cab: future (7z-wasm infrastructure); iso/dmg/zst/lzma/lz4: server-only
+- Updated `lib/providers/archive-provider.ts` — removed all hardcoded format arrays; all format decisions via `getArchiveFormatCapability()`, `isOperationCurrentlySupported()`, `getUnsupportedReason()` from archive-capability.ts
+- Updated `lib/registry/library-registry.ts` — `7zip-wasm` entry now points to `7z-wasm` npm package with accurate capability docs
+- Updated `lib/core/browser-arch.ts` — real `7z-wasm` lazy loader (imports factory, does NOT call factory/init WASM)
+- Updated `lib/engine/provider-selection-engine.ts` — `SevenZipProvider` entry updated with accurate input/output formats and infrastructure notes
+- Updated `lib/services/conversion-service.ts` — `SevenZipProvider` case added to `resolveNewProviderAsync()`
+- Copied `7zz.wasm` to `/public/wasm/7zz.wasm` for Phase 6C runtime access
+- TypeScript: 0 errors | Build: SUCCESS
+
+### Phase 6C Prerequisites
+
+- `7z-wasm` lazy loader registered → Phase 6C implements `SevenZipEngine.initialize({ locateFile: path => '/wasm/' + path })`
+- `archive-capability.ts` formats 7z/tar/gz/bz2/xz/cab all have `future` status → change to `partial`/`supported` when engine is wired
+- `BrowserArchiveProvider` will automatically handle these formats once `isOperationCurrentlySupported()` returns true
+
+
 
 **Prerequisites prepared by Phase 6B Part 2:**
 - `lib/engine/subscription-hooks.ts` defines all required interfaces

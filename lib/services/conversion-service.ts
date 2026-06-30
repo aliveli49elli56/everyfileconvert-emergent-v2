@@ -176,7 +176,8 @@ class ConversionService {
         }
         case 'BrowserArchiveProvider':
         case 'JSZipProvider':
-        case 'UnrarProvider': {
+        case 'UnrarProvider':
+        case 'SevenZipProvider': {
           const { browserArchiveProvider } = await import(/* webpackChunkName: "archive-provider" */ '../providers/archive-provider');
           return browserArchiveProvider;
         }

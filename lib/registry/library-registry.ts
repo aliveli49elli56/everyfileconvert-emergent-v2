@@ -888,8 +888,11 @@ export const LIBRARY_DEFINITIONS: LibraryDefinition[] = [
   {
     id: "7zip-wasm",
     name: "7zip-wasm",
-    package: "7zip-wasm",
-    homepage: "https://github.com/nicowillis/7zip-wasm",
+    // npm package: 7z-wasm@1.2.0 (installed)
+    // Note: the npm package name is "7z-wasm"; this library registry entry retains
+    // "7zip-wasm" as the canonical libraryId used across all registries.
+    package: "7z-wasm",
+    homepage: "https://www.npmjs.com/package/7z-wasm",
     license: "MIT",
     browserSupport: true,
     serverRequired: false,
@@ -900,12 +903,13 @@ export const LIBRARY_DEFINITIONS: LibraryDefinition[] = [
     priority: 2,
     status: "secondary",
     bundleSize: 6 * 1024 * 1024,
-    inputFormats: ["7z", "zip", "tar", "gz", "bz2", "xz", "rar", "cab"],
-    outputFormats: ["7z", "zip", "tar", "gz"],
+    // Formats per archive-capability.ts. RAR is extract-only via 7-Zip.
+    inputFormats: ["7z", "tar", "gz", "bz2", "xz", "cab", "zip", "rar"],
+    outputFormats: ["7z", "tar", "gz", "bz2", "xz", "zip"],
     supportsParallel: false,
     supportsStreaming: false,
     maxFileSizeBytes: 1 * 1024 * 1024 * 1024,
-    description: "7-Zip compiled to WASM — handles many archive formats",
+    description: "7-Zip compiled to WASM (7z-wasm) — infrastructure registered. Factory loader activates Phase 6C SevenZipEngine.",
   },
   {
     id: "libarchive",

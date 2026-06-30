@@ -513,13 +513,19 @@ const PROVIDER_META_TABLE: ProviderMeta[] = [
   },
   {
     id: "SevenZipProvider",
+    // 7z-wasm@1.2.0 installed as infrastructure. Module factory registered in browser-arch.ts.
+    // WASM binary served from /public/wasm/7zz.wasm.
+    // Processing pipeline (SevenZipEngine.initialize() + FS + callMain) planned for Phase 6C.
+    // Current BrowserArchiveProvider.canHandle() returns 'future' for these formats
+    // via archive-capability.ts — no fake processing, truthful metadata only.
     name: "7zip-wasm Provider",
     libraryId: "7zip-wasm",
     browserCompatible: true,
     serverRequired: false,
     requiresPremium: false,
-    inputFormats: ["7z", "zip", "tar", "gz", "bz2", "xz", "rar", "cab"],
-    outputFormats: ["7z", "zip", "tar", "gz"],
+    // Formats per 7z-wasm capability. RAR is read-only even by 7-Zip (no create).
+    inputFormats: ["7z", "tar", "gz", "bz2", "xz", "cab", "zip", "rar"],
+    outputFormats: ["7z", "tar", "gz", "bz2", "xz", "zip"],
     qualityScore: 92,
     speedScore: 65,
     memoryScore: 60,

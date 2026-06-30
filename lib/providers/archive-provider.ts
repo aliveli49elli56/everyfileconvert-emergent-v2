@@ -3,12 +3,21 @@
  *
  * Phase 6B Part 2 — Browser IArchiveProvider implementation.
  *
- * Browser Capability Declaration (truthful):
+ * Archive format capabilities are declared through metadata in:
+ *   lib/engine/archive-capability.ts
+ *
+ * This provider does NOT hardcode format lists.
+ * All canHandle() decisions are driven by ARCHIVE_FORMAT_CAPABILITIES.
+ *
+ * Currently implemented (current provider wiring):
  *   ZIP  : FULL   — create, extract, list, test (JSZip)
- *   RAR  : PARTIAL— extract only, no create (node-unrar-js)
- *   7Z   : FUTURE — 7zip-wasm not yet available on npm; server-only
- *   TAR  : FUTURE — no browser tar library currently registered
- *   GZ   : FUTURE — browser gzip decompression via CompressionStream API (partial)
+ *   RAR  : PARTIAL— extract/list/test only, no create (node-unrar-js)
+ *
+ * Infrastructure-registered for Phase 6C:
+ *   7z, tar, gz, bz2, xz, cab — 7z-wasm@1.2.0 installed; SevenZipEngine planned
+ *
+ * Server-only (no browser path):
+ *   iso, dmg, zst, lzma, lz4
  *
  * Libraries used (all lazy-loaded):
  *   - jszip          : ZIP create/extract/list
@@ -24,6 +33,11 @@ import type {
 } from '../types/provider-interfaces';
 import type { ConversionResult } from '../types/conversion';
 import { providerLifecycleRegistry } from '../core/browser-arch';
+import {
+  getArchiveFormatCapability,
+  isOperationCurrentlySupported,
+  getUnsupportedReason,
+} from '../engine/archive-capability';
 
 // ---------------------------------------------------------------------------
 // PROVIDER METADATA
@@ -32,16 +46,11 @@ import { providerLifecycleRegistry } from '../core/browser-arch';
 const PROVIDER_INFO: ProviderInfo = {
   id: 'BrowserArchiveProvider',
   name: 'Browser Archive Provider',
-  version: '6.2.0',
+  version: '6.2.1',
   type: 'client',
   enabled: true,
   premiumOnly: false,
 };
-
-/** ZIP: full support; RAR: extract only; others: future/server-only */
-const BROWSER_INPUT_FORMATS  = ['zip', 'rar'];
-const BROWSER_OUTPUT_FORMATS = ['zip'];
-const SERVER_ONLY_FORMATS    = ['7z', 'tar', 'gz', 'bz2', 'xz', 'cab', 'zst'];
 
 // ---------------------------------------------------------------------------
 // HELPERS
@@ -73,29 +82,57 @@ export class BrowserArchiveProvider implements IArchiveProvider {
 
   isReady(): boolean { return this._ready; }
 
+  /**
+   * Capability check — fully metadata-driven via archive-capability.ts.
+   * No format lists are hardcoded in this method.
+   */
   async canHandle(input: File | string, targetFormat: string): Promise<ProviderCapabilityCheck> {
-    const ext = typeof input === 'string'
-      ? input.toLowerCase()
+    const inputExt = typeof input === 'string'
+      ? input.toLowerCase().split('.').pop() ?? input.toLowerCase()
       : (input as File).name.split('.').pop()?.toLowerCase() ?? '';
 
-    if (SERVER_ONLY_FORMATS.includes(ext)) {
+    const cap = getArchiveFormatCapability(inputExt);
+
+    // Unknown format — not in archive capability registry
+    if (!cap) {
+      return { supported: false, reason: `Unknown archive format: ${inputExt}. Not registered in archive capability registry.` };
+    }
+
+    // Server-only: no browser path at all
+    if (cap.browserStatus === 'server-only') {
       return {
         supported: false,
-        reason: `${ext.toUpperCase()} archive format requires server processing. 7zip-wasm integration is planned for Phase 6C.`,
         requiresServer: true,
+        reason: getUnsupportedReason(inputExt, 'extract'),
       };
     }
-    if (!BROWSER_INPUT_FORMATS.includes(ext)) {
-      return { supported: false, reason: `Unsupported archive format: ${ext}` };
-    }
-    if (targetFormat && !BROWSER_OUTPUT_FORMATS.includes(targetFormat.toLowerCase()) && targetFormat !== ext) {
+
+    // Infrastructure-registered (future): library is available but not yet wired
+    if (cap.browserStatus === 'future') {
       return {
         supported: false,
-        reason: `Browser can only output ZIP archives. Target format ${targetFormat} requires server.`,
-        requiresServer: true,
+        reason: getUnsupportedReason(inputExt, 'extract'),
       };
     }
-    return { supported: true };
+
+    // For 'supported' or 'partial' formats, check if target format is achievable
+    if (targetFormat) {
+      const targetExt = targetFormat.toLowerCase();
+      const targetCap = getArchiveFormatCapability(targetExt);
+      if (targetCap && !isOperationCurrentlySupported(targetExt, 'create') && targetExt !== inputExt) {
+        return {
+          supported: false,
+          reason: getUnsupportedReason(targetExt, 'create'),
+          requiresServer: targetCap.operations.create === 'server-only',
+        };
+      }
+    }
+
+    // Format is currently supported or partial in this provider
+    return {
+      supported: true,
+      reason: cap.browserStatus === 'partial' ? cap.note : undefined,
+    };
   }
 
   async dispose(): Promise<void> { this._ready = false; }
@@ -104,8 +141,11 @@ export class BrowserArchiveProvider implements IArchiveProvider {
 
   async compress(files: File[], options: ArchiveCompressOptions): Promise<ConversionResult> {
     const target = options.targetFormat.toLowerCase();
-    if (target !== 'zip') {
-      return fail(`Browser can only create ZIP archives. ${target.toUpperCase()} creation requires server.`, 'UNSUPPORTED_FORMAT');
+
+    // Consult metadata: can we CREATE the target format in the browser right now?
+    if (!isOperationCurrentlySupported(target, 'create')) {
+      const reason = getUnsupportedReason(target, 'create');
+      return fail(reason, 'UNSUPPORTED_FORMAT');
     }
 
     try {
@@ -135,42 +175,53 @@ export class BrowserArchiveProvider implements IArchiveProvider {
   async extract(file: File, password?: string, _options?: BaseProcessingOptions): Promise<ConversionResult[]> {
     const ext = file.name.split('.').pop()?.toLowerCase() ?? '';
 
+    // Consult metadata: can we EXTRACT this format in the browser right now?
+    if (!isOperationCurrentlySupported(ext, 'extract')) {
+      const reason = getUnsupportedReason(ext, 'extract');
+      const cap = getArchiveFormatCapability(ext);
+      return [fail(reason, cap?.operations.extract === 'server-only' ? 'UNSUPPORTED_FORMAT' : 'CONVERSION_FAILED')];
+    }
+
     if (ext === 'zip') return this._extractZip(file, password);
     if (ext === 'rar') return this._extractRar(file, password);
 
-    return [fail(`${ext.toUpperCase()} extraction not supported in browser.`, 'UNSUPPORTED_FORMAT')];
+    // Fallback: metadata says supported/partial but no implementation path
+    return [fail(`${ext.toUpperCase()} extraction: unexpected state. Consult archive-capability.ts.`)];
   }
 
   async convert(file: File, targetFormat: string, _options?: BaseProcessingOptions): Promise<ConversionResult> {
     const srcExt = file.name.split('.').pop()?.toLowerCase() ?? '';
     const target = targetFormat.toLowerCase();
 
-    if (target !== 'zip') {
-      return fail(`Browser can only convert archives to ZIP. ${target.toUpperCase()} output requires server.`);
+    // Consult metadata: can we CREATE the target format?
+    if (!isOperationCurrentlySupported(target, 'create')) {
+      const reason = getUnsupportedReason(target, 'create');
+      return fail(reason);
     }
-    if (srcExt === 'zip') {
-      // Same format — return as-is
-      return {
-        success: true,
-        blob: file,
-        filename: file.name,
-        mimeType: 'application/zip',
-      };
+    // Consult metadata: can we EXTRACT the source format?
+    if (!isOperationCurrentlySupported(srcExt, 'extract')) {
+      const reason = getUnsupportedReason(srcExt, 'extract');
+      return fail(reason);
     }
-    if (srcExt === 'rar') {
-      // Extract RAR then re-zip
-      const items = await this._extractRar(file, undefined);
-      if (items.length === 0) return fail('RAR extraction produced no files');
-      const repackFiles = items
-        .filter(r => r.success && r.blob)
-        .map(r => new File([r.blob!], r.filename ?? 'file', { type: r.mimeType ?? '' }));
-      return this.compress(repackFiles, { targetFormat: 'zip' });
+
+    // Same format: return as-is
+    if (srcExt === target) {
+      return { success: true, blob: file, filename: file.name, mimeType: `application/${srcExt}` };
     }
-    return fail(`Cannot convert ${srcExt} to ${target} in browser.`);
+
+    // Extract then re-compress into target format
+    const extracted = await this.extract(file);
+    const good = extracted.filter(r => r.success && r.blob);
+    if (good.length === 0) return fail(`No files extracted from ${srcExt} archive`);
+    const repackFiles = good.map(r => new File([r.blob!], r.filename ?? 'file', { type: r.mimeType ?? '' }));
+    return this.compress(repackFiles, { targetFormat: target });
   }
 
   async list(file: File): Promise<{ name: string; size: number; compressed: number; isDirectory: boolean }[]> {
     const ext = file.name.split('.').pop()?.toLowerCase() ?? '';
+
+    // Consult metadata: can we LIST this format?
+    if (!isOperationCurrentlySupported(ext, 'list')) return [];
 
     if (ext === 'zip') return this._listZip(file);
     if (ext === 'rar') return this._listRar(file);
@@ -180,6 +231,10 @@ export class BrowserArchiveProvider implements IArchiveProvider {
 
   async test(file: File, _password?: string): Promise<boolean> {
     const ext = file.name.split('.').pop()?.toLowerCase() ?? '';
+
+    // Consult metadata: can we TEST this format?
+    if (!isOperationCurrentlySupported(ext, 'test')) return false;
+
     try {
       if (ext === 'zip') {
         const JSZip = (await import(/* webpackChunkName: "jszip" */ 'jszip')).default;
