@@ -341,12 +341,35 @@ App is 100% in-browser processing — no server fetch calls in any route.
 6. Configurable daily limits — All daily limits in subscription-config.ts, no code change needed
 7. Category-based upload limits — ext → Format Registry category → CATEGORY_LIMIT_MAP → limit
 
+## Phase 6C-2 — Pricing, Subscription UI & Advertisement Foundation (COMPLETE 2026-02-XX)
+
+### Files Created
+- `lib/services/subscription-service.ts` — SubscriptionService facade (only interface for UI → subscription queries)
+- `lib/types/download-workflow.ts` — Download workflow types (ConversionSummary, DownloadPageContext, IDownloadWorkflowManager)
+- `app/[locale]/pricing/page.tsx` — Pricing page server component (generateStaticParams + SEO metadata)
+- `components/pricing/PricingPageClient.tsx` — Full interactive pricing page (monthly/yearly toggle, 4 plan cards, 26-item feature table)
+
+### Files Modified
+- `lib/types/subscription.ts` — Added `downloadRetentionDays: number` to UsageLimits
+- `lib/config/subscription-config.ts` — New prices (STARTER=$7.99, PRO=$14.99, BUSINESS=$29.99); downloadRetentionDays per plan
+- `components/ads/ad-slot.tsx` — Uses `subscriptionService.shouldShowAds(planId)` — no plan-name checks
+- `components/layout/navbar.tsx` — Pricing link (conditional on SHOW_PRICING_PAGE feature flag)
+- `lib/services/future-services.ts` — Duplicate UsageLimits removed; PremiumPlan deprecated; AdSlot/AdConfig audited
+
+### Phase 6C-2 Requirements Met
+1. Advertisement architecture — `adsEnabled` feature, AdSlot uses subscriptionService.shouldShowAds() only
+2. Feature matrix expanded — all 15+ features + downloadRetentionDays in config
+3. Feature resolution — UI uses subscriptionService.canUseFeature/getPlanFeatures/getEffectiveLimits
+4. Fully configurable pricing page — everything from subscription-config.ts
+5. Coming Soon mode — PREMIUM_ENABLED=false shows plans+prices, disables purchasing
+6. Temporary pricing — $7.99/$14.99/$29.99, yearly, badges in subscription-config.ts
+7. Future billing compatibility — Stripe/PayPal hooks in SubscriptionService
+8. Download workflow foundation — lib/types/download-workflow.ts with all interfaces
+9. Provider integration verified — no plan names in providers
+10. Configuration audit — duplicates removed from future-services.ts
+
 **Upcoming tasks:**
-- Phase 6C-2: Pricing page UI, Authentication (JWT/session), Stripe/PayPal integration
-- Replace PlanResolver stub with JWT-backed implementation
-- Replace QuotaEngine stub with Redis-backed implementation
+- Phase 6C-3: /download page, DownloadWorkflowManager implementation, QuotaEngine Redis backing
+- Phase 6D: Auth (JWT/session), Stripe/PayPal payment integration, User accounts
 - Docker environment — FFmpeg server, LibreOffice server
-- Server-side providers (SharpImageProvider, LibreOfficeProvider, GhostscriptProvider, CalibreProvider, PuppeteerProvider)
-- Usage tracking (Redis-backed counters)
-- Cloud storage (S3/GCS for output files)
-- Queue system (BullMQ for async processing)
+- Server-side providers (SharpImageProvider, LibreOfficeProvider, GhostscriptProvider)

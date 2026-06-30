@@ -108,6 +108,7 @@ const FREE_LIMITS: UsageLimits = {
   maxMedicalMB:        100,
   maxDiskImageMB:      100,
   maxOtherMB:          100,
+  downloadRetentionDays: 0,  // No retention — anonymous, free tier
 };
 
 const STARTER_LIMITS: UsageLimits = {
@@ -130,6 +131,7 @@ const STARTER_LIMITS: UsageLimits = {
   maxMedicalMB:        500,
   maxDiskImageMB:      500,
   maxOtherMB:          500,
+  downloadRetentionDays: 7,  // 7-day download retention
 };
 
 const PRO_LIMITS: UsageLimits = {
@@ -152,6 +154,7 @@ const PRO_LIMITS: UsageLimits = {
   maxMedicalMB:        5000,
   maxDiskImageMB:      10000,
   maxOtherMB:          5000,
+  downloadRetentionDays: 30,  // 30-day download retention
 };
 
 const BUSINESS_LIMITS: UsageLimits = {
@@ -174,6 +177,7 @@ const BUSINESS_LIMITS: UsageLimits = {
   maxMedicalMB:        -1,    // unlimited
   maxDiskImageMB:      -1,    // unlimited
   maxOtherMB:          -1,    // unlimited
+  downloadRetentionDays: 90,  // 90-day download retention
 };
 
 // ============================================================================
@@ -280,8 +284,8 @@ export const PLAN_DEFINITIONS: Record<PlanId, PlanDefinition> = {
   starter: {
     id: 'starter',
     displayName: 'Starter',
-    monthlyPriceCents: 999,      // $9.99/month
-    yearlyPriceCents: 799,       // $7.99/month billed yearly → $95.88/year
+    monthlyPriceCents: 799,      // $7.99/month
+    yearlyPriceCents: 639,       // $6.39/month billed yearly → $76.68/year
     currency: 'USD',
     badge: undefined,
     enabled: true,
@@ -295,8 +299,8 @@ export const PLAN_DEFINITIONS: Record<PlanId, PlanDefinition> = {
   pro: {
     id: 'pro',
     displayName: 'Pro',
-    monthlyPriceCents: 2499,     // $24.99/month
-    yearlyPriceCents: 1999,      // $19.99/month billed yearly → $239.88/year
+    monthlyPriceCents: 1499,     // $14.99/month
+    yearlyPriceCents: 1199,      // $11.99/month billed yearly → $143.88/year
     currency: 'USD',
     badge: 'Most Popular',
     enabled: true,
@@ -310,8 +314,8 @@ export const PLAN_DEFINITIONS: Record<PlanId, PlanDefinition> = {
   business: {
     id: 'business',
     displayName: 'Business',
-    monthlyPriceCents: 7999,     // $79.99/month
-    yearlyPriceCents: 6399,      // $63.99/month billed yearly → $767.88/year
+    monthlyPriceCents: 2999,     // $29.99/month
+    yearlyPriceCents: 2399,      // $23.99/month billed yearly → $287.88/year
     currency: 'USD',
     badge: 'Best Value',
     enabled: true,

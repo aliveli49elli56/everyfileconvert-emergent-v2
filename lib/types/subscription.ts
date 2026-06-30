@@ -65,6 +65,12 @@ export interface UsageLimits {
   maxDiskImageMB: number;
   /** Max upload size in MB for all other file types */
   maxOtherMB: number;
+  /**
+   * Number of days download results are retained after conversion.
+   * 0 = no retention (immediate cleanup, anonymous use).
+   * Requires downloadHistory feature to be meaningful.
+   */
+  downloadRetentionDays: number;
 }
 
 // ---------------------------------------------------------------------------

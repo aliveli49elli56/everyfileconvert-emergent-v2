@@ -16,10 +16,13 @@ import {
   ChevronDown,
   X,
   Eye,
+  Tag,
 } from "lucide-react";
 import { locales, localeNames } from "@/lib/i18n/config";
 import type { Locale } from "@/lib/i18n/config";
 import { useRouter, usePathname } from "next/navigation";
+import { subscriptionService } from "@/lib/services/subscription-service";
+import { FEATURE_FLAGS } from "@/lib/config/subscription-config";
 
 interface NavLink {
   href: string;
@@ -80,6 +83,17 @@ function getNavLinks(locale: string): NavLink[] {
       iconColor: "text-cyan-400",
       iconBg: "group-hover:bg-cyan-500/10",
     },
+    ...(FEATURE_FLAGS.SHOW_PRICING_PAGE
+      ? [
+          {
+            href: `/${locale}/pricing`,
+            label: "Pricing",
+            icon: Tag,
+            iconColor: "text-emerald-400",
+            iconBg: "group-hover:bg-emerald-500/10",
+          } satisfies NavLink,
+        ]
+      : []),
   ];
 }
 

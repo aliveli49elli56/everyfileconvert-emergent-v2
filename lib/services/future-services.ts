@@ -2,10 +2,16 @@
  * lib/services/future-services.ts
  * Service layer interfaces for future features
  * Architecture preparation - not implemented yet
+ *
+ * Phase 6C-2 audit: duplicate plan/limits/ads interfaces removed.
+ * Canonical types are now in lib/types/subscription.ts.
+ * PremiumPlan → PlanDefinition, UsageLimits → UsageLimits, AdConfig → see below.
  */
 
 import type { ConversionJob, ConversionResult, ConversionProgress } from '../types/conversion';
 import type { FormatDefinition, FormatCategory } from '../types/formats';
+// Canonical subscription types — do not duplicate these here
+import type { PlanDefinition, UsageLimits as SubscriptionUsageLimits } from '../types/subscription';
 
 // ---------------------------------------------------------------------------
 // LONG-TAIL ENGINE (SEO PAGES)
@@ -58,8 +64,14 @@ export interface ISeoEngine {
 
 // ---------------------------------------------------------------------------
 // PREMIUM ENGINE
+// Phase 6C-2 audit: PremiumPlan duplicates PlanDefinition from
+// lib/types/subscription.ts. Marked deprecated; IPremiumEngine updated.
 // ---------------------------------------------------------------------------
 
+/**
+ * @deprecated Use PlanDefinition from lib/types/subscription.ts.
+ * Retained for backward compatibility — remove in Phase 6D cleanup.
+ */
 export interface PremiumPlan {
   id: string;
   name: string;
@@ -125,17 +137,9 @@ export interface IDownloadEngine {
 
 // ---------------------------------------------------------------------------
 // LIMITS ENGINE
+// Phase 6C-2 audit: UsageLimits interface removed — canonical type is
+// SubscriptionUsageLimits from lib/types/subscription.ts.
 // ---------------------------------------------------------------------------
-
-export interface UsageLimits {
-  tier: 'free' | 'premium' | 'enterprise';
-  daily: number;
-  monthly: number;
-  fileSize: number;
-  files: number;
-  batch: boolean;
-  premiumFormats: boolean;
-}
 
 export interface UsageRecord {
   date: Date;
@@ -145,7 +149,8 @@ export interface UsageRecord {
 }
 
 export interface ILimitsEngine {
-  getLimits(userId: string): Promise<UsageLimits>;
+  /** @see SubscriptionUsageLimits from lib/types/subscription.ts */
+  getLimits(userId: string): Promise<SubscriptionUsageLimits>;
   getUsage(userId: string): Promise<UsageRecord>;
   canConvert(userId: string, size: number): Promise<boolean>;
   recordUsage(userId: string, bytes: number, files: number): Promise<void>;
@@ -155,31 +160,40 @@ export interface ILimitsEngine {
 
 // ---------------------------------------------------------------------------
 // ADS ENGINE
+// Phase 6C-2 audit: shouldShowAd now routes through SubscriptionService.
+// AdConfig.enabled is redundant — use subscriptionService.shouldShowAds(planId).
 // ---------------------------------------------------------------------------
 
-export interface AdSlot {
+export interface AdSlotConfig {
   id: string;
   name: string;
   location: 'header' | 'sidebar' | 'footer' | 'inline' | 'popup';
   size: 'leaderboard' | 'rectangle' | 'sidebar' | 'native';
+  /** @deprecated Controlled via subscription plan feature 'adsEnabled' only */
   enabled: boolean;
-  premiumDisabled: boolean;
   provider: 'adsense' | 'custom';
   slotId?: string;
 }
 
+/**
+ * @deprecated Phase 6C-2: use subscriptionService.shouldShowAds(planId).
+ * No component may check AdConfig.enabled directly.
+ */
 export interface AdConfig {
-  enabled: boolean;
   provider: 'adsense' | 'custom' | 'none';
   publisherId?: string;
-  slots: AdSlot[];
+  slots: AdSlotConfig[];
   frequencyCap?: number;
   userTargeting?: boolean;
 }
 
 export interface IAdsEngine {
   getConfig(): Promise<AdConfig>;
-  getSlot(location: string): Promise<AdSlot | null>;
+  getSlot(location: string): Promise<AdSlotConfig | null>;
+  /**
+   * Phase 6C-2: always use subscriptionService.shouldShowAds(planId) instead.
+   * The userId lookup resolves to planId → adsEnabled feature flag.
+   */
   shouldShowAd(userId: string): Promise<boolean>;
   recordImpression(slotId: string): Promise<void>;
   recordClick(slotId: string): Promise<void>;
