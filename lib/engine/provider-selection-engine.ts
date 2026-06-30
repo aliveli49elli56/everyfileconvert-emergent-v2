@@ -1,10 +1,16 @@
 /**
  * lib/engine/provider-selection-engine.ts
  *
- * Universal Provider Selection Engine — Phase 6A
+ * Universal Provider Selection Engine — Phase 6A / Phase 6C-1
  *
  * Selects the optimal processing provider for any conversion request using
  * ONLY metadata from the registries.  Zero hardcoded if/else routing.
+ *
+ * Phase 6C-1 additions:
+ *   - SelectionRequest now accepts `userPlanId` (PlanId from subscription-config)
+ *   - Premium / server-processing checks now route through LimitEngine
+ *   - getMaximumUploadSize() convenience method delegates to LimitEngine
+ *   - Backward compat: userTier still accepted and mapped to PlanId
  *
  * Selection flow:
  *   Request
@@ -14,12 +20,13 @@
  *     → Capability Scoring   (rank by: quality × speed / memory)
  *     → Browser Compatibility (filter if client-side required)
  *     → Memory Limits        (filter by file size)
- *     → Premium Availability (filter by user tier)
+ *     → LimitEngine          (canUseFeature('serverProcessing') per plan)
  *     → Fallback Chain       (pick best, then fallback, then server)
  *     → Selected Provider
  */
 
 import type { FormatDefinition } from '../types/formats';
+import type { PlanId } from '../types/subscription';
 // Provider interfaces are not needed directly by the selection engine —
 // business logic only reads metadata from PROVIDER_META_TABLE.
 // Import types only if needed for typing future typed provider factories.
@@ -35,9 +42,13 @@ import type {
 import type { LibraryDefinition } from '../registry/library-registry';
 import { processorRegistry } from '../registry/processor-registry';
 import { libraryRegistry } from '../registry/library-registry';
+import { limitEngine } from './limit-engine';
+import { DEFAULT_PLAN_ID } from '../config/subscription-config';
+
 // TYPES
 // ---------------------------------------------------------------------------
 
+/** @deprecated Phase 6C-1: use `userPlanId: PlanId` in SelectionRequest instead */
 export type UserTier = 'free' | 'premium' | 'enterprise';
 
 export type RuntimeEnvironment = 'browser' | 'server' | 'edge';
@@ -51,8 +62,18 @@ export interface SelectionRequest {
   fileSizeBytes: number;
   /** Whether the request originates from a browser (no server access) */
   runtimeEnv: RuntimeEnvironment;
-  /** User tier — controls premium provider access */
+  /**
+   * User tier — backward compatible.
+   * @deprecated Phase 6C-1: prefer `userPlanId`. When both are provided,
+   * `userPlanId` takes precedence.
+   */
   userTier: UserTier;
+  /**
+   * Phase 6C-1: canonical plan identifier used by LimitEngine.
+   * Overrides userTier when provided.
+   * Defaults to DEFAULT_PLAN_ID ('free') when omitted.
+   */
+  userPlanId?: PlanId;
   /** Prefer lower memory usage over quality */
   preferLowMemory?: boolean;
   /** Prefer fastest result even if quality lower */
@@ -970,15 +991,37 @@ export class ProviderSelectionEngine {
       return candidate;
     }
 
-    // Check: premium tier
-    if (meta.requiresPremium && request.userTier === 'free') {
-      candidate.rejectionReason = 'Premium subscription required';
-      return candidate;
+    // Check: plan-level feature access via LimitEngine (Phase 6C-1)
+    // Requirement 5: no plan names inside providers — LimitEngine is the arbiter.
+    // All providers requiring server access need the 'serverProcessing' feature.
+    if (meta.serverRequired) {
+      const planId = this._resolvePlanId(request);
+      const featureCheck = limitEngine.canUseFeature(planId, 'serverProcessing');
+      if (!featureCheck.allowed) {
+        candidate.rejectionReason =
+          featureCheck.reason ?? 'Server processing requires a premium plan';
+        return candidate;
+      }
     }
 
     // Candidate is viable — attach WASM init flag from meta
     candidate.requiresWasmInit = meta.requiresWasmInit;
     return candidate;
+  }
+
+  /**
+   * Resolve the canonical PlanId from a SelectionRequest.
+   * Phase 6C-1: userPlanId takes precedence over legacy userTier.
+   */
+  private _resolvePlanId(request: SelectionRequest): import('../types/subscription').PlanId {
+    if (request.userPlanId) return request.userPlanId;
+    // Backward compat: map legacy UserTier → PlanId
+    switch (request.userTier) {
+      case 'free':       return 'free';
+      case 'premium':    return 'pro';
+      case 'enterprise': return 'business';
+      default:           return DEFAULT_PLAN_ID;
+    }
   }
 
   private buildReason(
@@ -1018,6 +1061,39 @@ export class ProviderSelectionEngine {
         m.inputFormats.includes(inputExt) &&
         m.outputFormats.includes(outputExt)
     );
+  }
+
+  /**
+   * Get the maximum upload size allowed for a plan + file category.
+   *
+   * Phase 6C-1 integration: delegates entirely to LimitEngine.
+   * Requirement 3: limit comes exclusively from subscription-config.ts.
+   * Requirement 7: category resolved from Format Registry by LimitEngine.
+   *
+   * @param planId   - Subscription plan identifier
+   * @param category - File category (e.g. 'image', 'video', 'audio')
+   * @returns Max bytes allowed, or -1 for unlimited
+   */
+  getMaximumUploadSize(
+    planId: import('../types/subscription').PlanId,
+    category: string,
+  ): number {
+    return limitEngine.getMaxUploadBytes(planId, category);
+  }
+
+  /**
+   * Get the maximum upload size for a plan, resolved from a file extension.
+   * Requirement 7: extension → Format Registry category → limit.
+   *
+   * @param planId - Subscription plan identifier
+   * @param ext    - File extension (e.g. 'mp3', 'png', 'docx')
+   * @returns Max bytes allowed, or -1 for unlimited
+   */
+  getMaximumUploadSizeByExtension(
+    planId: import('../types/subscription').PlanId,
+    ext: string,
+  ): number {
+    return limitEngine.getMaxUploadBytesByExtension(planId, ext);
   }
 
   /** All registered provider IDs */

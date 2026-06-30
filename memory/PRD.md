@@ -318,11 +318,35 @@ App is 100% in-browser processing — no server fetch calls in any route.
 - No provider refactoring required when billing/limits are added
 - Extension points: ISubscriptionProvider, IUsageTracker, IDownloadWorkflowProvider
 
+## Phase 6C-1 — Subscription Foundation & Configurable Limit Engine (COMPLETE 2026-02-XX)
+
+### Files Created
+- `lib/types/subscription.ts` — Canonical types (UsageLimits, PlanFeatures, LimitCheckResult, all 7 Provider interfaces)
+- `lib/config/subscription-config.ts` — **Single source of truth**: 4 plans (FREE/STARTER/PRO/BUSINESS), limits matrix, feature matrix, 80+ PROCESSOR_FEATURE_REQUIREMENTS, CATEGORY_LIMIT_MAP, helper functions
+- `lib/engine/limit-engine.ts` — Centralized LimitEngine (all 7 Phase 6C-1 requirements)
+- `lib/engine/quota-engine.ts` — In-memory QuotaEngine stub (IQuotaProvider)
+- `lib/engine/plan-resolver.ts` — PlanResolver stub (ISubscriptionProvider, always FREE)
+
+### Files Modified
+- `lib/engine/subscription-hooks.ts` — Wired to Phase 6C-1 engines; Phase 6B stubs retained
+- `lib/engine/provider-selection-engine.ts` — LimitEngine integrated; `userPlanId` added; `getMaximumUploadSize()` added
+- `lib/file-validation.ts` — Hardcoded FILE_SIZE_LIMIT removed; delegates to LimitEngine
+
+### Phase 6C-1 Requirements Met
+1. Audio limits — `maxAudioMB` in config, resolved via CATEGORY_LIMIT_MAP
+2. Premium visibility — Plans visible when PREMIUM_ENABLED=false; only purchasing disabled
+3. Single source of truth — subscription-config.ts only
+4. Download workflow — `limitEngine.getDownloadContext(planId)` provides all /download data
+5. Processor isolation — Processors query limitEngine only; no plan names in processors
+6. Configurable daily limits — All daily limits in subscription-config.ts, no code change needed
+7. Category-based upload limits — ext → Format Registry category → CATEGORY_LIMIT_MAP → limit
+
 **Upcoming tasks:**
+- Phase 6C-2: Pricing page UI, Authentication (JWT/session), Stripe/PayPal integration
+- Replace PlanResolver stub with JWT-backed implementation
+- Replace QuotaEngine stub with Redis-backed implementation
 - Docker environment — FFmpeg server, LibreOffice server
 - Server-side providers (SharpImageProvider, LibreOfficeProvider, GhostscriptProvider, CalibreProvider, PuppeteerProvider)
-- Subscription system (tiers: free/pro/enterprise)
 - Usage tracking (Redis-backed counters)
 - Cloud storage (S3/GCS for output files)
 - Queue system (BullMQ for async processing)
-- Premium billing (Stripe integration)
