@@ -1,186 +1,80 @@
 /**
  * lib/engine/mime-engine.ts
- * MIME Resolution Engine - centralized MIME type detection and normalization
+ * MIME Resolution Engine - centralized MIME type detection and normalization.
  *
- * Single source of truth for MIME type mappings.
- * Used by validation, file handling, and conversion pipeline.
+ * Phase 6B: EXTENSION_TO_MIME is now derived from the Format Registry (single
+ * source of truth). A small set of format aliases and variant extensions not
+ * present in the 300-format registry are supplemented below.
  */
 
 import { aliasEngine } from './alias-engine';
+import { formatRegistry } from '../registry/format-registry';
 
 // ---------------------------------------------------------------------------
-// PRIMARY MIME MAPPINGS
-// Extension → Primary MIME type
+// BUILD PRIMARY MIME MAP FROM FORMAT REGISTRY
 // ---------------------------------------------------------------------------
 
-export const EXTENSION_TO_MIME: Record<string, string> = {
-  // ── Raster Images ────────────────────────────────────────────────────────
-  png: 'image/png',
-  jpg: 'image/jpeg',
-  jpeg: 'image/jpeg',
-  gif: 'image/gif',
-  webp: 'image/webp',
-  bmp: 'image/bmp',
-  tiff: 'image/tiff',
-  tif: 'image/tiff',
-  heic: 'image/heic',
-  heif: 'image/heif',
-  avif: 'image/avif',
+/**
+ * Builds the ext→MIME map from formatRegistry (single source of truth) and
+ * supplements it with common variant extensions / aliases not in the registry.
+ */
+function buildExtToMimeFromRegistry(): Record<string, string> {
+  const map: Record<string, string> = {};
 
-  // ── Camera RAW ───────────────────────────────────────────────────────────
-  raw: 'image/x-raw',
-  cr2: 'image/x-canon-cr2',
-  cr3: 'image/x-canon-cr3',
-  nef: 'image/x-nikon-nef',
-  arw: 'image/x-sony-arw',
-  dng: 'image/x-adobe-dng',
-  rw2: 'image/x-panasonic-rw2',
-  orf: 'image/x-olympus-orf',
-  sr2: 'image/x-sony-sr2',
-  pef: 'image/x-pentax-pef',
-  raf: 'image/x-fuji-raf',
+  // Primary source: Format Registry (300 canonical formats)
+  for (const fmt of formatRegistry.getAll()) {
+    map[fmt.ext.toLowerCase()] = fmt.mime;
+  }
 
-  // ── Vector & Design ───────────────────────────────────────────────────────
-  svg: 'image/svg+xml',
-  ai: 'application/vnd.adobe.illustrator',
-  eps: 'application/postscript',
-  psd: 'image/vnd.adobe.photoshop',
-  cdr: 'application/x-cdr',
-  indd: 'application/x-indesign',
-  sketch: 'application/x-sketch',
-  fig: 'application/x-figma',
+  // Supplement: common aliases / variant extensions not represented as
+  // canonical registry entries (these never override registry values).
+  const EXTRA_ALIASES: Record<string, string> = {
+    // Video aliases
+    qt:     'video/quicktime',
+    mpg:    'video/mpeg',
+    '3g2':  'video/3gpp2',
+    mts:    'video/mp2t',
+    ogv:    'video/ogg',
+    f4v:    'video/x-f4v',
+    asf:    'video/x-ms-asf',
+    vob:    'video/dvd',
+    // Audio aliases
+    mpga:   'audio/mpeg',
+    mpeg3:  'audio/mpeg',
+    wave:   'audio/wav',
+    oga:    'audio/ogg',
+    aif:    'audio/aiff',
+    aifc:   'audio/aiff',
+    awb:    'audio/amr-wb',
+    ra:     'audio/x-pn-realaudio',
+    au:     'audio/basic',
+    snd:    'audio/basic',
+    m4p:    'audio/mp4',
+    m4b:    'audio/mp4',
+    m4r:    'audio/mp4',
+    // Document aliases
+    htm:      'text/html',
+    markdown: 'text/markdown',
+    yml:      'application/x-yaml',
+    gzip:     'application/gzip',
+    // Raw image aliases
+    sr2:  'image/x-sony-sr2',
+    tif:  'image/tiff',
+    // Other
+    typescript: 'application/typescript',
+    odg: 'application/vnd.oasis.opendocument.graphics',
+    stp: 'application/step',
+    igs: 'model/iges',
+  };
 
-  // ── Icons ──────────────────────────────────────────────────────────────────
-  ico: 'image/x-icon',
-  icns: 'image/x-icns',
+  for (const [ext, mime] of Object.entries(EXTRA_ALIASES)) {
+    if (!map[ext]) map[ext] = mime;
+  }
 
-  // ── Video ──────────────────────────────────────────────────────────────────
-  mp4: 'video/mp4',
-  webm: 'video/webm',
-  avi: 'video/x-msvideo',
-  mov: 'video/quicktime',
-  qt: 'video/quicktime',
-  mkv: 'video/x-matroska',
-  wmv: 'video/x-ms-wmv',
-  flv: 'video/x-flv',
-  mpeg: 'video/mpeg',
-  mpg: 'video/mpeg',
-  m4v: 'video/x-m4v',
-  '3gp': 'video/3gpp',
-  '3g2': 'video/3gpp2',
-  ogv: 'video/ogg',
-  ts: 'video/mp2t',
-  m2ts: 'video/mp2t',
-  mts: 'video/mp2t',
-  f4v: 'video/x-f4v',
-  asf: 'video/x-ms-asf',
-  vob: 'video/dvd',
+  return map;
+}
 
-  // ── Audio ──────────────────────────────────────────────────────────────────
-  mp3: 'audio/mpeg',
-  mpga: 'audio/mpeg',
-  mpeg3: 'audio/mpeg',
-  wav: 'audio/wav',
-  wave: 'audio/wav',
-  ogg: 'audio/ogg',
-  oga: 'audio/ogg',
-  flac: 'audio/flac',
-  aac: 'audio/aac',
-  m4a: 'audio/mp4',
-  m4p: 'audio/mp4',
-  m4b: 'audio/mp4',
-  m4r: 'audio/mp4',
-  wma: 'audio/x-ms-wma',
-  aiff: 'audio/aiff',
-  aif: 'audio/aiff',
-  aifc: 'audio/aiff',
-  opus: 'audio/opus',
-  ac3: 'audio/ac3',
-  amr: 'audio/amr',
-  awb: 'audio/amr-wb',
-  caf: 'audio/x-caf',
-  ra: 'audio/x-pn-realaudio',
-  au: 'audio/basic',
-  snd: 'audio/basic',
-
-  // ── Documents ──────────────────────────────────────────────────────────────
-  pdf: 'application/pdf',
-  doc: 'application/msword',
-  docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  xls: 'application/vnd.ms-excel',
-  xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-  ppt: 'application/vnd.ms-powerpoint',
-  pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-  txt: 'text/plain',
-  rtf: 'application/rtf',
-  odt: 'application/vnd.oasis.opendocument.text',
-  ods: 'application/vnd.oasis.opendocument.spreadsheet',
-  odp: 'application/vnd.oasis.opendocument.presentation',
-  odg: 'application/vnd.oasis.opendocument.graphics',
-  html: 'text/html',
-  htm: 'text/html',
-  md: 'text/markdown',
-  markdown: 'text/markdown',
-  csv: 'text/csv',
-  tsv: 'text/tab-separated-values',
-
-  // ── eBooks ─────────────────────────────────────────────────────────────────
-  epub: 'application/epub+zip',
-  mobi: 'application/x-mobipocket-ebook',
-  azw: 'application/vnd.amazon.ebook',
-  azw3: 'application/vnd.amazon.ebook',
-  fb2: 'application/x-fictionbook+xml',
-
-  // ── Archives ───────────────────────────────────────────────────────────────
-  zip: 'application/zip',
-  rar: 'application/vnd.rar',
-  '7z': 'application/x-7z-compressed',
-  tar: 'application/x-tar',
-  gz: 'application/gzip',
-  gzip: 'application/gzip',
-  bz2: 'application/x-bzip2',
-  xz: 'application/x-xz',
-  zst: 'application/zstd',
-
-  // ── CAD ────────────────────────────────────────────────────────────────────
-  dwg: 'application/acad',
-  dxf: 'application/dxf',
-  step: 'application/step',
-  stp: 'application/step',
-  stl: 'model/stl',
-  obj: 'model/obj',
-  fbx: 'application/octet-stream',
-  iges: 'model/iges',
-  igs: 'model/iges',
-
-  // ── Fonts ──────────────────────────────────────────────────────────────────
-  ttf: 'font/ttf',
-  otf: 'font/otf',
-  woff: 'font/woff',
-  woff2: 'font/woff2',
-  eot: 'application/vnd.ms-fontobject',
-
-  // ── Email ──────────────────────────────────────────────────────────────────
-  eml: 'message/rfc822',
-  msg: 'application/vnd.ms-outlook',
-
-  // ── Data & Code ────────────────────────────────────────────────────────────
-  json: 'application/json',
-  xml: 'application/xml',
-  yaml: 'application/x-yaml',
-  yml: 'application/x-yaml',
-  sql: 'application/sql',
-  js: 'application/javascript',
-  typescript: 'application/typescript',
-  css: 'text/css',
-
-  // ── GIS ────────────────────────────────────────────────────────────────────
-  geojson: 'application/geo+json',
-  kml: 'application/vnd.google-earth.kml+xml',
-  kmz: 'application/vnd.google-earth.kmz',
-  shp: 'application/x-shp',
-  gpx: 'application/gpx+xml',
-};
+export const EXTENSION_TO_MIME: Record<string, string> = buildExtToMimeFromRegistry();
 
 // ---------------------------------------------------------------------------
 // REVERSE MAPPING

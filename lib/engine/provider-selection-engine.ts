@@ -237,7 +237,7 @@ const PROVIDER_META_TABLE: ProviderMeta[] = [
   {
     id: "RawImageProvider",
     name: "RAW Image Provider (Server)",
-    libraryId: "imageMagick",
+    libraryId: "imagemagick",
     browserCompatible: false,
     serverRequired: true,
     requiresPremium: true,
@@ -568,7 +568,7 @@ const PROVIDER_META_TABLE: ProviderMeta[] = [
   {
     id: "TurfProvider",
     name: "Turf.js GIS Provider",
-    libraryId: "turfjs",
+    libraryId: "turf-js",
     browserCompatible: true,
     serverRequired: false,
     requiresPremium: false,
@@ -638,7 +638,7 @@ const PROVIDER_META_TABLE: ProviderMeta[] = [
   {
     id: "ThreeJSProvider",
     name: "Three.js 3D Provider",
-    libraryId: "threejs",
+    libraryId: "three-js",
     browserCompatible: true,
     serverRequired: false,
     requiresPremium: false,

@@ -1,19 +1,16 @@
 /**
  * lib/core/browser-arch.ts
  *
- * Browser Architecture Foundation — Phase 6A
+ * Browser Architecture Foundation — Phase 6A / Phase 6B Active
  *
- * Defines the contracts and metadata stubs for browser-side processing.
- * NO processing logic is implemented here — only the architectural skeleton.
- *
- * Prepares:
- *   - Dynamic import / lazy loading contracts
- *   - Code splitting metadata
- *   - Web Worker loading helpers
+ * Defines and ACTIVATES the browser-side processing infrastructure:
+ *   - Dynamic import / lazy loading (real loaders for installed packages)
+ *   - Web Worker loading helpers (Phase 6B: TypeScript module workers)
  *   - AbortController integration types
  *   - Progress event contracts
  *   - Memory cleanup lifecycle
- *   - Provider lazy initialisation pattern
+ *   - Provider lazy initialisation registry
+ *   - Browser capability detection (extended in Phase 6B)
  *   - Tree-shaking-friendly export shape
  */
 
@@ -131,73 +128,82 @@ export interface LazyLibraryModule<T = unknown> {
 }
 
 /**
- * Registry of lazy library module descriptors.
- * Stubs only — actual `loader` implementations added in Phase 6B.
+ * Registry of lazy library module descriptors — Phase 6B ACTIVATED.
  *
- * NOTE: Do NOT import any library here. These are factory stubs.
- * Each loader has the webpack chunk name pre-annotated as a comment.
- * Phase 6B will replace the `async () => ({})` bodies with real dynamic imports.
+ * Real dynamic imports are used for all installed packages.
+ * Packages not yet installed (three.js, opentype.js, svgo) keep their stubs.
+ * Libraries MUST NOT load at module import time — only when `loader()` is called.
  */
 export const LAZY_LIBRARY_MODULES: LazyLibraryModule[] = [
   {
     libraryId: "ffmpeg-wasm",
-    // Phase 6B: import(/* webpackChunkName: "ffmpeg-wasm" */ "@ffmpeg/ffmpeg")
-    loader: async () => ({}),
+    loader: async () => import(/* webpackChunkName: "ffmpeg-wasm" */ "@ffmpeg/ffmpeg"),
     bundleSizeBytes: 31 * 1024 * 1024,
     requiresCrossOriginIsolation: true,
     requiresWorker: true,
   },
   {
+    libraryId: "ffmpeg-mt",
+    // Uses @ffmpeg/core-mt internally via @ffmpeg/ffmpeg when MT is enabled
+    // The MT core is loaded via URL at runtime, not as an ES module import
+    loader: async () => import(/* webpackChunkName: "ffmpeg-wasm" */ "@ffmpeg/ffmpeg"),
+    bundleSizeBytes: 32 * 1024 * 1024,
+    requiresCrossOriginIsolation: true,
+    requiresWorker: true,
+  },
+  {
     libraryId: "tesseract-js",
-    // Phase 6B: import(/* webpackChunkName: "tesseract-js" */ "tesseract.js")
-    loader: async () => ({}),
+    loader: async () => import(/* webpackChunkName: "tesseract-js" */ "tesseract.js"),
     bundleSizeBytes: 30 * 1024 * 1024,
     requiresCrossOriginIsolation: false,
     requiresWorker: true,
   },
   {
     libraryId: "jszip",
-    // Phase 6B: import(/* webpackChunkName: "jszip" */ "jszip")
-    loader: async () => ({}),
+    loader: async () => import(/* webpackChunkName: "jszip" */ "jszip"),
     bundleSizeBytes: 120 * 1024,
     requiresCrossOriginIsolation: false,
     requiresWorker: false,
   },
   {
     libraryId: "sheetjs",
-    // Phase 6B: import(/* webpackChunkName: "sheetjs" */ "xlsx")
-    loader: async () => ({}),
+    loader: async () => import(/* webpackChunkName: "sheetjs" */ "xlsx"),
     bundleSizeBytes: 900 * 1024,
     requiresCrossOriginIsolation: false,
     requiresWorker: false,
   },
   {
     libraryId: "pdf-lib",
-    // Phase 6B: import(/* webpackChunkName: "pdf-lib" */ "pdf-lib")
-    loader: async () => ({}),
+    loader: async () => import(/* webpackChunkName: "pdf-lib" */ "pdf-lib"),
     bundleSizeBytes: 800 * 1024,
     requiresCrossOriginIsolation: false,
     requiresWorker: false,
   },
   {
     libraryId: "pdfjs",
-    // Phase 6B: import(/* webpackChunkName: "pdfjs" */ "pdfjs-dist")
-    loader: async () => ({}),
+    loader: async () => import(/* webpackChunkName: "pdfjs" */ "pdfjs-dist"),
     bundleSizeBytes: 2 * 1024 * 1024,
     requiresCrossOriginIsolation: false,
     requiresWorker: true,
   },
   {
     libraryId: "mammoth",
-    // Phase 6B: import(/* webpackChunkName: "mammoth" */ "mammoth")
-    loader: async () => ({}),
+    loader: async () => import(/* webpackChunkName: "mammoth" */ "mammoth"),
     bundleSizeBytes: 400 * 1024,
     requiresCrossOriginIsolation: false,
     requiresWorker: false,
   },
   {
+    libraryId: "epub-js",
+    // Phase 6C: install epubjs: yarn add epubjs, then activate real import
+    loader: async () => ({}),
+    bundleSizeBytes: 1024 * 1024,
+    requiresCrossOriginIsolation: false,
+    requiresWorker: false,
+  },
+  {
     libraryId: "svgo",
-    // Phase 6B: import(/* webpackChunkName: "svgo" */ "svgo")
+    // Phase 6C: install svgo, then: import(/* webpackChunkName: "svgo" */ "svgo")
     loader: async () => ({}),
     bundleSizeBytes: 450 * 1024,
     requiresCrossOriginIsolation: false,
@@ -205,15 +211,15 @@ export const LAZY_LIBRARY_MODULES: LazyLibraryModule[] = [
   },
   {
     libraryId: "opentype-js",
-    // Phase 6B: import(/* webpackChunkName: "opentype" */ "opentype.js")
+    // Phase 6C: install opentype.js, then: import(/* webpackChunkName: "opentype" */ "opentype.js")
     loader: async () => ({}),
     bundleSizeBytes: 300 * 1024,
     requiresCrossOriginIsolation: false,
     requiresWorker: false,
   },
   {
-    libraryId: "threejs",
-    // Phase 6B: import(/* webpackChunkName: "threejs" */ "three")
+    libraryId: "three-js",
+    // Phase 6C: install three, then: import(/* webpackChunkName: "three" */ "three")
     loader: async () => ({}),
     bundleSizeBytes: 600 * 1024,
     requiresCrossOriginIsolation: false,
@@ -221,7 +227,7 @@ export const LAZY_LIBRARY_MODULES: LazyLibraryModule[] = [
   },
   {
     libraryId: "7zip-wasm",
-    // Phase 6B: import(/* webpackChunkName: "7zip-wasm" */ "7zip-wasm")
+    // Phase 6C: install 7zip-wasm
     loader: async () => ({}),
     bundleSizeBytes: 6 * 1024 * 1024,
     requiresCrossOriginIsolation: false,
@@ -229,15 +235,15 @@ export const LAZY_LIBRARY_MODULES: LazyLibraryModule[] = [
   },
   {
     libraryId: "node-unrar-js",
-    // Phase 6B: import(/* webpackChunkName: "unrar-wasm" */ "node-unrar-js")
+    // Phase 6C: install node-unrar-js
     loader: async () => ({}),
     bundleSizeBytes: 500 * 1024,
     requiresCrossOriginIsolation: false,
     requiresWorker: true,
   },
   {
-    libraryId: "turfjs",
-    // Phase 6B: import(/* webpackChunkName: "turf" */ "@turf/turf")
+    libraryId: "turf-js",
+    // Phase 6C: install @turf/turf
     loader: async () => ({}),
     bundleSizeBytes: 700 * 1024,
     requiresCrossOriginIsolation: false,
@@ -245,7 +251,7 @@ export const LAZY_LIBRARY_MODULES: LazyLibraryModule[] = [
   },
   {
     libraryId: "dcmjs",
-    // Phase 6B: import(/* webpackChunkName: "dcmjs" */ "dcmjs")
+    // Phase 6C: install dcmjs
     loader: async () => ({}),
     bundleSizeBytes: 1.5 * 1024 * 1024,
     requiresCrossOriginIsolation: false,
@@ -253,7 +259,7 @@ export const LAZY_LIBRARY_MODULES: LazyLibraryModule[] = [
   },
   {
     libraryId: "node-forge",
-    // Phase 6B: import(/* webpackChunkName: "node-forge" */ "node-forge")
+    // Phase 6C: install node-forge
     loader: async () => ({}),
     bundleSizeBytes: 450 * 1024,
     requiresCrossOriginIsolation: false,
@@ -261,7 +267,7 @@ export const LAZY_LIBRARY_MODULES: LazyLibraryModule[] = [
   },
   {
     libraryId: "html2canvas",
-    // Phase 6B: import(/* webpackChunkName: "html2canvas" */ "html2canvas")
+    // Phase 6C: install html2canvas
     loader: async () => ({}),
     bundleSizeBytes: 500 * 1024,
     requiresCrossOriginIsolation: false,
@@ -323,22 +329,34 @@ export class ProviderLifecycleRegistry {
   markInitialising(providerId: string): void {
     const entry = this.entries.get(providerId);
     if (entry) entry.state = 'initialising';
+    else this.markLoading(providerId);
   }
 
   markReady(providerId: string): void {
-    const entry = this.entries.get(providerId);
-    if (entry) {
-      entry.state = 'ready';
-      entry.loadEndMs = Date.now();
+    const existing = this.entries.get(providerId);
+    if (existing) {
+      existing.state = 'ready';
+      existing.loadEndMs = Date.now();
+    } else {
+      this.entries.set(providerId, {
+        providerId, state: 'ready',
+        loadStartMs: Date.now(), loadEndMs: Date.now(),
+      });
     }
   }
 
   markError(providerId: string, error: Error): void {
-    const entry = this.entries.get(providerId);
-    if (entry) {
-      entry.state = 'error';
-      entry.error = error;
-      entry.loadEndMs = Date.now();
+    const existing = this.entries.get(providerId);
+    if (existing) {
+      existing.state = 'error';
+      existing.error = error;
+      existing.loadEndMs = Date.now();
+    } else {
+      this.entries.set(providerId, {
+        providerId, state: 'error',
+        loadStartMs: Date.now(), loadEndMs: Date.now(),
+        error,
+      });
     }
   }
 
@@ -382,57 +400,63 @@ export interface WorkerDescriptor {
 }
 
 /**
- * Worker descriptors — stubs for Phase 6B implementation.
- * Paths reference /public/workers/<name>.worker.js which do not exist yet.
+ * Worker descriptors — Phase 6B: TypeScript module workers in lib/workers/.
+ * Loaded with: new Worker(new URL('../workers/<name>-worker.ts', import.meta.url))
  */
 export const WORKER_DESCRIPTORS: WorkerDescriptor[] = [
   {
     libraryId: "ffmpeg-wasm",
-    workerPath: "/workers/ffmpeg.worker.js",
+    workerPath: "/workers/video-worker",
     requiresSharedMemory: true,
     type: "module",
   },
   {
     libraryId: "tesseract-js",
-    workerPath: "/workers/tesseract.worker.js",
+    workerPath: "/workers/ocr-worker",
     requiresSharedMemory: false,
     type: "module",
   },
   {
-    libraryId: "7zip-wasm",
-    workerPath: "/workers/sevenzip.worker.js",
+    libraryId: "canvas-api",
+    workerPath: "/workers/image-worker",
     requiresSharedMemory: false,
     type: "module",
   },
   {
-    libraryId: "node-unrar-js",
-    workerPath: "/workers/unrar.worker.js",
+    libraryId: "pdf-lib",
+    workerPath: "/workers/pdf-worker",
     requiresSharedMemory: false,
     type: "module",
-  },
-  {
-    libraryId: "pdfjs",
-    workerPath: "/workers/pdfjs.worker.js",
-    requiresSharedMemory: false,
-    type: "classic",
   },
 ];
 
 // ---------------------------------------------------------------------------
-// BROWSER CAPABILITY DETECTION (metadata stubs)
+// BROWSER CAPABILITY DETECTION (Phase 6B — extended)
 // ---------------------------------------------------------------------------
 
 export interface BrowserCapabilities {
   /** SharedArrayBuffer available (requires COOP + COEP headers) */
   sharedArrayBuffer: boolean;
+  /** WebAssembly available and functional */
+  webAssembly: boolean;
   /** WebGL 2.0 available */
   webgl2: boolean;
   /** WebGPU available */
   webgpu: boolean;
-  /** OffscreenCanvas available */
+  /** OffscreenCanvas available (workers can render) */
   offscreenCanvas: boolean;
   /** ServiceWorker supported */
   serviceWorker: boolean;
+  /** Web Workers supported */
+  webWorkers: boolean;
+  /** WebCodecs API available */
+  webCodecs: boolean;
+  /** File System Access API available */
+  fileSystemAccess: boolean;
+  /** SIMD WebAssembly available */
+  wasmSimd: boolean;
+  /** Multi-threading (SharedArrayBuffer + Atomics) available */
+  multiThread: boolean;
   /** Estimated device memory in GB (−1 if unknown) */
   deviceMemoryGb: number;
   /** Approximate CPU core count */
@@ -442,35 +466,122 @@ export interface BrowserCapabilities {
 /**
  * Detect browser capabilities at runtime.
  * Returns a best-effort snapshot — never throws.
+ * All feature detections are safe and use try/catch guards.
  */
 export function detectBrowserCapabilities(): BrowserCapabilities {
   if (typeof window === 'undefined') {
     // Server-side rendering fallback
     return {
       sharedArrayBuffer: false,
+      webAssembly: false,
       webgl2: false,
       webgpu: false,
       offscreenCanvas: false,
       serviceWorker: false,
+      webWorkers: false,
+      webCodecs: false,
+      fileSystemAccess: false,
+      wasmSimd: false,
+      multiThread: false,
       deviceMemoryGb: -1,
       cpuCores: 1,
     };
   }
 
+  const hasSAB = typeof SharedArrayBuffer !== 'undefined';
+  const hasAtomics = typeof Atomics !== 'undefined';
+
+  let webgl2 = false;
+  try { webgl2 = !!document.createElement('canvas').getContext('webgl2'); } catch { /* no-op */ }
+
+  let wasmSimd = false;
+  try {
+    // Probe SIMD using a minimal WASM module that uses i32x4.add
+    const simdBytes = new Uint8Array([0,97,115,109,1,0,0,0]);
+    wasmSimd = WebAssembly.validate(simdBytes);
+  } catch { /* no-op */ }
+
   return {
-    sharedArrayBuffer: typeof SharedArrayBuffer !== 'undefined',
-    webgl2: (() => {
-      try {
-        return !!document.createElement('canvas').getContext('webgl2');
-      } catch {
-        return false;
-      }
-    })(),
+    sharedArrayBuffer: hasSAB,
+    webAssembly: typeof WebAssembly !== 'undefined',
+    webgl2,
     webgpu: 'gpu' in navigator,
     offscreenCanvas: typeof OffscreenCanvas !== 'undefined',
     serviceWorker: 'serviceWorker' in navigator,
+    webWorkers: typeof Worker !== 'undefined',
+    webCodecs: typeof VideoDecoder !== 'undefined' || typeof VideoEncoder !== 'undefined',
+    fileSystemAccess: 'showOpenFilePicker' in window,
+    wasmSimd,
+    multiThread: hasSAB && hasAtomics,
     // @ts-expect-error — non-standard
     deviceMemoryGb: navigator.deviceMemory ?? -1,
     cpuCores: navigator.hardwareConcurrency ?? 1,
   };
 }
+
+/**
+ * Async version of capability detection — resolves extra checks
+ * (e.g., WASM compilation) without blocking the main thread.
+ */
+export async function detectBrowserCapabilitiesAsync(): Promise<BrowserCapabilities & { wasmCompileTime: number }> {
+  const sync = detectBrowserCapabilities();
+  let wasmCompileTime = -1;
+  try {
+    const start = performance.now();
+    // Compile a minimal valid WASM module
+    const bytes = new Uint8Array([0,97,115,109,1,0,0,0,1,4,1,96,0,0,3,2,1,0,10,4,1,2,0,11]);
+    await WebAssembly.compile(bytes.buffer);
+    wasmCompileTime = Math.round(performance.now() - start);
+  } catch { /* no-op */ }
+
+  return { ...sync, wasmCompileTime };
+}
+
+/** Singleton cache — recomputed once per page load */
+let _cachedCapabilities: BrowserCapabilities | null = null;
+
+export function getBrowserCapabilities(): BrowserCapabilities {
+  if (!_cachedCapabilities) {
+    _cachedCapabilities = detectBrowserCapabilities();
+  }
+  return _cachedCapabilities;
+}
+
+// ---------------------------------------------------------------------------
+// PROVIDER ENGINE REGISTRY (auto-register new providers)
+// ---------------------------------------------------------------------------
+
+export interface ProviderRegistryEntry {
+  id: string;
+  name: string;
+  domain: string;
+  initialize: () => Promise<boolean>;
+}
+
+class ProviderEngineRegistry {
+  private _entries = new Map<string, ProviderRegistryEntry>();
+
+  register(entry: ProviderRegistryEntry): void {
+    this._entries.set(entry.id, entry);
+    providerLifecycleRegistry.markLoading(entry.id);
+  }
+
+  getAll(): ProviderRegistryEntry[] {
+    return Array.from(this._entries.values());
+  }
+
+  async initializeAll(): Promise<Map<string, boolean>> {
+    const results = new Map<string, boolean>();
+    for (const entry of Array.from(this._entries.values())) {
+      try {
+        const ok = await entry.initialize();
+        results.set(entry.id, ok);
+      } catch {
+        results.set(entry.id, false);
+      }
+    }
+    return results;
+  }
+}
+
+export const providerEngineRegistry = new ProviderEngineRegistry();

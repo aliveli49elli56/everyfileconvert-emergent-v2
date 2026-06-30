@@ -214,3 +214,58 @@ App is 100% in-browser processing — no server fetch calls in any route.
 - ✅ No UI changes made
 - ✅ No broken routes
 - ✅ Build passes cleanly
+
+---
+
+## Phase 6A — COMPLETE (2025-06-30)
+
+### Registry Final Statistics
+- **Formats**: 300 unique (no duplicates)
+- **Conversion pairs**: 1,231 (317 source formats)
+- **Processors**: 101 across 24 domains (no duplicates)
+- **Libraries**: 76 (17 stubs added, 9 naming inconsistencies fixed)
+- **Provider interfaces**: 25 (IBaseProvider + 24 domain)
+- **Concrete providers in meta table**: 38
+- **Categories**: 26
+- **Orphan formats**: 8 (all legitimately isolated — proprietary/executables/manifests)
+- **Cross-registry mismatches**: 0
+- **TypeScript errors**: 0
+- **Build**: PASS
+
+### Files Created/Modified in Phase 6A
+- `lib/registry/format-registry.ts` — expanded to 300 formats
+- `lib/registry/conversion-registry.ts` — expanded to 1,231 pairs
+- `lib/registry/library-registry.ts` — created (76 libraries)
+- `lib/engine/provider-selection-engine.ts` — created (38 providers, fully metadata-driven)
+- `lib/core/browser-arch.ts` — created (lazy loading stubs)
+- `lib/registry/viewer-registry.ts` — updated (Phase 6A categories)
+- `memory/phase6a-report.md` — Final Validation Report generated
+
+### Phase 6B Prerequisites (DO NOT START BEFORE REVIEWED)
+1. Docker environment — FFmpeg, LibreOffice, ImageMagick
+2. FFmpeg WASM integration — implement IVideoProvider
+3. Refactor legacy engine files — migrate hardcoded MIME maps to use formatRegistry
+4. Implement IImageProvider — complete Canvas API provider
+5. Web Worker implementation — activate browser-arch.ts stubs
+6. Batch processing foundation — use supportsBatch flag already set on all 300 formats
+
+### Phase 6B Part 1 — COMPLETE (2025-06-30)
+
+**Browser Processing Engine Implementation:**
+- Removed ALL hardcoded MIME maps from architecture files
+- MIME engine derives data from Format Registry (300 formats) as single source of truth
+- Created `ImageCanvasProvider` — full IImageProvider (14 methods via Canvas API)
+- Created `VideoFFmpegProvider` — full IVideoProvider (15 methods via FFmpeg.wasm)
+- Conversion service routes through Provider Selection Engine first (38-entry metadata table)
+- Worker Architecture: 5 files (worker-types, image-worker, video-worker, pdf-worker, ocr-worker) with typed messages
+- Browser capability detection expanded: 13 fields (webWorkers, webCodecs, fileSystemAccess, wasmSimd, multiThread)
+- Lazy loaders activated for 8 installed packages
+- TypeScript: 0 errors | Build: SUCCESS
+
+**Phase 6B Part 2 Prerequisites:**
+1. Install: epubjs, svgo, opentype.js, three, 7zip-wasm, turf, node-forge, html2canvas, dcmjs
+2. Implement IDocumentProvider (Mammoth + pdfjs + SheetJS — all installed)
+3. Implement IArchiveProvider (JSZip — already installed)
+4. Replace require() with async import() in conversion-service
+5. Registry-backed Worker MIME data (build-time JSON from Format Registry)
+6. FFmpeg Probe metadata in VideoFFmpegProvider.getMetadata()

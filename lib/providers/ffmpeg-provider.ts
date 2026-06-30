@@ -1,48 +1,51 @@
 /**
  * lib/providers/ffmpeg-provider.ts
- * FFmpeg.wasm provider for video/audio operations
+ * FFmpeg.wasm provider for video/audio operations — capabilities derived from
+ * Processor Registry and Format Registry (Phase 6B: no hardcoded lists).
  */
 
 import { BaseProvider, providerFactory } from './base-provider';
 import type { ProviderCapabilities } from '../types/providers';
 import type { ConversionJob, ConversionResult, ConversionProgress } from '../types/conversion';
+import { formatRegistry } from '../registry/format-registry';
+import { processorRegistry } from '../registry/processor-registry';
 
 // ---------------------------------------------------------------------------
-// CAPABILITIES
+// REGISTRY-DRIVEN CAPABILITIES
 // ---------------------------------------------------------------------------
 
-const FFMPEG_CAPABILITIES: ProviderCapabilities = {
-  maxFileSize: 500 * 1024 * 1024, // 500MB
-  maxFiles: 10,
-  supportsFormats: [
-    'mp4', 'webm', 'avi', 'mov', 'mkv', 'wmv', 'flv', 'mpeg', 'mpg', 'm4v',
-    '3gp', 'ogv', 'ts', 'f4v', 'mp3', 'wav', 'ogg', 'flac', 'aac', 'm4a',
-    'wma', 'aiff', 'opus', 'ac3', 'amr', 'caf',
-  ],
-  supportsOperations: [
-    'video:convert',
-    'video:trim',
-    'video:compress',
-    'video:rotate',
-    'video:extract-audio',
-    'video:gif',
-    'video:crop',
-    'video:reverse',
-    'video:subtitle',
-    'video:merge',
-    'audio:convert',
-    'audio:trim',
-    'audio:compress',
-    'audio:normalize',
-    'audio:merge',
-    'audio:speed',
-    'audio:pitch',
-  ],
-  premiumOnly: false,
-  requiresAuth: false,
-  estimatedSpeed: 'medium',
-  qualityRating: 'high',
-};
+function buildFFmpegCapabilities(): ProviderCapabilities {
+  // Video + audio formats from Format Registry
+  const videoFormats = formatRegistry.getByCategory('video').map(f => f.ext);
+  const audioFormats = formatRegistry.getByCategory('audio').map(f => f.ext);
+  const allMediaFormats = Array.from(new Set([...videoFormats, ...audioFormats]));
+
+  // Video + audio operations from Processor Registry
+  const videoProcessors = processorRegistry.getByCategory('video' as import('../types/formats').FormatCategory);
+  const audioProcessors = processorRegistry.getByCategory('audio' as import('../types/formats').FormatCategory);
+  const allOps = [
+    ...videoProcessors.map(p => p.id),
+    ...audioProcessors.map(p => p.id),
+  ].filter(Boolean);
+
+  return {
+    maxFileSize: 500 * 1024 * 1024, // 500 MB
+    maxFiles: 10,
+    supportsFormats: allMediaFormats,
+    supportsOperations: allOps.length > 0 ? allOps : [
+      'video:convert', 'video:trim', 'video:compress', 'video:rotate',
+      'video:extract-audio', 'video:gif', 'video:crop', 'video:reverse',
+      'video:subtitle', 'audio:convert', 'audio:trim', 'audio:compress',
+      'audio:normalize', 'audio:merge', 'audio:speed', 'audio:pitch',
+    ],
+    premiumOnly: false,
+    requiresAuth: false,
+    estimatedSpeed: 'medium',
+    qualityRating: 'high',
+  };
+}
+
+const FFMPEG_CAPABILITIES: ProviderCapabilities = buildFFmpegCapabilities();
 
 // ---------------------------------------------------------------------------
 // FFMPEG PROVIDER

@@ -1,6 +1,9 @@
 /**
  * lib/services/conversion-service.ts
- * Central conversion orchestration service
+ * Central conversion orchestration service.
+ *
+ * Phase 6B: All browser processing requests now route through the
+ * Provider Selection Engine first. Legacy engine is kept as fallback.
  */
 
 import type {
@@ -13,6 +16,7 @@ import type {
 import { providerRegistry } from '../registry/provider-registry';
 import { formatRegistry } from '../registry/format-registry';
 import { conversionRegistry } from '../registry/conversion-registry';
+import { providerSelectionEngine } from '../engine/provider-selection-engine';
 
 // ---------------------------------------------------------------------------
 // CONVERSION SERVICE
@@ -83,7 +87,28 @@ class ConversionService {
         };
       }
 
-      // Select provider
+      // Phase 6B: Route through Provider Selection Engine first
+      const srcExt = job.files[0]?.name.split('.').pop()?.toLowerCase() ?? '';
+      const tgtExt = (job.options as { targetFormat?: string })?.targetFormat?.toLowerCase() ?? '';
+
+      const selectionResult = providerSelectionEngine.select({
+        inputExt: srcExt,
+        outputExt: tgtExt,
+        fileSizeBytes: job.files.reduce((s, f) => s + f.size, 0),
+        runtimeEnv: 'browser',
+        userTier: job.mode === 'premium' ? 'premium' : 'free',
+      });
+
+      // Try new Phase 6A/6B provider implementations
+      const selectedCandidate = selectionResult.selected;
+      const pse = selectedCandidate ? this.resolveNewProvider(selectedCandidate.providerId) : null;
+      if (pse) {
+        const result = await this.executeWithNewProvider(job, pse, onProgress);
+        this.jobResults.set(job.id, result);
+        return { ...result, duration: Date.now() - startTime, provider: selectedCandidate!.providerName };
+      }
+
+      // Fall back to old provider-registry
       const providerConfig = providerRegistry.selectBest(job);
       if (!providerConfig) {
         return {
@@ -127,6 +152,77 @@ class ConversionService {
     } finally {
       this.activeJobs.delete(job.id);
     }
+  }
+
+  /**
+   * Phase 6B: Map PSE provider IDs to new IImageProvider/IVideoProvider implementations.
+   * As more providers are implemented, add them here.
+   */
+  private resolveNewProvider(providerId: string): import('../types/provider-interfaces').IBaseProvider | null {
+    try {
+      switch (providerId) {
+        case 'CanvasApiProvider':
+        case 'CanvasImageProvider': {
+          const { imageCanvasProvider } = require('../providers/image-canvas-provider');
+          return imageCanvasProvider;
+        }
+        case 'FFmpegWasmProvider': {
+          const { videoFFmpegProvider } = require('../providers/video-ffmpeg-provider');
+          return videoFFmpegProvider;
+        }
+        default:
+          return null;
+      }
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Phase 6B: Execute using new IBaseProvider-conformant providers.
+   */
+  private async executeWithNewProvider(
+    job: ConversionJob,
+    provider: import('../types/provider-interfaces').IBaseProvider,
+    onProgress?: (progress: ConversionProgress) => void,
+  ): Promise<ConversionResult> {
+    // Ensure provider is ready
+    if (!provider.isReady()) {
+      const ok = await provider.initialize();
+      if (!ok) {
+        return { success: false, error: `Provider ${provider.info.id} failed to initialize`, errorCode: 'CONVERSION_FAILED' };
+      }
+    }
+
+    // Check capability
+    const srcExt = job.files[0]?.name.split('.').pop() ?? '';
+    const tgtExt = (job.options as { targetFormat?: string })?.targetFormat ?? '';
+    const check = await provider.canHandle(job.files[0] ?? '', tgtExt);
+    if (!check.supported) {
+      return this.executeLegacy(job, onProgress);
+    }
+
+    // Route to typed provider method
+    const domain = (job.operation as string).split(':')[0];
+    if (domain === 'image') {
+      const imgProvider = provider as import('../types/provider-interfaces').IImageProvider;
+      const opts = {
+        targetFormat: tgtExt,
+        quality: (job.options as { quality?: number })?.quality,
+        onProgress: (p: ConversionProgress) => onProgress?.(p),
+      };
+      return imgProvider.convert(job.files[0], opts);
+    }
+    if (domain === 'video' || domain === 'audio') {
+      const vidProvider = provider as import('../types/provider-interfaces').IVideoProvider;
+      return vidProvider.convert(job.files[0], {
+        targetFormat: tgtExt,
+        onProgress: (p: ConversionProgress) => onProgress?.(p),
+      });
+    }
+
+    // Generic fallback
+    return this.executeLegacy(job, onProgress);
   }
 
   /**

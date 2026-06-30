@@ -1,22 +1,23 @@
+import { formatRegistry } from './registry/format-registry';
+import { mimeEngine } from './engine/mime-engine';
+
 export interface ConversionResult {
   blob: Blob;
   width: number;
   height: number;
 }
 
-const CANVAS_FORMATS = ["png", "jpeg", "jpg", "webp", "bmp"] as const;
-type CanvasFormat = (typeof CANVAS_FORMATS)[number];
+/** Returns all image format extensions supported by Canvas API */
+function getCanvasSupportedFormats(): Set<string> {
+  return new Set(
+    formatRegistry
+      .getByCategory('image')
+      .map(f => f.ext.toLowerCase())
+  );
+}
 
-const MIME_MAP: Record<string, string> = {
-  png: "image/png",
-  jpeg: "image/jpeg",
-  jpg: "image/jpeg",
-  webp: "image/webp",
-  bmp: "image/bmp",
-};
-
-function isCanvasFormat(format: string): format is CanvasFormat {
-  return CANVAS_FORMATS.includes(format as CanvasFormat);
+function isCanvasFormat(format: string): boolean {
+  return getCanvasSupportedFormats().has(format.toLowerCase());
 }
 
 function loadImage(file: File): Promise<HTMLImageElement> {
@@ -50,11 +51,11 @@ function drawToCanvas(img: HTMLImageElement): HTMLCanvasElement {
 
 function canvasToBlob(
   canvas: HTMLCanvasElement,
-  format: CanvasFormat,
+  format: string,
   quality: number = 0.92
 ): Promise<Blob> {
   return new Promise((resolve, reject) => {
-    const mime = MIME_MAP[format] || "image/png";
+    const mime = mimeEngine.getMime(format);
     const q = format === "png" ? undefined : quality;
     canvas.toBlob(
       (blob) => {
@@ -211,7 +212,7 @@ export async function convertImage(
 
   if (src === tgt) {
     const buf = await file.arrayBuffer();
-    const blob = new Blob([buf], { type: file.type || MIME_MAP[src] || "application/octet-stream" });
+    const blob = new Blob([buf], { type: file.type || mimeEngine.getMime(src) || "application/octet-stream" });
     return { blob, width: 0, height: 0 };
   }
 

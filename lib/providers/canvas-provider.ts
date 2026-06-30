@@ -1,36 +1,45 @@
 /**
  * lib/providers/canvas-provider.ts
- * Canvas API provider for image operations
+ * Canvas API provider for image operations — capabilities derived from
+ * Processor Registry and Format Registry (Phase 6B: no hardcoded lists).
  */
 
 import { BaseProvider, providerFactory } from './base-provider';
 import type { ProviderCapabilities } from '../types/providers';
 import type { ConversionJob, ConversionResult, ConversionProgress } from '../types/conversion';
+import { formatRegistry } from '../registry/format-registry';
+import { processorRegistry } from '../registry/processor-registry';
+import { mimeEngine } from '../engine/mime-engine';
 
 // ---------------------------------------------------------------------------
-// CAPABILITIES
+// REGISTRY-DRIVEN CAPABILITIES
 // ---------------------------------------------------------------------------
 
-const CANVAS_CAPABILITIES: ProviderCapabilities = {
-  maxFileSize: 100 * 1024 * 1024, // 100MB
-  maxFiles: 50,
-  supportsFormats: ['png', 'jpg', 'jpeg', 'webp', 'gif', 'bmp', 'tiff', 'heic', 'heif', 'svg', 'ico', 'icns'],
-  supportsOperations: [
-    'image:convert',
-    'image:crop',
-    'image:resize',
-    'image:rotate',
-    'image:flip',
-    'image:compress',
-    'image:blur',
-    'image:watermark',
-    'image:color-adjust',
-  ],
-  premiumOnly: false,
-  requiresAuth: false,
-  estimatedSpeed: 'fast',
-  qualityRating: 'high',
-};
+function buildCanvasCapabilities(): ProviderCapabilities {
+  // Image formats from Format Registry
+  const imageFormats = formatRegistry.getByCategory('image').map(f => f.ext);
+
+  // Image operations from Processor Registry (domain = 'image')
+  const imageProcessors = processorRegistry.getByCategory('image' as import('../types/formats').FormatCategory);
+  const operations = imageProcessors.map(p => p.id);
+
+  return {
+    maxFileSize: 100 * 1024 * 1024, // 100 MB
+    maxFiles: 50,
+    supportsFormats: imageFormats,
+    supportsOperations: operations.length > 0 ? operations : [
+      'image:convert', 'image:crop', 'image:resize', 'image:rotate',
+      'image:flip', 'image:compress', 'image:blur', 'image:watermark',
+      'image:color-adjust',
+    ],
+    premiumOnly: false,
+    requiresAuth: false,
+    estimatedSpeed: 'fast',
+    qualityRating: 'high',
+  };
+}
+
+const CANVAS_CAPABILITIES: ProviderCapabilities = buildCanvasCapabilities();
 
 // ---------------------------------------------------------------------------
 // CANVAS PROVIDER
@@ -201,16 +210,7 @@ class CanvasProvider extends BaseProvider {
   }
 
   private getMimeType(format: string): string {
-    const mimes: Record<string, string> = {
-      png: 'image/png',
-      jpg: 'image/jpeg',
-      jpeg: 'image/jpeg',
-      webp: 'image/webp',
-      gif: 'image/gif',
-      bmp: 'image/bmp',
-      tiff: 'image/tiff',
-    };
-    return mimes[format.toLowerCase()] || 'image/png';
+    return mimeEngine.getMime(format);
   }
 
   private generateFilename(original: string, format: string): string {

@@ -36,6 +36,9 @@ export const CONVERSION_MATRIX: Record<string, string[]> = {
   jfif: ["jpg", "png",  "webp", "bmp"],
   jp2:  ["jpg", "png",  "tiff", "bmp"],
   j2k:  ["jp2", "jpg",  "png"],
+  bpg:  ["png", "jpg",  "webp", "jpeg"],
+  qoi:  ["png", "jpg",  "webp", "bmp"],
+  xbm:  ["png", "bmp",  "ico"],
 
   // ── Camera RAW ──────────────────────────────────────────────────────────────
   raw:  ["png", "jpg", "jpeg", "webp", "tiff", "pdf"],
@@ -119,6 +122,8 @@ export const CONVERSION_MATRIX: Record<string, string[]> = {
   f4v:  ["mp4",  "webm", "avi", "mov", "flv", "gif", "mp3", "wav"],
   hevc: ["mp4",  "mkv",  "webm", "avi"],
   m2ts: ["mp4",  "mkv",  "avi"],
+  "264": ["mp4", "mkv",  "mov"],
+  "265": ["mp4", "mkv",  "mov", "hevc"],
   rm:   ["mp4",  "webm", "avi", "mp3"],
   rmvb: ["mp4",  "avi",  "mkv"],
   vp9:  ["webm", "mp4"],
@@ -229,6 +234,7 @@ export const CONVERSION_MATRIX: Record<string, string[]> = {
   txz:  ["tar",  "zip"],
   cpio: ["tar",  "zip"],
   ar:   ["tar"],
+  ace:  ["zip",  "7z",  "tar"],
 
   // ── Font ─────────────────────────────────────────────────────────────────────
   ttf:  ["woff", "woff2", "otf", "eot", "svg"],

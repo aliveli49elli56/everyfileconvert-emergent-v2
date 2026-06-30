@@ -11,6 +11,7 @@
 
 import type { TranscodeJob, TranscodeResult } from './Transcoder';
 import { buildOutputName } from './Transcoder';
+import { mimeEngine } from '../engine/mime-engine';
 
 // Detect SharedArrayBuffer availability → choose MT or ST core
 function hasSAB(): boolean {
@@ -45,21 +46,9 @@ type FFmpegUtilModule = {
   toBlobURL: (url: string, mimeType: string) => Promise<string>;
 };
 
-// ── MIME types for output ──────────────────────────────────────────────────────
-const VIDEO_MIME: Record<string, string> = {
-  mp4: 'video/mp4', webm: 'video/webm', avi: 'video/x-msvideo',
-  mov: 'video/quicktime', mkv: 'video/x-matroska', gif: 'image/gif',
-  ogv: 'video/ogg', m4v: 'video/x-m4v', wmv: 'video/x-ms-wmv',
-  flv: 'video/x-flv',
-};
-const AUDIO_MIME: Record<string, string> = {
-  mp3: 'audio/mpeg', wav: 'audio/wav', ogg: 'audio/ogg', flac: 'audio/flac',
-  aac: 'audio/aac', m4a: 'audio/mp4', opus: 'audio/opus', ac3: 'audio/ac3',
-  aiff: 'audio/aiff', wma: 'audio/x-ms-wma', amr: 'audio/amr', caf: 'audio/x-caf',
-};
-
+// ── MIME type resolution via Format Registry (single source of truth) ──────────
 function mimeFor(ext: string): string {
-  return VIDEO_MIME[ext] ?? AUDIO_MIME[ext] ?? `video/${ext}`;
+  return mimeEngine.getMime(ext);
 }
 
 // ── Build FFmpeg argument arrays for each operation ───────────────────────────
