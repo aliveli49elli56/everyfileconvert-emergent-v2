@@ -92,6 +92,7 @@ export default function FileConverter({
       standard: [],
       advanced: [],
       niche: [],
+      legacy: [],
     };
     for (const f of formats) {
       groups[f.tier].push(f);

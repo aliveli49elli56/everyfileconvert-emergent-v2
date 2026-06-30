@@ -321,6 +321,90 @@ export const CATEGORY_LIMITS: Record<FormatCategory, { maxFileSize: Record<UserT
       enterprise: 5 * 1024 * 1024 * 1024,
     },
   },
+  "3d": {
+    maxFileSize: {
+      free: 50 * 1024 * 1024,
+      premium: 500 * 1024 * 1024,
+      enterprise: 5 * 1024 * 1024 * 1024,
+    },
+  },
+  pdf: {
+    maxFileSize: {
+      free: 100 * 1024 * 1024,
+      premium: 1 * 1024 * 1024 * 1024,
+      enterprise: 10 * 1024 * 1024 * 1024,
+    },
+  },
+  spreadsheet: {
+    maxFileSize: {
+      free: 50 * 1024 * 1024,
+      premium: 500 * 1024 * 1024,
+      enterprise: 5 * 1024 * 1024 * 1024,
+    },
+  },
+  presentation: {
+    maxFileSize: {
+      free: 100 * 1024 * 1024,
+      premium: 1 * 1024 * 1024 * 1024,
+      enterprise: 5 * 1024 * 1024 * 1024,
+    },
+  },
+  webpage: {
+    maxFileSize: {
+      free: 20 * 1024 * 1024,
+      premium: 200 * 1024 * 1024,
+      enterprise: 2 * 1024 * 1024 * 1024,
+    },
+  },
+  subtitle: {
+    maxFileSize: {
+      free: 5 * 1024 * 1024,
+      premium: 50 * 1024 * 1024,
+      enterprise: 500 * 1024 * 1024,
+    },
+  },
+  certificate: {
+    maxFileSize: {
+      free: 5 * 1024 * 1024,
+      premium: 50 * 1024 * 1024,
+      enterprise: 500 * 1024 * 1024,
+    },
+  },
+  scientific: {
+    maxFileSize: {
+      free: 100 * 1024 * 1024,
+      premium: 2 * 1024 * 1024 * 1024,
+      enterprise: 20 * 1024 * 1024 * 1024,
+    },
+  },
+  medical: {
+    maxFileSize: {
+      free: 100 * 1024 * 1024,
+      premium: 2 * 1024 * 1024 * 1024,
+      enterprise: 20 * 1024 * 1024 * 1024,
+    },
+  },
+  "disk-image": {
+    maxFileSize: {
+      free: 500 * 1024 * 1024,
+      premium: 10 * 1024 * 1024 * 1024,
+      enterprise: 100 * 1024 * 1024 * 1024,
+    },
+  },
+  executable: {
+    maxFileSize: {
+      free: 50 * 1024 * 1024,
+      premium: 500 * 1024 * 1024,
+      enterprise: 5 * 1024 * 1024 * 1024,
+    },
+  },
+  other: {
+    maxFileSize: {
+      free: 50 * 1024 * 1024,
+      premium: 500 * 1024 * 1024,
+      enterprise: 5 * 1024 * 1024 * 1024,
+    },
+  },
 };
 
 // ---------------------------------------------------------------------------

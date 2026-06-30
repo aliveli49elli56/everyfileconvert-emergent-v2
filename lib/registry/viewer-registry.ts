@@ -17,6 +17,7 @@ import {
   Map as MapIcon,
   Type,
   Layers,
+  Cuboid,
 } from 'lucide-react';
 import type { ViewerEngine, FormatCategory } from '../types/formats';
 import { formatRegistry } from './format-registry';
@@ -39,7 +40,15 @@ export type ViewerCategory =
   | 'cad'
   | 'ebook'
   | 'font'
-  | 'gis';
+  | 'gis'
+  // ── Phase 6A new viewer categories ───────────────────────────────────────
+  | '3d'
+  | 'subtitle'
+  | 'certificate'
+  | 'medical'
+  | 'scientific'
+  | 'disk-image'
+  | 'webpage';
 
 // ---------------------------------------------------------------------------
 // VIEWER CAPABILITY INTERFACE
@@ -216,6 +225,112 @@ export const VIEWER_ENGINES: Record<ViewerEngine, ViewerCapability> = {
     label: 'Unsupported Format',
     supportedFeatures: [],
   },
+  '3d': {
+    engine: '3d',
+    category: '3d',
+    component: 'ThreeDViewer',
+    icon: Cuboid,
+    label: '3D Model Viewer',
+    supportedFeatures: ['zoom', 'pan', 'rotate-3d', 'wireframe', 'download'],
+    maxFileSize: 200 * 1024 * 1024,
+    requiresWebGL: true,
+  },
+  subtitle: {
+    engine: 'subtitle',
+    category: 'subtitle',
+    component: 'SubtitleViewer',
+    icon: FileText,
+    label: 'Subtitle Viewer',
+    supportedFeatures: ['view', 'edit', 'download'],
+    maxFileSize: 10 * 1024 * 1024,
+  },
+  certificate: {
+    engine: 'certificate',
+    category: 'certificate',
+    component: 'CertificateViewer',
+    icon: FileText,
+    label: 'Certificate Viewer',
+    supportedFeatures: ['inspect', 'download'],
+    maxFileSize: 5 * 1024 * 1024,
+  },
+  medical: {
+    engine: 'medical',
+    category: 'medical',
+    component: 'MedicalViewer',
+    icon: FileText,
+    label: 'DICOM Viewer',
+    supportedFeatures: ['zoom', 'pan', 'windowing', 'slice-nav', 'download'],
+    maxFileSize: 500 * 1024 * 1024,
+    requiresWebGL: true,
+  },
+  scientific: {
+    engine: 'scientific',
+    category: 'scientific',
+    component: 'ScientificViewer',
+    icon: FileText,
+    label: 'Scientific Data Viewer',
+    supportedFeatures: ['plot', 'export', 'download'],
+    maxFileSize: 500 * 1024 * 1024,
+  },
+  'disk-image': {
+    engine: 'disk-image',
+    category: 'disk-image',
+    component: 'DiskImageViewer',
+    icon: Archive,
+    label: 'Disk Image Browser',
+    supportedFeatures: ['browse', 'extract', 'download'],
+    maxFileSize: 10 * 1024 * 1024 * 1024,
+  },
+  webpage: {
+    engine: 'webpage',
+    category: 'webpage',
+    component: 'WebpageViewer',
+    icon: FileText,
+    label: 'Webpage Viewer',
+    supportedFeatures: ['render', 'scroll', 'download'],
+    maxFileSize: 50 * 1024 * 1024,
+  },
+  // ── Alias/composite viewer engines ────────────────────────────────────────
+  /** Generic image viewer (alias for native-image) */
+  image: {
+    engine: 'image',
+    category: 'image',
+    component: 'ImageViewer',
+    icon: Image,
+    label: 'Image Viewer',
+    supportedFeatures: ['zoom', 'pan', 'rotate', 'download'],
+    maxFileSize: 100 * 1024 * 1024,
+  },
+  /** Generic document viewer (alias for docx) */
+  document: {
+    engine: 'document',
+    category: 'document',
+    component: 'DocumentViewer',
+    icon: FileText,
+    label: 'Document Viewer',
+    supportedFeatures: ['scroll', 'search', 'download'],
+    maxFileSize: 200 * 1024 * 1024,
+  },
+  /** Code / data file viewer */
+  code: {
+    engine: 'code',
+    category: 'code',
+    component: 'CodeViewer',
+    icon: Code,
+    label: 'Code Viewer',
+    supportedFeatures: ['syntax-highlight', 'copy', 'download'],
+    maxFileSize: 10 * 1024 * 1024,
+  },
+  /** Vector/design file viewer */
+  design: {
+    engine: 'design',
+    category: 'design',
+    component: 'DesignViewer',
+    icon: Layers,
+    label: 'Design Viewer',
+    supportedFeatures: ['zoom', 'pan', 'layer-toggle', 'download'],
+    maxFileSize: 200 * 1024 * 1024,
+  },
 };
 
 // ---------------------------------------------------------------------------
@@ -312,6 +427,48 @@ export const VIEWER_CATEGORIES: Record<ViewerCategory, {
     gradient: 'from-green-500 to-emerald-500',
     icon: MapIcon,
   },
+  '3d': {
+    label: '3D Models',
+    color: 'text-cyan-600',
+    gradient: 'from-cyan-500 to-blue-500',
+    icon: Cuboid,
+  },
+  webpage: {
+    label: 'Webpages',
+    color: 'text-blue-600',
+    gradient: 'from-blue-500 to-sky-500',
+    icon: FileText,
+  },
+  subtitle: {
+    label: 'Subtitles',
+    color: 'text-gray-600',
+    gradient: 'from-gray-500 to-slate-600',
+    icon: FileText,
+  },
+  certificate: {
+    label: 'Certificates',
+    color: 'text-yellow-600',
+    gradient: 'from-yellow-500 to-amber-500',
+    icon: FileText,
+  },
+  medical: {
+    label: 'Medical',
+    color: 'text-red-600',
+    gradient: 'from-red-500 to-rose-500',
+    icon: FileText,
+  },
+  scientific: {
+    label: 'Scientific',
+    color: 'text-purple-600',
+    gradient: 'from-purple-500 to-violet-500',
+    icon: FileText,
+  },
+  'disk-image': {
+    label: 'Disk Images',
+    color: 'text-zinc-600',
+    gradient: 'from-zinc-500 to-gray-500',
+    icon: Archive,
+  },
 };
 
 // ---------------------------------------------------------------------------
@@ -379,20 +536,27 @@ class ViewerRegistry {
   /** Convert viewer category to format category */
   toFormatCategory(viewerCategory: ViewerCategory): FormatCategory {
     const mapping: Record<ViewerCategory, FormatCategory> = {
-      document: 'document',
-      spreadsheet: 'document',
-      presentation: 'document',
-      image: 'image',
-      video: 'video',
-      audio: 'audio',
-      archive: 'archive',
-      email: 'email',
-      design: 'vector',
-      code: 'code',
-      cad: 'cad',
-      ebook: 'ebook',
-      font: 'font',
-      gis: 'gis',
+      document:     'document',
+      spreadsheet:  'spreadsheet',
+      presentation: 'presentation',
+      image:        'image',
+      video:        'video',
+      audio:        'audio',
+      archive:      'archive',
+      email:        'email',
+      design:       'vector',
+      code:         'code',
+      cad:          'cad',
+      ebook:        'ebook',
+      font:         'font',
+      gis:          'gis',
+      '3d':         '3d',
+      webpage:      'webpage',
+      subtitle:     'subtitle',
+      certificate:  'certificate',
+      medical:      'medical',
+      scientific:   'scientific',
+      'disk-image': 'disk-image',
     };
     return mapping[viewerCategory];
   }
@@ -400,20 +564,32 @@ class ViewerRegistry {
   /** Convert format category to viewer category */
   fromFormatCategory(category: FormatCategory): ViewerCategory {
     const mapping: Record<FormatCategory, ViewerCategory> = {
-      image: 'image',
-      raw: 'image',
-      vector: 'design',
-      icon: 'image',
-      cad: 'cad',
-      video: 'video',
-      audio: 'audio',
-      document: 'document',
-      archive: 'archive',
-      font: 'font',
-      gis: 'gis',
-      email: 'email',
-      code: 'code',
-      ebook: 'ebook',
+      image:        'image',
+      raw:          'image',
+      vector:       'design',
+      icon:         'image',
+      "3d":         'cad',
+      cad:          'cad',
+      video:        'video',
+      audio:        'audio',
+      pdf:          'document',
+      document:     'document',
+      spreadsheet:  'spreadsheet',
+      presentation: 'presentation',
+      archive:      'archive',
+      font:         'font',
+      gis:          'gis',
+      email:        'email',
+      code:         'code',
+      ebook:        'ebook',
+      webpage:      'document',
+      subtitle:     'document',
+      certificate:  'document',
+      scientific:   'document',
+      medical:      'document',
+      "disk-image": 'archive',
+      executable:   'document',
+      other:        'document',
     };
     return mapping[category] ?? 'document';
   }

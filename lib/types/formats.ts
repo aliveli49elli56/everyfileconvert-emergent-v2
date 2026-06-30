@@ -48,7 +48,7 @@ export type FormatCategory =
   | "other";
 
 /** Processing tier for UI display */
-export type FormatTier = "popular" | "standard" | "advanced" | "niche";
+export type FormatTier = "popular" | "standard" | "advanced" | "niche" | "legacy";
 
 /** Converter page type */
 export type ConverterType =
@@ -75,6 +75,10 @@ export type ProcessingEngine =
   | "font-engine"
   | "gis-engine"
   | "archive-engine"
+  | "ebook-engine"
+  | "email-engine"
+  | "cad-engine"
+  | "design-tool"
   // ── New engines (Phase 6A) ────────────────────────────────────────────────
   | "3d-engine"
   | "webpage-engine"
@@ -87,17 +91,19 @@ export type ProcessingEngine =
   | "ocr-engine"
   | "vector-engine"
   | "raw-engine"
-  | "executable-engine"
-  | "email-engine";
+  | "executable-engine";
 
 /** Viewer engine identifier */
 export type ViewerEngine =
   | "native-image"
+  | "image"
   | "svg"
   | "pdf"
   | "docx"
+  | "document"
   | "spreadsheet"
   | "text"
+  | "code"
   | "archive"
   | "email"
   | "video"
@@ -108,6 +114,7 @@ export type ViewerEngine =
   | "cad"
   | "font"
   | "gis"
+  | "design"
   // ── New viewer engines (Phase 6A) ─────────────────────────────────────────
   | "3d"
   | "subtitle"
