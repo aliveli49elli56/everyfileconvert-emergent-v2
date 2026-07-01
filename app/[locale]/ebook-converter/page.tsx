@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import EbookConverterClient from "@/components/EbookConverterClient";
+import UniversalLandingExtras from "@/components/UniversalLandingExtras";
 import { BookOpen } from "lucide-react";
 import { locales, getHreflangLinks } from "@/lib/i18n/config";
 
@@ -122,6 +123,7 @@ export default async function EbookConverterPage({
         </div>
       </section>
     </div>
+    <UniversalLandingExtras variant="category" locale={locale} category="ebook" />
     </>
   );
 }

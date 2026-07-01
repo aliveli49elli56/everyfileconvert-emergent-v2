@@ -1,10 +1,13 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Upload, Download } from 'lucide-react';
 
 interface Props { toolName?: string; onFileSelected?: (f: File) => void }
 
 export default function ColorAdjustmentsUI({ toolName, onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [file,   setFile]  = useState<File|null>(null);
   const [objUrl, setObjUrl]= useState<string|null>(null);
   const [brightness, setBrightness] = useState(100);
@@ -38,11 +41,15 @@ export default function ColorAdjustmentsUI({ toolName, onFileSelected }: Props) 
       ctx.drawImage(img,0,0);
       canvas.toBlob(b=>{
         if(!b)return;
-        if(resultUrl)URL.revokeObjectURL(resultUrl);
-        const url = URL.createObjectURL(b);
-        setResultUrl(url);
-        const a = document.createElement('a');
-        a.href=url; a.download=`adjusted_${file.name}`; a.click();
+        storeAndRedirect(b, {
+          inputFilename:  file.name,
+          outputFilename: `adjusted_${file.name}`,
+          inputFormat:    file.name.split('.').pop()?.toLowerCase() ?? 'png',
+          outputFormat:   file.name.split('.').pop()?.toLowerCase() ?? 'png',
+          inputSizeBytes: file.size,
+          providerId:     'CanvasProcessor',
+          libraryId:      'canvas-api',
+        });
       }, file.type||'image/png', 0.95);
     };
     img.src=objUrl;

@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef } from 'react';
 import { Upload, Download } from 'lucide-react';
 import { FlipHorizontal, FlipVertical } from 'lucide-react';
@@ -6,6 +7,8 @@ import { FlipHorizontal, FlipVertical } from 'lucide-react';
 interface Props { toolName?: string; onFileSelected?: (f: File) => void }
 
 export default function FlipImageUI({ toolName, onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [file,   setFile]  = useState<File|null>(null);
   const [objUrl, setObjUrl]= useState<string|null>(null);
   const [flipH,  setFlipH] = useState(false);
@@ -39,10 +42,15 @@ export default function FlipImageUI({ toolName, onFileSelected }: Props) {
       ctx.restore();
       canvas.toBlob(b=>{
         if(!b)return;
-        const url = URL.createObjectURL(b);
-        const a = document.createElement('a');
-        a.href=url; a.download=`flipped_${file.name}`; a.click();
-        URL.revokeObjectURL(url); setBusy(false);
+        storeAndRedirect(b, {
+        inputFilename:  file.name,
+        outputFilename: `flipped_${file.name}`,
+        inputFormat:    file.name.split('.').pop()?.toLowerCase() ?? 'png',
+        outputFormat:   file.name.split('.').pop()?.toLowerCase() ?? 'png',
+        inputSizeBytes: file.size,
+        providerId:     'CanvasProcessor',
+        libraryId:      'canvas-api',
+      }); setBusy(false);
       }, file.type||'image/png', 0.95);
     };
     img.src = objUrl;

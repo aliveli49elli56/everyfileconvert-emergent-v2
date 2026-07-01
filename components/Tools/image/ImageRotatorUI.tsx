@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 
 import { useRef, useState, useCallback } from 'react';
 import {
@@ -12,6 +13,8 @@ interface Props {
 }
 
 export default function ImageRotatorUI({ toolName, onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [file, setFile]           = useState<File | null>(null);
   const [objectUrl, setObjectUrl] = useState<string | null>(null);
   const [rotation, setRotation]   = useState(0);   // 0 | 90 | 180 | 270
@@ -57,10 +60,15 @@ export default function ImageRotatorUI({ toolName, onFileSelected }: Props) {
       ctx.restore();
       canvas.toBlob((blob) => {
         if (!blob) return;
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = `rotated_${file.name}`; a.click();
-        URL.revokeObjectURL(url);
+        storeAndRedirect(blob, {
+        inputFilename:  file.name,
+        outputFilename: `rotated_${file.name}`,
+        inputFormat:    file.name.split('.').pop()?.toLowerCase() ?? 'png',
+        outputFormat:   file.name.split('.').pop()?.toLowerCase() ?? 'png',
+        inputSizeBytes: file.size,
+        providerId:     'CanvasProcessor',
+        libraryId:      'canvas-api',
+      });
         setBusy(false);
       }, file.type === 'image/gif' ? 'image/png' : file.type, 0.95);
     };

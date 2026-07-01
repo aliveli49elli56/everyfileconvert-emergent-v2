@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { FEATURE_FLAGS } from "@/lib/config/subscription-config";
 
 const BASE_URL = "https://everyfileconvert.com";
 
@@ -24,6 +25,7 @@ const CORE_TOOLS = [
   "/contact",
   "/privacy",
   "/terms",
+  ...(FEATURE_FLAGS.SHOW_PRICING_PAGE ? ["/pricing"] : []),
 ] as const;
 
 const CONVERSIONS: Record<string, string[]> = {

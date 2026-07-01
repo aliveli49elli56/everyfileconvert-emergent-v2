@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef } from 'react';
 import { Upload, Download, Loader2, X, Plus } from 'lucide-react';
 interface Props { toolName?: string; onFileSelected?: (f: File) => void }
@@ -6,6 +7,8 @@ type Stage = 'idle'|'processing'|'done'|'error';
 interface VItem { id:string; file:File; name:string; size:string }
 
 export default function BatchVideoConverterUI({ toolName, onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [files,setFiles]=useState<VItem[]>([]);
   const [format,setFormat]=useState('mp4');
   const [stage,setStage]=useState<Stage>('idle');
@@ -37,7 +40,15 @@ export default function BatchVideoConverterUI({ toolName, onFileSelected }: Prop
       setCurrent('');
       const zipBlob=await zip.generateAsync({type:'blob'});
       if(zipUrl)URL.revokeObjectURL(zipUrl);
-      setZipUrl(URL.createObjectURL(zipBlob));
+      storeAndRedirect(zipBlob, {
+        inputFilename:  files[0]?.file.name ?? 'video',
+        outputFilename: 'converted-videos.zip',
+        inputFormat:    files[0]?.file.name.split('.').pop()?.toLowerCase() ?? 'mp4',
+        outputFormat:   'zip',
+        inputSizeBytes: files.reduce((s,f)=>s+f.file.size,0),
+        providerId:     'Transcoder',
+        libraryId:      'ffmpeg-wasm',
+      });
       setStage('done');
     }catch(e){setError(e instanceof Error?e.message:'Failed');setStage('error');}
   };
@@ -79,8 +90,7 @@ export default function BatchVideoConverterUI({ toolName, onFileSelected }: Prop
       <div className="flex items-center justify-between border-t border-slate-100 pt-3">
         <button onClick={()=>{setFiles([]);setZipUrl(null);setStage('idle');}} className="text-xs text-slate-400 hover:text-slate-600">Clear all</button>
         {zipUrl
-          ?<a href={zipUrl} download="converted_videos.zip" data-testid="batchvid-download"
-              className="flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600"><Download className="h-4 w-4"/>Download ZIP</a>
+          ?<span className="flex items-center gap-1.5 text-sm font-semibold text-emerald-600"><Download className="h-4 w-4"/>Redirecting…</span>
           :<button onClick={handleProcess} disabled={!files.length||stage==='processing'} data-testid="batchvid-process"
               className="flex items-center gap-1.5 rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-violet-700 disabled:opacity-40 transition-colors">
               {stage==='processing'?<><Loader2 className="h-4 w-4 animate-spin"/>Converting…</>:`Convert ${files.length} Video${files.length!==1?'s':''}`}

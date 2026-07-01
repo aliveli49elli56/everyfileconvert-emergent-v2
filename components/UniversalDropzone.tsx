@@ -8,6 +8,8 @@ import {
   type DragEvent,
   type ChangeEvent,
 } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import { downloadWorkflowManager } from '@/lib/engine/download-workflow-manager';
 import { Upload, X, Download, CircleCheck as CheckCircle2, CircleAlert as AlertCircle, Loader as Loader2, Package, Info, ChevronDown, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { revokeObjectURL } from '@/lib/file-validation';
@@ -228,6 +230,8 @@ function TargetFormatSelector({
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export default function UniversalDropzone({ allowedTypes, mode = 'all', onFileSelected, defaultSourceExt, defaultTargetFormat }: UniversalDropzoneProps) {
+  const router   = useRouter();
+  const pathname = usePathname();
   const [isDragging, setIsDragging]         = useState(false);
   const [files, setFiles]                   = useState<FileEntry[]>([]);
   const [isRunning, setIsRunning]           = useState(false);
@@ -318,6 +322,7 @@ export default function UniversalDropzone({ allowedTypes, mode = 'all', onFileSe
     if (zipUrlRef.current) { revokeObjectURL(zipUrlRef.current); zipUrlRef.current = null; setZipUrl(null); }
 
     const results: { name: string; blob: Blob }[] = [];
+    const conversionStartTime = Date.now();
 
     for (const entry of pending) {
       setFiles((prev) => prev.map((f) => f.id === entry.id
@@ -362,32 +367,109 @@ export default function UniversalDropzone({ allowedTypes, mode = 'all', onFileSe
       }
     }
 
+    if (results.length === 1) {
+      // Single file: redirect to download page
+      const singleResult = results[0];
+      const srcFile = files.find(f => f.outputName === singleResult.name)?.file ?? null;
+      const summary = {
+        jobId:           downloadWorkflowManager.generateJobId(),
+        inputFilename:   srcFile?.name ?? singleResult.name,
+        outputFilename:  singleResult.name,
+        inputSizeBytes:  srcFile?.size ?? 0,
+        outputSizeBytes: singleResult.blob.size,
+        inputFormat:     (srcFile?.name ?? singleResult.name).split('.').pop()?.toLowerCase() ?? '',
+        outputFormat:    singleResult.name.split('.').pop()?.toLowerCase() ?? '',
+        providerId:      'BrowserProcessor',
+        libraryId:       'browser',
+        processingEnv:   'browser' as const,
+        completedAt:     new Date().toISOString(),
+        durationMs:      Date.now() - conversionStartTime,
+        available:       true,
+        expiresAt:       null,
+      };
+      const blobUrl = URL.createObjectURL(singleResult.blob);
+      downloadWorkflowManager.storeJob(summary, singleResult.blob, blobUrl);
+      setIsRunning(false);
+      const locale = pathname.split('/')[1] || 'en';
+      router.push(`/${locale}/download?jobId=${summary.jobId}`);
+      return;
+    }
+
     if (results.length > 1) {
       try {
         const JSZip = (await import('jszip')).default;
         const zip = new JSZip();
         for (const { name, blob } of results) zip.file(name, blob);
         const zipBlob = await zip.generateAsync({ type: 'blob' });
-        const url = URL.createObjectURL(zipBlob);
-        zipUrlRef.current = url;
-        setZipUrl(url);
+        const zipUrl2 = URL.createObjectURL(zipBlob);
+        // Store ZIP in manager and redirect
+        const firstFile = files[0]?.file;
+        const summary = {
+          jobId:           downloadWorkflowManager.generateJobId(),
+          inputFilename:   firstFile?.name ?? 'files',
+          outputFilename:  'converted-files.zip',
+          inputSizeBytes:  files.reduce((s, f) => s + (f.file?.size ?? 0), 0),
+          outputSizeBytes: zipBlob.size,
+          inputFormat:     (firstFile?.name ?? '').split('.').pop()?.toLowerCase() ?? '',
+          outputFormat:    'zip',
+          providerId:      'BrowserProcessor',
+          libraryId:       'browser',
+          processingEnv:   'browser' as const,
+          completedAt:     new Date().toISOString(),
+          durationMs:      Date.now() - conversionStartTime,
+          available:       true,
+          expiresAt:       null,
+        };
+        downloadWorkflowManager.storeJob(summary, zipBlob, zipUrl2);
+        zipUrlRef.current = zipUrl2;
+        setZipUrl(zipUrl2);
+        setIsRunning(false);
+        const locale = pathname.split('/')[1] || 'en';
+        router.push(`/${locale}/download?jobId=${summary.jobId}`);
+        return;
       } catch { /* individual downloads still work */ }
     }
-    setIsRunning(false);
   };
 
   // ── Downloads / removal ───────────────────────────────────────────────────
 
   const downloadFile = (entry: FileEntry) => {
     if (!entry.downloadUrl || !entry.outputName) return;
-    const a = document.createElement('a');
-    a.href = entry.downloadUrl; a.download = entry.outputName;
-    a.style.display = 'none'; document.body.appendChild(a); a.click();
-    setTimeout(() => document.body.removeChild(a), 100);
+    // Store in manager and redirect to download page
+    const fetchStartTime = Date.now();
+    fetch(entry.downloadUrl).then(r => r.blob()).then(blob => {
+      const summary = {
+        jobId:           downloadWorkflowManager.generateJobId(),
+        inputFilename:   entry.file?.name ?? entry.displayName,
+        outputFilename:  entry.outputName!,
+        inputSizeBytes:  entry.file?.size ?? 0,
+        outputSizeBytes: blob.size,
+        inputFormat:     (entry.file?.name ?? '').split('.').pop()?.toLowerCase() ?? '',
+        outputFormat:    entry.outputName!.split('.').pop()?.toLowerCase() ?? '',
+        providerId:      'BrowserProcessor',
+        libraryId:       'browser',
+        processingEnv:   'browser' as const,
+        completedAt:     new Date().toISOString(),
+        durationMs:      Date.now() - fetchStartTime,
+        available:       true,
+        expiresAt:       null,
+      };
+      downloadWorkflowManager.storeJob(summary, blob, entry.downloadUrl!);
+      const locale = pathname.split('/')[1] || 'en';
+      router.push(`/${locale}/download?jobId=${summary.jobId}`);
+    }).catch(() => {
+      // Fallback: direct download
+      const a = document.createElement('a');
+      a.href = entry.downloadUrl!; a.download = entry.outputName!;
+      a.style.display = 'none'; document.body.appendChild(a); a.click();
+      setTimeout(() => document.body.removeChild(a), 100);
+    });
   };
 
   const downloadZip = () => {
     if (!zipUrl) return;
+    // ZIP is already stored via downloadWorkflowManager in the batch flow
+    // This is a fallback for when the manager redirect didn't happen
     const a = document.createElement('a');
     a.href = zipUrl; a.download = 'converted-files.zip';
     a.style.display = 'none'; document.body.appendChild(a); a.click();

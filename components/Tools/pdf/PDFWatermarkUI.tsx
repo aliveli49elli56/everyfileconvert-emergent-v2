@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef } from 'react';
 import { FileText, Download, Loader2, Stamp } from 'lucide-react';
 
@@ -9,6 +10,8 @@ const POSITIONS = ['center', 'top-left', 'top-right', 'bottom-left', 'bottom-rig
 const ANGLES    = [0, 45, -45, 90];
 
 export default function PDFWatermarkUI({ onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [file, setFile]         = useState<File | null>(null);
   const [text, setText]         = useState('CONFIDENTIAL');
   const [color, setColor]       = useState('#6b7280');
@@ -39,7 +42,15 @@ export default function PDFWatermarkUI({ onFileSelected }: Props) {
         options: { watermarkText: text, watermarkColor: color, watermarkOpacity: opacity, watermarkAngle: angle, watermarkPosition: position as 'center' | 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left', watermarkFontSize: fontSize },
         onProgress: (pct) => { setProgress(pct); setStageMsg(pct < 20 ? 'Loading pdf-lib…' : 'Applying watermark…'); },
       });
-      setResult(URL.createObjectURL(res.blob));
+      storeAndRedirect(res.blob, {
+        inputFilename:   file.name,
+        outputFilename:  `watermarked_${file?.name}`,
+        inputFormat:     'pdf',
+        outputFormat:    'pdf',
+        inputSizeBytes:  file.size,
+        providerId:      'Transcoder',
+        libraryId:       'pdf-lib',
+      });
       setStage('done');
     } catch (e) { setError(e instanceof Error ? e.message : 'Failed'); setStage('error'); }
   };
@@ -166,8 +177,7 @@ export default function PDFWatermarkUI({ onFileSelected }: Props) {
         <button onClick={() => { setFile(null); setResult(null); setStage('idle'); }}
           className="text-xs text-slate-400 hover:text-slate-600">← Change file</button>
         {resultUrl
-          ? <a href={resultUrl} download={`watermarked_${file?.name}`} data-testid="pdf-watermark-download"
-            className="flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600"><Download className="h-4 w-4" />Download</a>
+          ? <span className="flex items-center gap-1.5 text-sm font-semibold text-emerald-600"><Download className="h-4 w-4"/>Redirecting…</span>
           : <button onClick={handleProcess} disabled={stage === 'processing' || !text.trim()} data-testid="pdf-watermark-process"
             className="flex items-center gap-1.5 rounded-xl bg-slate-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-40 transition-colors">
             {stage === 'processing' ? <><Loader2 className="h-4 w-4 animate-spin" />Applying…</> : <><Stamp className="h-4 w-4" />Apply Watermark</>}

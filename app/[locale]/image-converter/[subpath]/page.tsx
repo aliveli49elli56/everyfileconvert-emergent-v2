@@ -1,9 +1,22 @@
+/**
+ * app/[locale]/image-converter/[subpath]/page.tsx
+ *
+ * Handles two cases:
+ *  1. Named tool subpages (e.g. "upscale") → custom SUBPAGE_CONFIGS layout
+ *  2. Converter format subpages (e.g. "jpg-to-png", "jpg") → delegates to
+ *     the same conversion engine used by [slug] and [...slug].
+ */
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Shield, Zap, Lock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import UniversalDropzone from "@/components/UniversalDropzone";
-import { getHreflangLinks } from "@/lib/i18n/config";
+import UniversalToolPageClient from "@/components/UniversalToolPageClient";
+import UniversalLandingExtras from "@/components/UniversalLandingExtras";
+import { getHreflangLinks, getDictionary } from "@/lib/i18n/config";
+import type { Locale } from "@/lib/i18n/config";
+import { getConversionPageData, getAllConversionSlugs } from "@/lib/engine/dynamic-tool-page-data";
 
 interface PageProps {
   params: Promise<{ locale: string; subpath: string }>;
@@ -24,8 +37,38 @@ const trustFeatures = [
   { icon: Lock, label: "No Account", desc: "No sign-up required" },
 ];
 
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  const toolKeys  = Object.keys(SUBPAGE_CONFIGS);
+  const convSlugs = getAllConversionSlugs()
+    .filter(s => {
+      // Include slugs whose input format is an image type
+      const [inp] = s.split("-to-");
+      return inp === "jpg" || inp === "png" || inp === "gif" || inp === "webp"
+        || inp === "avif" || inp === "heic" || inp === "bmp" || inp === "tiff"
+        || inp === "svg" || inp === "ico" || inp === "jxl";
+    });
+  return [...toolKeys, ...convSlugs].map(subpath => ({ subpath }));
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale, subpath } = await params;
+
+  // Converter route takes priority — just use the subpath slug
+  const convData = getConversionPageData(subpath);
+  if (convData) {
+    const hreflangs = getHreflangLinks(`/image-converter/${subpath}`);
+    return {
+      title: convData.title,
+      description: convData.description,
+      keywords: convData.keywords.join(", "),
+      openGraph: { title: convData.title, description: convData.description, type: "website", url: `https://everyfileconvert.com/${locale}/image-converter/${subpath}` },
+      twitter: { card: "summary_large_image", title: convData.title, description: convData.description },
+      alternates: { canonical: `https://everyfileconvert.com/${locale}/image-converter/${subpath}`, languages: Object.fromEntries(hreflangs.map(({ locale: l, href }) => [l, href])) },
+    };
+  }
+
   const config = SUBPAGE_CONFIGS[subpath];
   if (!config) return { title: "Image Tool | EveryFileConvert" };
 
@@ -41,12 +84,33 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ImageConverterSubPage({ params }: PageProps) {
   const { locale, subpath } = await params;
-  const config = SUBPAGE_CONFIGS[subpath] ?? {
-    name: "Image Tool",
-    desc: "Process and convert images online for free.",
-    seoTitle: "Image Tool | EveryFileConvert",
-    seoDesc: "Process images online for free.",
-  };
+
+  // ── Case 1: Converter format slug (e.g. jpg-to-png, jpg) ──────────────────
+  // getConversionPageData expects just the slug, not the full path
+  const convData = getConversionPageData(subpath);
+  if (convData?.parsedConversion) {
+    const dict = await getDictionary(locale as Locale);
+    const { parsedConversion, category } = convData;
+    const slugString = `image-converter/${subpath}`;
+    return (
+      <>
+        <UniversalToolPageClient pageData={convData} slug={slugString} locale={locale as Locale} dict={dict} />
+        <UniversalLandingExtras
+          variant="converter"
+          locale={locale}
+          inputExt={parsedConversion.inputFormat ?? undefined}
+          outputExt={parsedConversion.outputFormat ?? undefined}
+          isSingleFormat={parsedConversion.isSingleFormat}
+          category={category}
+        />
+      </>
+    );
+  }
+
+  // ── Case 2: Named tool subpage (e.g. upscale) ─────────────────────────────
+  const config = SUBPAGE_CONFIGS[subpath];
+  // Unknown subpath → 404
+  if (!config) notFound();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
@@ -74,6 +138,16 @@ export default async function ImageConverterSubPage({ params }: PageProps) {
           </div>
         </div>
       </section>
+      <UniversalLandingExtras
+        variant="tool"
+        locale={locale}
+        toolKey={subpath}
+        toolName={config.name}
+        toolMode="image"
+        toolParentPath="image-converter"
+        toolParentLabel="Image Converter"
+        category="image"
+      />
     </div>
   );
 }

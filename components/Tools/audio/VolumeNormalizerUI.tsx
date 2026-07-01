@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef } from 'react';
 import { FileAudio, Download, Loader2, Volume2 } from 'lucide-react';
 
@@ -13,6 +14,8 @@ const LUFS_PRESETS = [
 ];
 
 export default function VolumeNormalizerUI({ onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [file, setFile]         = useState<File | null>(null);
   const [objUrl, setObjUrl]     = useState<string | null>(null);
   const [preset, setPreset]     = useState(LUFS_PRESETS[0]);
@@ -45,7 +48,15 @@ export default function VolumeNormalizerUI({ onFileSelected }: Props) {
         options: { lufsTarget: lufsTarget },
         onProgress: (pct) => { setProgress(pct); setStageMsg(pct < 25 ? 'Loading FFmpeg…' : `Normalizing to ${lufsTarget} LUFS…`); },
       });
-      setResult(URL.createObjectURL(res.blob));
+      storeAndRedirect(res.blob, {
+        inputFilename:   file.name,
+        outputFilename:  `normalized_${file.name}`,
+        inputFormat:     file.name.split('.').pop()?.toLowerCase() ?? 'mp3',
+        outputFormat:    file.name.split('.').pop()?.toLowerCase() ?? 'mp3',
+        inputSizeBytes:  file.size,
+        providerId:      'Transcoder',
+        libraryId:       'ffmpeg-wasm',
+      });
       setStage('done');
     } catch (e) { setError(e instanceof Error ? e.message : 'Failed'); setStage('error'); }
   };
@@ -123,8 +134,7 @@ export default function VolumeNormalizerUI({ onFileSelected }: Props) {
         <button onClick={() => { setFile(null); if (objUrl) URL.revokeObjectURL(objUrl); setObjUrl(null); setResult(null); setStage('idle'); }}
           className="text-xs text-slate-400 hover:text-slate-600">← Change file</button>
         {resultUrl
-          ? <a href={resultUrl} download={`normalized_${file?.name}`} data-testid="normalize-download"
-            className="flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600"><Download className="h-4 w-4" />Download</a>
+          ? <span className="flex items-center gap-1.5 text-sm font-semibold text-emerald-600"><Download className="h-4 w-4"/>Redirecting…</span>
           : <button onClick={handleProcess} disabled={stage === 'processing'} data-testid="normalize-process"
             className="flex items-center gap-1.5 rounded-xl bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-600 disabled:opacity-40 transition-colors">
             {stage === 'processing' ? <><Loader2 className="h-4 w-4 animate-spin" />Normalizing…</> : <><Volume2 className="h-4 w-4" />Normalize</>}

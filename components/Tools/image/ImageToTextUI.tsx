@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 /**
  * ImageToTextUI — OCR tool using Tesseract.js (lazy loaded)
  * Extracts text from images, copy/download result
@@ -10,7 +11,9 @@ interface Props { toolName?: string; onFileSelected?: (f: File) => void }
 type Stage = 'idle' | 'loading' | 'done' | 'error';
 
 export default function ImageToTextUI({ onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
   const [imgSrc, setImgSrc]   = useState<string | null>(null);
+  const [loadedFile, setLoadedFile] = useState<File|null>(null);
   const [stage, setStage]     = useState<Stage>('idle');
   const [progress, setProgress] = useState(0);
   const [text, setText]       = useState('');
@@ -21,6 +24,7 @@ export default function ImageToTextUI({ onFileSelected }: Props) {
   const fileRef   = useRef<File | null>(null);
 
   const loadFile = (f: File) => {
+    setLoadedFile(f);
     if (!f.type.startsWith('image/')) return;
     fileRef.current = f;
     setImgSrc(URL.createObjectURL(f));
@@ -56,10 +60,15 @@ export default function ImageToTextUI({ onFileSelected }: Props) {
 
   const downloadText = () => {
     const blob = new Blob([text], { type: 'text/plain' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'extracted_text.txt';
-    a.click();
+    storeAndRedirect(blob, {
+      inputFilename:  loadedFile?.name ?? 'image.png',
+      outputFilename: 'extracted_text.txt',
+      inputFormat:    loadedFile?.name.split('.').pop()?.toLowerCase() ?? 'png',
+      outputFormat:   'txt',
+      inputSizeBytes: loadedFile?.size ?? 0,
+      providerId:     'TesseractOCR',
+      libraryId:      'tesseract-js',
+    });
   };
 
   if (!imgSrc) return (

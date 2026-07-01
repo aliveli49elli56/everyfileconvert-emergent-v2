@@ -7,10 +7,11 @@
  * - Mobile: full-screen overlay with touch/pinch support
  * - Real-time preview via CanvasPreview
  * - Tool-specific controls via ToolControls
- * - Calls Transcoder and downloads the result
+ * - Calls Transcoder, stores job in DownloadWorkflowManager, redirects to /download
  * ─────────────────────────────────────────────────────────────────────────────
  */
 import { useState, useCallback } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import {
   X, Download, Sparkles, Loader2, ChevronLeft, Upload,
 } from 'lucide-react';
@@ -18,6 +19,8 @@ import { cn } from '@/lib/utils';
 import type { TranscodeOptions, TranscodeOp } from '@/lib/engine/Transcoder';
 import CanvasPreview from './CanvasPreview';
 import ToolControls from './ToolControls';
+import { downloadWorkflowManager } from '@/lib/engine/download-workflow-manager';
+import type { ConversionSummary } from '@/lib/types/download-workflow';
 
 interface Props {
   open: boolean;
@@ -32,11 +35,14 @@ interface Props {
 export default function AdvancedStudio({
   open, onClose, file, toolKey, toolName, mode, defaultOp,
 }: Props) {
+  const router   = useRouter();
+  const pathname = usePathname();
+
   const [options, setOptions] = useState<TranscodeOptions>({ quality: 85 });
   const [processing, setProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [progressMsg, setProgressMsg] = useState('Processing...');
-  const [result, setResult] = useState<{ url: string; filename: string } | null>(null);
+  const [result, setResult] = useState<{ url: string; filename: string; jobId?: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'preview' | 'controls'>('preview');
 
@@ -63,6 +69,7 @@ export default function AdvancedStudio({
           : 'Processing...',
       );
 
+      const processStartTime = Date.now();
       const res = await Transcoder.run({
         files: [file],
         op,
@@ -75,7 +82,27 @@ export default function AdvancedStudio({
       });
 
       const url = URL.createObjectURL(res.blob);
-      setResult({ url, filename: res.filename });
+
+      // Build ConversionSummary and store in DownloadWorkflowManager
+      const srcExt2 = file.name.split('.').pop()?.toLowerCase() ?? '';
+      const summary: ConversionSummary = {
+        jobId:           downloadWorkflowManager.generateJobId(),
+        inputFilename:   file.name,
+        outputFilename:  res.filename,
+        inputSizeBytes:  file.size,
+        outputSizeBytes: res.blob.size,
+        inputFormat:     srcExt2,
+        outputFormat:    (options.targetFormat ?? srcExt2),
+        providerId:      'Transcoder',
+        libraryId:       'ffmpeg-wasm',
+        processingEnv:   'browser',
+        completedAt:     new Date().toISOString(),
+        durationMs:      Date.now() - processStartTime,
+        available:       true,
+        expiresAt:       null,
+      };
+      downloadWorkflowManager.storeJob(summary, res.blob, url);
+      setResult({ url, filename: res.filename, jobId: summary.jobId });
       setProgress(100);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Processing failed');
@@ -85,13 +112,10 @@ export default function AdvancedStudio({
   }, [file, options, defaultOp, mode]);
 
   const handleDownload = useCallback(() => {
-    if (!result) return;
-    const a = document.createElement('a');
-    a.href = result.url; a.download = result.filename;
-    a.style.display = 'none'; document.body.appendChild(a); a.click();
-    setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(result.url); }, 200);
-    setResult(null);
-  }, [result]);
+    if (!result?.jobId) return;
+    const locale = pathname.split('/')[1] || 'en';
+    router.push(`/${locale}/download?jobId=${result.jobId}`);
+  }, [result, router, pathname]);
 
   if (!open) return null;
 

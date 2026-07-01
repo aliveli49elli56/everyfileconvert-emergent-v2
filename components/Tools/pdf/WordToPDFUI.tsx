@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef } from 'react';
 import { FileText, Download, Loader2, ArrowRight } from 'lucide-react';
 
@@ -8,6 +9,8 @@ type Stage = 'idle' | 'processing' | 'done' | 'error';
 const ACCEPTED = '.docx,.doc,application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
 export default function WordToPDFUI({ onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [file, setFile]         = useState<File | null>(null);
   const [stage, setStage]       = useState<Stage>('idle');
   const [progress, setProgress] = useState(0);
@@ -32,7 +35,15 @@ export default function WordToPDFUI({ onFileSelected }: Props) {
         files: [file], op: 'doc:to-pdf',
         onProgress: (pct) => { setProgress(pct); setStageMsg(pct < 20 ? 'Loading converter…' : 'Converting to PDF…'); },
       });
-      setResult(URL.createObjectURL(res.blob));
+      storeAndRedirect(res.blob, {
+        inputFilename:   file.name,
+        outputFilename:  file?.name.replace(/\.docx?$/, '.pdf'),
+        inputFormat:     file?.name.split('.').pop()?.toLowerCase() ?? 'docx',
+        outputFormat:    'pdf',
+        inputSizeBytes:  file.size,
+        providerId:      'Transcoder',
+        libraryId:       'pdf-lib',
+      });
       setStage('done');
     } catch (e) { setError(e instanceof Error ? e.message : 'Failed'); setStage('error'); }
   };
@@ -107,8 +118,7 @@ export default function WordToPDFUI({ onFileSelected }: Props) {
         <button onClick={() => { setFile(null); setResult(null); setStage('idle'); }}
           className="text-xs text-slate-400 hover:text-slate-600">← Change file</button>
         {resultUrl
-          ? <a href={resultUrl} download={file?.name.replace(/\.docx?$/, '.pdf')} data-testid="word-to-pdf-download"
-            className="flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600"><Download className="h-4 w-4" />Download PDF</a>
+          ? <span className="flex items-center gap-1.5 text-sm font-semibold text-emerald-600"><Download className="h-4 w-4"/>Redirecting…</span>
           : <button onClick={handleProcess} disabled={stage === 'processing'} data-testid="word-to-pdf-process"
             className="flex items-center gap-1.5 rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-amber-600 disabled:opacity-40 transition-colors">
             {stage === 'processing' ? <><Loader2 className="h-4 w-4 animate-spin" />Converting…</> : <>Convert to PDF</>}

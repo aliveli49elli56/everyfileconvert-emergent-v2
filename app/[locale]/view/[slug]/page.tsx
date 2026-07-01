@@ -8,6 +8,8 @@ import ViewHistory from "@/components/viewer/ViewHistory";
 import { getViewerPageData, getAllViewerSlugs } from "@/lib/engine/dynamic-tool-page-data";
 import { getDictionary, getHreflangLinks } from "@/lib/i18n/config";
 import type { Locale } from "@/lib/i18n/config";
+import UniversalLandingExtras from "@/components/UniversalLandingExtras";
+import type { FormatCategory } from "@/lib/types/formats";
 
 export const dynamicParams = true;
 
@@ -244,6 +246,12 @@ export default async function ViewerSlugPage({
         </div>
       </div>
     </div>
+      <UniversalLandingExtras
+        variant="viewer"
+        locale={locale}
+        viewerExt={slug}
+        category={(category as FormatCategory) || "document"}
+      />
     </>
   );
 }

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import UniversalLandingExtras from "@/components/UniversalLandingExtras";
 import {
   ArrowRight,
   Minimize2,
@@ -173,6 +174,7 @@ export default async function LocaleCompressAudioPage({ params }: PageProps) {
         </div>
       </section>
     </div>
+    <UniversalLandingExtras variant="tool" locale={locale} toolKey="compress-audio" toolName="Audio Compressor" toolMode="audio" category="audio" />
     </>
   );
 }

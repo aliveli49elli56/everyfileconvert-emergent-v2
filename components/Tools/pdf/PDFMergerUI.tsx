@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef } from 'react';
 import { FileText, Download, Loader2, Layers, X, GripVertical } from 'lucide-react';
 
@@ -6,6 +7,8 @@ interface Props { toolName?: string; onFileSelected?: (f: File) => void }
 type Stage = 'idle' | 'processing' | 'done' | 'error';
 
 export default function PDFMergerUI({ onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [files, setFiles]       = useState<File[]>([]);
   const [stage, setStage]       = useState<Stage>('idle');
   const [progress, setProgress] = useState(0);
@@ -36,7 +39,15 @@ export default function PDFMergerUI({ onFileSelected }: Props) {
         files, op: 'pdf:merge',
         onProgress: (pct) => { setProgress(pct); setStageMsg(pct < 20 ? 'Loading pdf-lib…' : `Merging ${files.length} PDFs…`); },
       });
-      setResult(URL.createObjectURL(res.blob));
+      storeAndRedirect(res.blob, {
+        inputFilename:   files[0]?.name ?? 'document.pdf',
+        outputFilename:  'merged.pdf',
+        inputFormat:     'pdf',
+        outputFormat:    'pdf',
+        inputSizeBytes:  files.reduce((s,f)=>s+f.size, 0),
+        providerId:      'Transcoder',
+        libraryId:       'pdf-lib',
+      });
       setStage('done');
     } catch (e) { setError(e instanceof Error ? e.message : 'Failed'); setStage('error'); }
   };
@@ -106,8 +117,7 @@ export default function PDFMergerUI({ onFileSelected }: Props) {
         <button onClick={() => { setFiles([]); setResult(null); setStage('idle'); }}
           className="text-xs text-slate-400 hover:text-slate-600">← Clear all</button>
         {resultUrl
-          ? <a href={resultUrl} download="merged.pdf" data-testid="pdf-merge-download"
-            className="flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600"><Download className="h-4 w-4" />Download Merged PDF</a>
+          ? <span className="flex items-center gap-1.5 text-sm font-semibold text-emerald-600"><Download className="h-4 w-4"/>Redirecting…</span>
           : <button onClick={handleProcess} disabled={stage === 'processing' || files.length < 2} data-testid="pdf-merge-process"
             className="flex items-center gap-1.5 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-40 transition-colors">
             {stage === 'processing' ? <><Loader2 className="h-4 w-4 animate-spin" />Merging…</> : <><Layers className="h-4 w-4" />Merge {files.length} PDFs</>}

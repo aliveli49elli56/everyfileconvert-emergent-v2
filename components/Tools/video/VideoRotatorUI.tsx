@@ -1,10 +1,13 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef } from 'react';
 import { Upload, Download, Loader2, RotateCw } from 'lucide-react';
 interface Props { toolName?: string; onFileSelected?: (f: File) => void }
 type Stage = 'idle'|'processing'|'done'|'error';
 
 export default function VideoRotatorUI({ toolName, onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [file,setFile]=useState<File|null>(null);
   const [objUrl,setObjUrl]=useState<string|null>(null);
   const [rotation,setRotation]=useState<0|90|180|270>(0);
@@ -33,7 +36,25 @@ export default function VideoRotatorUI({ toolName, onFileSelected }: Props) {
         options:{rotation: rotation},
         onProgress:pct=>{setProgress(pct);setStageMsg(pct<25?'Loading FFmpeg…':'Rotating…');},
       });
-      setResultUrl(URL.createObjectURL(res.blob));setStage('done');
+      storeAndRedirect(res.blob, {
+
+        inputFilename:   file.name,
+
+        outputFilename:  `rotated_${file.name}`,
+
+        inputFormat:     file.name.split('.').pop()?.toLowerCase() ?? 'mp4',
+
+        outputFormat:    file.name.split('.').pop()?.toLowerCase() ?? 'mp4',
+
+        inputSizeBytes:  file.size,
+
+        providerId:      'Transcoder',
+
+        libraryId:       'ffmpeg-wasm',
+
+      });
+
+      setStage('done');
     }catch(e){setError(e instanceof Error?e.message:'Failed');setStage('error');}
   };
 

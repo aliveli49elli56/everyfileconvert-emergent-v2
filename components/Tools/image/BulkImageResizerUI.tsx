@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef } from 'react';
 import { Upload, Download, X, Loader2, Plus } from 'lucide-react';
 
@@ -8,6 +9,7 @@ type Stage = 'idle'|'processing'|'done'|'error';
 interface FileItem { id: string; file: File; preview: string; newW: number; newH: number; done: boolean; }
 
 export default function BulkImageResizerUI({ toolName, onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
   const [files,  setFiles] = useState<FileItem[]>([]);
   const [targetW, setTargetW] = useState(1280);
   const [targetH, setTargetH] = useState(720);
@@ -58,7 +60,15 @@ export default function BulkImageResizerUI({ toolName, onFileSelected }: Props) 
       }
       const zipBlob = await zip.generateAsync({type:'blob'});
       if (zipUrl) URL.revokeObjectURL(zipUrl);
-      setZipUrl(URL.createObjectURL(zipBlob));
+      storeAndRedirect(zipBlob, {
+        inputFilename:  files[0]?.file.name ?? 'image',
+        outputFilename: 'resized-images.zip',
+        inputFormat:    files[0]?.file.name.split('.').pop()?.toLowerCase() ?? 'png',
+        outputFormat:   'zip',
+        inputSizeBytes: files.reduce((s, f) => s + f.file.size, 0),
+        providerId:     'CanvasProcessor',
+        libraryId:      'canvas-api',
+      });
       setStage('done');
     } catch(e) { setError(e instanceof Error?e.message:'Failed'); setStage('error'); }
   };

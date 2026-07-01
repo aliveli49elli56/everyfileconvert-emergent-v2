@@ -188,6 +188,20 @@ export interface FormatDefinition {
   workerSupported?: boolean;
   /** Long-tail SEO aliases */
   seoAliases?: string[];
+
+  // ── Phase 7: Extended metadata ────────────────────────────────────────────────
+  /** Search aliases for improved discovery (used by search engine & AI factory) */
+  searchAliases?: string[];
+  /** Human-readable feature list for converter pages */
+  supportedFeatures?: string[];
+  /** SEO-optimised meta description for format/converter pages */
+  seoDescription?: string;
+  /** Hero section title override for category landing pages */
+  heroTitle?: string;
+  /** Hero section description override for category landing pages */
+  heroDescription?: string;
+  /** Related format categories for internal linking */
+  relatedCategories?: FormatCategory[];
 }
 
 // ── Phase 6A: New Interfaces ──────────────────────────────────────────────────
@@ -241,6 +255,20 @@ export interface CategoryDefinition {
   hasViewer?: boolean;
   /** Whether category has dedicated editor */
   hasEditor?: boolean;
+
+  // ── Phase 7: Extended metadata ────────────────────────────────────────────────
+  /** SEO meta description for the category landing page */
+  seoDescription?: string;
+  /** Hero section title for the category landing page */
+  heroTitle?: string;
+  /** Hero section description for the category landing page */
+  heroDescription?: string;
+  /** Key feature list shown on landing pages */
+  supportedFeatures?: string[];
+  /** Related categories for cross-linking */
+  relatedCategories?: FormatCategory[];
+  /** Slug for the dedicated category landing page */
+  landingRoute?: string;
 }
 
 /** Format lookup result */

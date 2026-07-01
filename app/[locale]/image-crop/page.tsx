@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import UniversalLandingExtras from "@/components/UniversalLandingExtras";
 import {
   ArrowRight,
   Crop,
@@ -53,12 +54,12 @@ export async function generateStaticParams() {
 }
 
 const cropModes = [
-  { name: "Custom Crop", description: "Drag to select any region of your image", icon: Crop, href: "tools/image-crop/custom", color: "from-cyan-500 to-blue-500", popular: true },
-  { name: "Square Crop", description: "Crop to perfect 1:1 square for social media", icon: SquareIcon, href: "tools/image-crop/square", color: "from-emerald-500 to-teal-500" },
-  { name: "Landscape Crop", description: "16:9 or 4:3 ratio — perfect for web and video", icon: RectangleHorizontal, href: "tools/image-crop/landscape", color: "from-violet-500 to-purple-500" },
-  { name: "Portrait Crop", description: "9:16 or 3:4 ratio for stories and prints", icon: RectangleVertical, href: "tools/image-crop/portrait", color: "from-rose-500 to-pink-500" },
-  { name: "Resize & Crop", description: "Resize and crop in one step to exact dimensions", icon: Maximize2, href: "tools/image-crop/resize", color: "from-amber-500 to-orange-500" },
-  { name: "Circular Crop", description: "Crop images into perfect circles", icon: Scissors, href: "tools/image-crop/circle", color: "from-teal-500 to-cyan-500", isNew: true },
+  { name: "Custom Crop", description: "Drag to select any region of your image", icon: Crop, href: "image-crop/custom", color: "from-cyan-500 to-blue-500", popular: true },
+  { name: "Square Crop", description: "Crop to perfect 1:1 square for social media", icon: SquareIcon, href: "image-crop/square", color: "from-emerald-500 to-teal-500" },
+  { name: "Landscape Crop", description: "16:9 or 4:3 ratio — perfect for web and video", icon: RectangleHorizontal, href: "image-crop/landscape", color: "from-violet-500 to-purple-500" },
+  { name: "Portrait Crop", description: "9:16 or 3:4 ratio for stories and prints", icon: RectangleVertical, href: "image-crop/portrait", color: "from-rose-500 to-pink-500" },
+  { name: "Resize & Crop", description: "Resize and crop in one step to exact dimensions", icon: Maximize2, href: "image-crop/resize", color: "from-amber-500 to-orange-500" },
+  { name: "Circular Crop", description: "Crop images into perfect circles", icon: Scissors, href: "image-crop/circle", color: "from-teal-500 to-cyan-500", isNew: true },
 ];
 
 const presets = [
@@ -174,6 +175,7 @@ export default async function LocaleImageCropPage({ params }: PageProps) {
         </div>
       </section>
     </div>
+    <UniversalLandingExtras variant="tool" locale={locale} toolKey="image-crop" toolName="Image Crop" toolMode="image" category="image" />
     </>
   );
 }

@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 /**
  * AddSubtitleUI — Add/burn subtitles to video using FFmpeg.wasm
  * Supports SRT file upload OR manual subtitle entry
@@ -17,6 +18,8 @@ function timecodeToSec(tc: string) {
 }
 
 export default function AddSubtitleUI({ onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [videoFile, setVideo]   = useState<File | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [mode, setMode]         = useState<'upload' | 'manual'>('upload');
@@ -66,7 +69,15 @@ export default function AddSubtitleUI({ onFileSelected }: Props) {
           setStageMsg(pct < 20 ? 'Loading FFmpeg…' : 'Burning subtitles…');
         },
       });
-      setResult(URL.createObjectURL(res.blob));
+      storeAndRedirect(res.blob, {
+        inputFilename:  videoFile?.name ?? 'video.mp4',
+        outputFilename: `subtitled_${videoFile?.name ?? 'video.mp4'}`,
+        inputFormat:    videoFile?.name.split('.').pop()?.toLowerCase() ?? 'mp4',
+        outputFormat:   videoFile?.name.split('.').pop()?.toLowerCase() ?? 'mp4',
+        inputSizeBytes: videoFile?.size ?? 0,
+        providerId:     'Transcoder',
+        libraryId:      'ffmpeg-wasm',
+      });
       setStage('done');
     } catch (e) { setError(e instanceof Error ? e.message : 'Failed'); setStage('error'); }
   };
@@ -153,8 +164,7 @@ export default function AddSubtitleUI({ onFileSelected }: Props) {
         <button onClick={() => { setVideo(null); setVideoUrl(null); setResult(null); setStage('idle'); }}
           className="text-xs text-slate-400 hover:text-slate-600">← Change video</button>
         {resultUrl
-          ? <a href={resultUrl} download={`subtitled_${videoFile?.name}`} data-testid="subtitle-download"
-            className="flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600"><Download className="h-4 w-4" />Download</a>
+          ? <span className="flex items-center gap-1.5 text-sm font-semibold text-emerald-600"><Download className="h-4 w-4"/>Redirecting…</span>
           : <button onClick={handleProcess}
             disabled={stage === 'processing' || (mode === 'upload' && !srtFile)}
             data-testid="subtitle-process"

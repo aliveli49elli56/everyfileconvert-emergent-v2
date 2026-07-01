@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +21,8 @@ import { conversionRegistry } from "@/lib/registry/conversion-registry";
 import type { FormatTier, FormatCategory } from "@/lib/types/formats";
 import { validateFileSize } from "@/lib/file-validation";
 import { convertImage } from "@/lib/image-converter";
-import { revokeObjectURL, createDownloadUrl, triggerFileDownload } from "@/lib/file-validation";
+import { revokeObjectURL, createDownloadUrl } from "@/lib/file-validation";
+import { downloadWorkflowManager } from "@/lib/engine/download-workflow-manager";
 
 
 const categoryIcons: Record<string, React.ElementType> = {
@@ -65,6 +67,8 @@ export default function FileConverter({
   initialInputFormat = "",
   initialOutputFormat = "",
 }: FileConverterProps) {
+  const router   = useRouter();
+  const pathname = usePathname();
   const [inputFormat, setInputFormat] = useState(initialInputFormat);
   const [outputFormat, setOutputFormat] = useState(initialOutputFormat);
   const [fileInfo, setFileInfo] = useState<{ name: string; size: string; file: File } | null>(null);
@@ -150,45 +154,52 @@ export default function FileConverter({
 
   const handleConvert = async () => {
     if (!fileInfo) return;
-    setIsConverting(true);
-    setProgress(0);
-
+    setIsConverting(true); setProgress(0);
+    const startTime = Date.now();
     try {
       setProgress(20);
-
       const inputCategory = formatRegistry.get(inputFormat)?.category;
+      let blob: Blob;
+      let providerId = 'BrowserProcessor', libraryId = 'browser';
       if (inputCategory && ["image", "raw", "vector", "icon"].includes(inputCategory)) {
         const result = await convertImage(fileInfo.file, inputFormat, outputFormat);
-        setProgress(80);
-        const url = createDownloadUrl(result.blob);
-        setDownloadUrl(url);
+        blob = result.blob; providerId = 'CanvasImageProvider'; libraryId = 'canvas-api';
       } else {
-        setProgress(80);
         const buf = await fileInfo.file.arrayBuffer();
-        const blob = new Blob([buf], { type: "application/octet-stream" });
-        const url = createDownloadUrl(blob);
-        setDownloadUrl(url);
+        blob = new Blob([buf], { type: "application/octet-stream" });
       }
-
-      setProgress(100);
-      setIsConverting(false);
-      setIsComplete(true);
+      setProgress(85);
+      const durationMs = Date.now() - startTime;
+      const summary = {
+        jobId:           downloadWorkflowManager.generateJobId(),
+        inputFilename:   fileInfo.name,
+        outputFilename:  `converted.${outputFormat}`,
+        inputSizeBytes:  fileInfo.file.size,
+        outputSizeBytes: blob.size,
+        inputFormat,
+        outputFormat,
+        providerId,
+        libraryId,
+        processingEnv:   'browser' as const,
+        completedAt:     new Date().toISOString(),
+        durationMs,
+        available:       true,
+        expiresAt:       null,
+      };
+      const blobUrl = createDownloadUrl(blob);
+      downloadWorkflowManager.storeJob(summary, blob, blobUrl);
+      setProgress(100); setIsConverting(false); setIsComplete(true);
+      const locale = pathname.split('/')[1] || 'en';
+      setTimeout(() => { router.push(`/${locale}/download?jobId=${summary.jobId}`); }, 400);
     } catch (error) {
-      setIsConverting(false);
-      setProgress(0);
+      setIsConverting(false); setProgress(0);
       toast.error("Conversion failed. Please try a different format or file.");
       console.error("Conversion error:", error);
     }
   };
 
   const handleDownload = () => {
-    if (!downloadUrl || !fileInfo) return;
-    try {
-      triggerFileDownload(downloadUrl, `converted.${outputFormat}`);
-    } catch (error) {
-      toast.error("Failed to download file");
-      console.error("Download error:", error);
-    }
+    // No-op: handled by DownloadWorkflowManager redirect
   };
 
   const handleReset = () => {

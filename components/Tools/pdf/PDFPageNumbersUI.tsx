@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef } from 'react';
 import { FileText, Download, Loader2, Hash } from 'lucide-react';
 
@@ -14,6 +15,8 @@ const POSITIONS = [
 ];
 
 export default function PDFPageNumbersUI({ onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [file, setFile]         = useState<File | null>(null);
   const [position, setPosition] = useState('bottom-center');
   const [startNum, setStartNum] = useState(1);
@@ -41,7 +44,15 @@ export default function PDFPageNumbersUI({ onFileSelected }: Props) {
         options: { pageNumberPosition: position as 'bottom-center' | 'bottom-right' | 'bottom-left' | 'top-center' | 'top-right' | 'top-left', pageNumberStart: startNum, pageNumberFontSize: fontSize },
         onProgress: (pct) => { setProgress(pct); setStageMsg(pct < 20 ? 'Loading pdf-lib…' : 'Adding page numbers…'); },
       });
-      setResult(URL.createObjectURL(res.blob));
+      storeAndRedirect(res.blob, {
+        inputFilename:   file.name,
+        outputFilename:  `numbered_${file?.name}`,
+        inputFormat:     'pdf',
+        outputFormat:    'pdf',
+        inputSizeBytes:  file.size,
+        providerId:      'Transcoder',
+        libraryId:       'pdf-lib',
+      });
       setStage('done');
     } catch (e) { setError(e instanceof Error ? e.message : 'Failed'); setStage('error'); }
   };
@@ -121,8 +132,7 @@ export default function PDFPageNumbersUI({ onFileSelected }: Props) {
         <button onClick={() => { setFile(null); setResult(null); setStage('idle'); }}
           className="text-xs text-slate-400 hover:text-slate-600">← Change file</button>
         {resultUrl
-          ? <a href={resultUrl} download={`numbered_${file?.name}`} data-testid="page-numbers-download"
-            className="flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600"><Download className="h-4 w-4" />Download</a>
+          ? <span className="flex items-center gap-1.5 text-sm font-semibold text-emerald-600"><Download className="h-4 w-4"/>Redirecting…</span>
           : <button onClick={handleProcess} disabled={stage === 'processing'} data-testid="page-numbers-process"
             className="flex items-center gap-1.5 rounded-xl bg-teal-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-teal-600 disabled:opacity-40 transition-colors">
             {stage === 'processing' ? <><Loader2 className="h-4 w-4 animate-spin" />Adding…</> : <><Hash className="h-4 w-4" />Add Page Numbers</>}

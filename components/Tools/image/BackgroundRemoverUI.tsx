@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef } from 'react';
 import { Upload, Download, Loader2 } from 'lucide-react';
 
@@ -6,6 +7,8 @@ interface Props { toolName?: string; onFileSelected?: (f: File) => void }
 type Stage = 'idle'|'processing'|'done'|'error';
 
 export default function BackgroundRemoverUI({ toolName, onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [file,   setFile]  = useState<File|null>(null);
   const [objUrl, setObjUrl]= useState<string|null>(null);
   const [stage,  setStage] = useState<Stage>('idle');
@@ -37,7 +40,15 @@ export default function BackgroundRemoverUI({ toolName, onFileSelected }: Props)
           setStageMsg(pct<25 ? 'Analyzing image…' : pct<70 ? 'Removing background…' : 'Finalizing…');
         },
       });
-      setResultUrl(URL.createObjectURL(res.blob));
+      storeAndRedirect(res.blob, {
+        inputFilename:  file.name,
+        outputFilename: `no_bg_${file.name.replace(/\.[^.]+$/, '.png')}`,
+        inputFormat:    file.name.split('.').pop()?.toLowerCase() ?? 'png',
+        outputFormat:   'png',
+        inputSizeBytes: file.size,
+        providerId:     'Transcoder',
+        libraryId:      'rembg-wasm',
+      });
       setStage('done');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Processing failed');
@@ -99,8 +110,7 @@ export default function BackgroundRemoverUI({ toolName, onFileSelected }: Props)
       <div className="flex items-center justify-between border-t border-slate-100 pt-3">
         <button onClick={()=>{setFile(null);if(objUrl)URL.revokeObjectURL(objUrl);setObjUrl(null);setResultUrl(null);setStage('idle');}} className="text-xs text-slate-400 hover:text-slate-600">← Change image</button>
         {resultUrl
-          ? <a href={resultUrl} download={`no-bg_${file?.name?.replace(/\.[^.]+$/,'.png')}`} data-testid="bgremover-download"
-              className="flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600 transition-colors"><Download className="h-4 w-4"/>Download PNG</a>
+          ? <span className="flex items-center gap-1.5 text-sm font-semibold text-emerald-600"><Download className="h-4 w-4"/>Redirecting…</span>
           : <button onClick={handleProcess} disabled={stage==='processing'} data-testid="bgremover-process"
               className="flex items-center gap-1.5 rounded-xl bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-600 disabled:opacity-50 transition-colors">
               {stage==='processing' ? <><Loader2 className="h-4 w-4 animate-spin"/>Processing…</> : 'Remove Background'}

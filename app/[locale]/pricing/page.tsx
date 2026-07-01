@@ -16,6 +16,7 @@
 import type { Metadata } from "next";
 import { locales, getHreflangLinks } from "@/lib/i18n/config";
 import { PricingPageClient } from "@/components/pricing/PricingPageClient";
+import { FEATURE_FLAGS } from "@/lib/config/subscription-config";
 
 // ---------------------------------------------------------------------------
 // STATIC PARAMS (pre-render for all locales)
@@ -41,7 +42,10 @@ export async function generateMetadata({
     title: "Pricing — EveryFileConvert",
     description:
       "Simple, transparent pricing for EveryFileConvert. Start free with browser-based conversions. Upgrade for server processing, larger files, and advanced features.",
-    robots: { index: true, follow: true },
+    robots: {
+      index:  FEATURE_FLAGS.SHOW_PRICING_PAGE,
+      follow: FEATURE_FLAGS.SHOW_PRICING_PAGE,
+    },
     alternates: {
       canonical: `https://everyfileconvert.com/${locale}/pricing`,
       languages: Object.fromEntries(

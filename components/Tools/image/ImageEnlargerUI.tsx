@@ -1,10 +1,13 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef, useEffect } from 'react';
 import { Upload, Download, Link } from 'lucide-react';
 
 interface Props { toolName?: string; onFileSelected?: (f: File) => void }
 
 export default function ImageEnlargerUI({ toolName, onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [file,   setFile]  = useState<File|null>(null);
   const [objUrl, setObjUrl]= useState<string|null>(null);
   const [naturalW, setNaturalW] = useState(0);
@@ -47,10 +50,15 @@ export default function ImageEnlargerUI({ toolName, onFileSelected }: Props) {
       ctx.drawImage(img,0,0,newW,newH);
       canvas.toBlob(b=>{
         if(!b)return;
-        const url=URL.createObjectURL(b);
-        const a=document.createElement('a');
-        a.href=url; a.download=`enlarged_${file.name}`; a.click();
-        URL.revokeObjectURL(url); setBusy(false);
+        storeAndRedirect(b, {
+        inputFilename:  file.name,
+        outputFilename: `enlarged_${file.name}`,
+        inputFormat:    file.name.split('.').pop()?.toLowerCase() ?? 'png',
+        outputFormat:   file.name.split('.').pop()?.toLowerCase() ?? 'png',
+        inputSizeBytes: file.size,
+        providerId:     'CanvasProcessor',
+        libraryId:      'canvas-api',
+      }); setBusy(false);
       }, file.type||'image/png', 0.95);
     };
     img.src=objUrl;

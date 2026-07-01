@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,8 +10,10 @@ import { Upload, ArrowRight, Download, CircleCheck as CheckCircle2, X, Shield, Z
 import { toast } from "sonner";
 import AdSlot from "@/components/ads/ad-slot";
 import type { ToolPageData, RelatedToolData } from "@/lib/engine/dynamic-tool-page-data";
-import { validateFileSize, revokeObjectURL, createDownloadUrl, triggerFileDownload } from "@/lib/file-validation";
+import { validateFileSize, revokeObjectURL, createDownloadUrl } from "@/lib/file-validation";
 import { convertImage } from "@/lib/image-converter";
+import { downloadWorkflowManager } from "@/lib/engine/download-workflow-manager";
+import type { ConversionSummary } from "@/lib/types/download-workflow";
 import type { Locale } from "@/lib/i18n/config";
 
 // ---------------------------------------------------------------------------
@@ -170,6 +173,9 @@ export default function UniversalToolPageClient({
 }: UniversalToolPageClientProps) {
   const { parsedConversion, category, categoryRoute, categoryLabel, breadcrumbs, relatedTools, availableOutputs, uploadConfig } = pageData;
 
+  const router   = useRouter();
+  const pathname = usePathname();
+
   const [fileInfo, setFileInfo] = useState<FileInfo | null>(null);
   const [isConverting, setIsConverting] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -225,19 +231,47 @@ export default function UniversalToolPageClient({
   const handleConvert = async () => {
     if (!fileInfo) return;
     setIsConverting(true); setProgress(0);
+    const startTime = Date.now();
     try {
       const outputFormat = isSingleFormatMode ? selectedOutputFormat : parsedConversion?.outputFormat;
       if (!outputFormat) { toast.error(td(dict, "converter", "noFormatSelected")); setIsConverting(false); return; }
       setProgress(20);
       const isImageConversion = category === "image" || (parsedConversion?.outputCategory && parsedConversion.outputCategory === "image");
+      let blob: Blob;
+      let providerId = "BrowserProcessor";
+      let libraryId  = "browser";
       if (isImageConversion) {
         const result = await convertImage(fileInfo.file, parsedConversion?.inputFormat || '', outputFormat);
-        setProgress(80); const url = createDownloadUrl(result.blob); setDownloadUrl(url);
+        blob = result.blob;
+        providerId = "CanvasImageProvider";
+        libraryId  = "canvas-api";
       } else {
-        setProgress(80); const buf = await fileInfo.file.arrayBuffer();
-        const blob = new Blob([buf], { type: "application/octet-stream" }); const url = createDownloadUrl(blob); setDownloadUrl(url);
+        const buf = await fileInfo.file.arrayBuffer();
+        blob = new Blob([buf], { type: "application/octet-stream" });
       }
+      setProgress(85);
+      const durationMs = Date.now() - startTime;
+      const summary: ConversionSummary = {
+        jobId:           downloadWorkflowManager.generateJobId(),
+        inputFilename:   fileInfo.name,
+        outputFilename:  `converted.${outputFormat}`,
+        inputSizeBytes:  fileInfo.file.size,
+        outputSizeBytes: blob.size,
+        inputFormat:     parsedConversion?.inputFormat || '',
+        outputFormat,
+        providerId,
+        libraryId,
+        processingEnv:   "browser",
+        completedAt:     new Date().toISOString(),
+        durationMs,
+        available:       true,
+        expiresAt:       null,
+      };
+      const blobUrl = createDownloadUrl(blob);
+      downloadWorkflowManager.storeJob(summary, blob, blobUrl);
       setProgress(100); setIsConverting(false); setIsComplete(true);
+      const locale = pathname.split("/")[1] || "en";
+      setTimeout(() => { router.push(`/${locale}/download?jobId=${summary.jobId}`); }, 400);
     } catch (error) {
       setIsConverting(false); setProgress(0);
       toast.error(td(dict, "converter", "conversionFailed"));
@@ -246,11 +280,7 @@ export default function UniversalToolPageClient({
   };
 
   const handleDownload = () => {
-    if (!downloadUrl || !fileInfo) return;
-    const outputFormat = isSingleFormatMode ? selectedOutputFormat : parsedConversion?.outputFormat;
-    if (!outputFormat) { toast.error(td(dict, "converter", "noFormatSelected")); return; }
-    try { triggerFileDownload(downloadUrl, `converted.${outputFormat}`); }
-    catch (error) { toast.error(td(dict, "converter", "downloadFailed")); console.error("Download error:", error); }
+    // No-op: downloads are handled by DownloadWorkflowManager redirect
   };
 
   const handleReset = () => {
@@ -402,7 +432,7 @@ export default function UniversalToolPageClient({
                   {isComplete && (
                     <div className="flex items-center justify-center gap-2 p-3 bg-green-50 rounded-xl border border-green-100">
                       <CheckCircle2 className="h-5 w-5 text-green-600 flex-shrink-0" />
-                      <span className="text-green-700 font-medium text-sm">{convDict?.conversionComplete || "Conversion Complete!"}</span>
+                      <span className="text-green-700 font-medium text-sm">Conversion complete! Redirecting to download…</span>
                     </div>
                   )}
 
@@ -413,9 +443,9 @@ export default function UniversalToolPageClient({
                         {isConverting ? convDict?.converting || "Converting..." : isSingleFormatMode ? selectedOutputFormat ? `Convert to .${selectedOutputFormat.toUpperCase()}` : convDict?.selectFormat || "Select a format" : `Convert to ${OUT}`}
                       </Button>
                     ) : (
-                      <Button className={`flex-1 bg-gradient-to-r ${gradientColor} text-white hover:opacity-90 shadow-sm`} onClick={handleDownload} disabled={!downloadUrl}>
+                      <Button className={`flex-1 bg-gradient-to-r ${gradientColor} text-white hover:opacity-90 shadow-sm opacity-60`} disabled>
                         <Download className="mr-2 h-4 w-4" />
-                        {convDict?.download || "Download"} .{isSingleFormatMode ? selectedOutputFormat?.toUpperCase() : OUT}
+                        Redirecting…
                       </Button>
                     )}
                   </div>

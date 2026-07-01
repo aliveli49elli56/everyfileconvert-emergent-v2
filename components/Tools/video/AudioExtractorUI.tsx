@@ -1,10 +1,13 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef } from 'react';
 import { Upload, Download, Loader2 } from 'lucide-react';
 interface Props { toolName?: string; onFileSelected?: (f: File) => void }
 type Stage = 'idle'|'processing'|'done'|'error';
 
 export default function AudioExtractorUI({ toolName, onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [file,setFile]=useState<File|null>(null);
   const [objUrl,setObjUrl]=useState<string|null>(null);
   const [stage,setStage]=useState<Stage>('idle');
@@ -33,7 +36,16 @@ export default function AudioExtractorUI({ toolName, onFileSelected }: Props) {
         options:{targetFormat:format},
         onProgress:pct=>{setProgress(pct);setStageMsg(pct<25?'Loading FFmpeg…':'Extracting audio…');},
       });
-      setResultUrl(URL.createObjectURL(res.blob));setStage('done');
+      storeAndRedirect(res.blob, {
+      inputFilename:  file.name,
+      outputFilename: `audio_${file.name.replace(/\.[^.]+$/,'')}.${format}`,
+      inputFormat:    file.name.split('.').pop()?.toLowerCase() ?? 'mp4',
+      outputFormat:   format,
+      inputSizeBytes: file.size,
+      providerId:     'Transcoder',
+      libraryId:      'ffmpeg-wasm',
+    });
+    setStage('done');
     }catch(e){setError(e instanceof Error?e.message:'Failed');setStage('error');}
   };
 

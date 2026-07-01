@@ -26,6 +26,7 @@ import {
   CopyPlus,
   ScanEye,
 } from "lucide-react";
+import UniversalLandingExtras from "@/components/UniversalLandingExtras";
 import UniversalDropzone from "@/components/UniversalDropzone";
 import AdSlot from "@/components/ads/ad-slot";
 import { getDictionary, getHreflangLinks } from "@/lib/i18n/config";
@@ -205,6 +206,7 @@ export default async function LocaleImageConverterPage({ params }: PageProps) {
         </div>
       </section>
     </div>
+    <UniversalLandingExtras variant="category" locale={locale} category="image" />
     </>
   );
 }

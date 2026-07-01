@@ -417,7 +417,7 @@ class AnalyticsEventEngine {
         tier: 'free',
         locale: 'en',
         userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : '',
-        page: typeof window !== 'undefined' ? window.location.pathname : '',
+        page: '',
       },
     };
   }
@@ -471,3 +471,27 @@ export function createAnalyticsEvent(name: string, parameters: Record<string, un
 export function validateAnalyticsEvent(name: string, parameters: Record<string, unknown>) {
   return analyticsEventEngine.validateEvent(name, parameters);
 }
+
+
+// ---------------------------------------------------------------------------
+// PHASE 7 — Product & UX Expansion event constants
+// ---------------------------------------------------------------------------
+
+export const PHASE7_EVENTS = {
+  RECOMMENDED_CONVERTER_CLICKED: 'recommended_converter_clicked',
+  RECOMMENDED_TOOL_CLICKED:      'recommended_tool_clicked',
+  INTERNAL_LINK_CLICKED:         'internal_link_clicked',
+  POPULAR_CONVERSION_CLICKED:    'popular_conversion_clicked',
+  TRENDING_CONVERSION_CLICKED:   'trending_conversion_clicked',
+  CATEGORY_PAGE_VIEWED:          'category_page_viewed',
+  SEARCH_USED:                   'search_used',
+  SEARCH_RESULT_CLICKED:         'search_result_clicked',
+  PRESET_SELECTED:               'preset_selected',
+  CROP_APPLIED:                  'crop_applied',
+  RESIZE_APPLIED:                'resize_applied',
+  DOWNLOAD_FUNNEL_CTA_CLICKED:   'download_funnel_cta_clicked',
+  CONVERSION_SUGGESTION_SHOWN:   'conversion_suggestion_shown',
+  CONVERSION_SUGGESTION_CLICKED: 'conversion_suggestion_clicked',
+} as const;
+
+export type Phase7EventName = typeof PHASE7_EVENTS[keyof typeof PHASE7_EVENTS];

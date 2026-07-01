@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getDictionary, getHreflangLinks } from "@/lib/i18n/config";
 import type { Locale } from "@/lib/i18n/config";
 import UniversalToolPageClient from "@/components/UniversalToolPageClient";
+import UniversalLandingExtras from "@/components/UniversalLandingExtras";
 import { getConversionPageData, getAllConversionSlugs } from "@/lib/engine/dynamic-tool-page-data";
 import { conversionRegistry } from "@/lib/registry/conversion-registry";
 
@@ -201,6 +202,14 @@ export default async function DynamicToolPage({ params }: PageProps) {
         slug={slugString}
         locale={locale as Locale}
         dict={dict}
+      />
+      <UniversalLandingExtras
+        variant="converter"
+        locale={locale}
+        inputExt={pageData.parsedConversion.inputFormat ?? undefined}
+        outputExt={pageData.parsedConversion.outputFormat ?? undefined}
+        isSingleFormat={pageData.parsedConversion.isSingleFormat}
+        category={pageData.category}
       />
     </>
   );

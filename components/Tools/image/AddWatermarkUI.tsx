@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 /**
  * AddWatermarkUI — Canvas-based image watermark
  * Text watermark with position, opacity, color, font size
@@ -18,6 +19,9 @@ const POSITIONS = [
 ];
 
 export default function AddWatermarkUI({ onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
+  const [loadedFile, setLoadedFile] = useState<File|null>(null);
   const [imgSrc, setImgSrc]     = useState<string | null>(null);
   const [text, setText]         = useState('© MyBrand');
   const [color, setColor]       = useState('#ffffff');
@@ -92,9 +96,15 @@ export default function AddWatermarkUI({ onFileSelected }: Props) {
     canvasRef.current?.toBlob(blob => {
       if (!blob) return;
       const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'watermarked.png';
-      a.click();
+      storeAndRedirect(blob, {
+        inputFilename:  loadedFile?.name ?? 'image.png',
+        outputFilename: 'watermarked.png',
+        inputFormat:    loadedFile?.name.split('.').pop()?.toLowerCase() ?? 'png',
+        outputFormat:   'png',
+        inputSizeBytes: loadedFile?.size ?? 0,
+        providerId:     'CanvasProcessor',
+        libraryId:      'canvas-api',
+      });
     }, 'image/png');
   };
 

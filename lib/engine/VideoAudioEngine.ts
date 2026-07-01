@@ -22,9 +22,17 @@ function getCoreFolder(): string {
   return hasSAB() ? 'ffmpeg-mt' : 'ffmpeg';
 }
 
+function getAppOrigin(): string {
+  // Config-driven: prefer explicit env var, fall back to browser origin in dev
+  const envOrigin = typeof process !== 'undefined'
+    ? (process.env['NEXT_PUBLIC_APP_URL'] as string | undefined)
+    : undefined;
+  if (envOrigin) return envOrigin;
+  return typeof window !== 'undefined' ? window.location.origin : '';
+}
+
 function getCoreBase(): string {
-  const origin = typeof window !== 'undefined' ? window.location.origin : '';
-  return `${origin}/${getCoreFolder()}`;
+  return `${getAppOrigin()}/${getCoreFolder()}`;
 }
 
 type FFmpegInstance = {

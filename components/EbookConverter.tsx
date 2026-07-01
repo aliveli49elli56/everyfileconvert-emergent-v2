@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,8 +10,8 @@ import { toast } from "sonner";
 import {
   revokeObjectURL,
   createDownloadUrl,
-  triggerFileDownload,
 } from "@/lib/file-validation";
+import { downloadWorkflowManager } from "@/lib/engine/download-workflow-manager";
 import { formatRegistry } from "@/lib/registry/format-registry";
 import { conversionRegistry } from "@/lib/registry/conversion-registry";
 
@@ -312,6 +313,8 @@ export default function EbookConverter({
   defaultFrom = "epub",
   defaultTo = "pdf",
 }: EbookConverterProps) {
+  const router   = useRouter();
+  const pathname = usePathname();
   const [fromFormat, setFromFormat] = useState<EbookFormat>(
     (defaultFrom as EbookFormat) || "epub"
   );
@@ -390,16 +393,37 @@ export default function EbookConverter({
     if (!fileInfo) return;
     setIsConverting(true);
     setProgress(10);
+    const startTime = Date.now();
 
     try {
       setProgress(30);
       const blob = await performConversion(fileInfo.file, fromFormat, toFormat);
       setProgress(90);
-      const url = createDownloadUrl(blob);
-      setDownloadUrl(url);
+      const durationMs = Date.now() - startTime;
+      const blobUrl = createDownloadUrl(blob);
+      const baseName = fileInfo.name.replace(/\.[^.]+$/, "");
+      const summary = {
+        jobId:           downloadWorkflowManager.generateJobId(),
+        inputFilename:   fileInfo.name,
+        outputFilename:  `${baseName}.${toFormat}`,
+        inputSizeBytes:  fileInfo.file.size,
+        outputSizeBytes: blob.size,
+        inputFormat:     fromFormat,
+        outputFormat:    toFormat,
+        providerId:      'EbookProvider',
+        libraryId:       'epub-js',
+        processingEnv:   'browser' as const,
+        completedAt:     new Date().toISOString(),
+        durationMs,
+        available:       true,
+        expiresAt:       null,
+      };
+      downloadWorkflowManager.storeJob(summary, blob, blobUrl);
       setProgress(100);
       setIsComplete(true);
       toast.success("Conversion complete!");
+      const locale = pathname.split('/')[1] || 'en';
+      setTimeout(() => { router.push(`/${locale}/download?jobId=${summary.jobId}`); }, 400);
     } catch (err) {
       toast.error("Conversion failed. Please try a different file or format.");
       console.error(err);
@@ -409,9 +433,7 @@ export default function EbookConverter({
   };
 
   const handleDownload = () => {
-    if (!downloadUrl || !fileInfo) return;
-    const baseName = fileInfo.name.replace(/\.[^.]+$/, "");
-    triggerFileDownload(downloadUrl, `${baseName}.${toFormat}`);
+    // No-op: handled by DownloadWorkflowManager redirect
   };
 
   const handleReset = () => {

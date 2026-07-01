@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef } from 'react';
 import { Upload, Download, Loader2 } from 'lucide-react';
 
@@ -6,6 +7,8 @@ interface Props { toolName?: string; onFileSelected?: (f: File) => void }
 type Stage = 'idle'|'processing'|'done'|'error';
 
 export default function VideoCompressorUI({ toolName, onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [file,    setFile]   = useState<File|null>(null);
   const [objUrl,  setObjUrl] = useState<string|null>(null);
   const [crf,     setCrf]    = useState(28);
@@ -36,8 +39,15 @@ export default function VideoCompressorUI({ toolName, onFileSelected }: Props) {
         options: { quality: Math.round((51 - crf) / 33 * 100) },
         onProgress: pct => { setProgress(pct); setStageMsg(pct<25?'Loading FFmpeg…':'Compressing…'); },
       });
-      setResultSize(res.blob.size);
-      setResultUrl(URL.createObjectURL(res.blob));
+      storeAndRedirect(res.blob, {
+        inputFilename:  file.name,
+        outputFilename: `compressed_${file.name}`,
+        inputFormat:    file.name.split('.').pop()?.toLowerCase() ?? 'mp4',
+        outputFormat:   file.name.split('.').pop()?.toLowerCase() ?? 'mp4',
+        inputSizeBytes: file.size,
+        providerId:     'Transcoder',
+        libraryId:      'ffmpeg-wasm',
+      });
       setStage('done');
     } catch (e) { setError(e instanceof Error?e.message:'Failed'); setStage('error'); }
   };
@@ -92,8 +102,7 @@ export default function VideoCompressorUI({ toolName, onFileSelected }: Props) {
       <div className="flex items-center justify-between border-t border-slate-100 pt-3">
         <button onClick={()=>{setFile(null);if(objUrl)URL.revokeObjectURL(objUrl);setObjUrl(null);setResultUrl(null);setStage('idle');}} className="text-xs text-slate-400 hover:text-slate-600">← Change video</button>
         {resultUrl
-          ? <a href={resultUrl} download={`compressed_${file?.name}`} data-testid="vcompress-download"
-              className="flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600"><Download className="h-4 w-4"/>Download ({(resultSize/1024/1024).toFixed(1)} MB)</a>
+          ? <span className="flex items-center gap-1.5 text-sm font-semibold text-emerald-600"><Download className="h-4 w-4"/>Redirecting…</span>
           : <button onClick={handleProcess} disabled={stage==='processing'} data-testid="vcompress-process"
               className="flex items-center gap-1.5 rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-violet-700 disabled:opacity-40 transition-colors">
               {stage==='processing'?<><Loader2 className="h-4 w-4 animate-spin"/>Compressing…</>:'Compress Video'}

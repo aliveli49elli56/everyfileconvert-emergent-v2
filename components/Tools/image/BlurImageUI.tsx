@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 /**
  * BlurImageUI — Canvas-based image blur tool
  * Full image Gaussian blur via CSS filter (fast), region blur via offscreen canvas
@@ -9,6 +10,9 @@ import { Image, Download } from 'lucide-react';
 interface Props { toolName?: string; onFileSelected?: (f: File) => void }
 
 export default function BlurImageUI({ onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
+  const [loadedFile, setLoadedFile] = useState<File|null>(null);
   const [imgSrc, setImgSrc]   = useState<string | null>(null);
   const [radius, setRadius]   = useState(8);
   const [mode, setMode]       = useState<'full' | 'edges'>('full');
@@ -59,9 +63,15 @@ export default function BlurImageUI({ onFileSelected }: Props) {
     canvasRef.current?.toBlob((blob) => {
       if (!blob) return;
       const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'blurred.png';
-      a.click();
+      storeAndRedirect(blob, {
+        inputFilename:  loadedFile?.name ?? 'image.png',
+        outputFilename: 'blurred.png',
+        inputFormat:    loadedFile?.name.split('.').pop()?.toLowerCase() ?? 'png',
+        outputFormat:   'png',
+        inputSizeBytes: loadedFile?.size ?? 0,
+        providerId:     'CanvasProcessor',
+        libraryId:      'canvas-api',
+      });
     }, 'image/png');
   };
 

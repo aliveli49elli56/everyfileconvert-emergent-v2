@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef } from 'react';
 import { FileText, Download, Loader2, Scissors } from 'lucide-react';
 
@@ -6,6 +7,8 @@ interface Props { toolName?: string; onFileSelected?: (f: File) => void }
 type Stage = 'idle' | 'processing' | 'done' | 'error';
 
 export default function PDFSplitterUI({ onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [file, setFile]         = useState<File | null>(null);
   const [pageCount, setPageCount] = useState<number | null>(null);
   const [mode, setMode]         = useState<'all' | 'range'>('all');
@@ -40,7 +43,15 @@ export default function PDFSplitterUI({ onFileSelected }: Props) {
         options: { splitMode: mode, pageRange: mode === 'range' ? rangeStr : undefined },
         onProgress: (pct) => { setProgress(pct); setStageMsg(pct < 20 ? 'Loading pdf-lib…' : 'Splitting PDF…'); },
       });
-      setResult(URL.createObjectURL(res.blob));
+      storeAndRedirect(res.blob, {
+        inputFilename:   file.name,
+        outputFilename:  `split_${file?.name}`,
+        inputFormat:     'pdf',
+        outputFormat:    'pdf',
+        inputSizeBytes:  file.size,
+        providerId:      'Transcoder',
+        libraryId:       'pdf-lib',
+      });
       setStage('done');
     } catch (e) { setError(e instanceof Error ? e.message : 'Failed'); setStage('error'); }
   };
@@ -122,8 +133,7 @@ export default function PDFSplitterUI({ onFileSelected }: Props) {
         <button onClick={() => { setFile(null); setResult(null); setStage('idle'); setPageCount(null); }}
           className="text-xs text-slate-400 hover:text-slate-600">← Change file</button>
         {resultUrl
-          ? <a href={resultUrl} download={`split_${file?.name}`} data-testid="pdf-split-download"
-            className="flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600"><Download className="h-4 w-4" />Download</a>
+          ? <span className="flex items-center gap-1.5 text-sm font-semibold text-emerald-600"><Download className="h-4 w-4"/>Redirecting…</span>
           : <button onClick={handleProcess} disabled={stage === 'processing' || (mode === 'range' && !rangeStr.trim())} data-testid="pdf-split-process"
             className="flex items-center gap-1.5 rounded-xl bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-600 disabled:opacity-40 transition-colors">
             {stage === 'processing' ? <><Loader2 className="h-4 w-4 animate-spin" />Splitting…</> : <><Scissors className="h-4 w-4" />Split PDF</>}

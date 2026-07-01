@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef } from 'react';
 import { Upload, Download, X, Loader2, Plus, Droplets } from 'lucide-react';
 
@@ -9,6 +10,8 @@ interface FileItem { id: string; file: File; preview: string }
 type Op = 'resize'|'watermark'|'grayscale'|'brightness';
 
 export default function BatchImageProcessorUI({ toolName, onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [files,  setFiles]  = useState<FileItem[]>([]);
   const [op,     setOp]     = useState<Op>('resize');
   const [resizeW, setResizeW] = useState(800);
@@ -67,7 +70,15 @@ export default function BatchImageProcessorUI({ toolName, onFileSelected }: Prop
       }
       const zipBlob=await zip.generateAsync({type:'blob'});
       if(zipUrl)URL.revokeObjectURL(zipUrl);
-      setZipUrl(URL.createObjectURL(zipBlob));
+      storeAndRedirect(zipBlob, {
+        inputFilename:  files[0]?.file.name ?? 'image',
+        outputFilename: 'processed-images.zip',
+        inputFormat:    files[0]?.file.name.split('.').pop()?.toLowerCase() ?? 'png',
+        outputFormat:   'zip',
+        inputSizeBytes: files.reduce((s,f)=>s+f.file.size,0),
+        providerId:     'CanvasProcessor',
+        libraryId:      'canvas-api',
+      });
       setStage('done');
     } catch(e){ setError(e instanceof Error?e.message:'Failed'); setStage('error'); }
   };
@@ -130,8 +141,7 @@ export default function BatchImageProcessorUI({ toolName, onFileSelected }: Prop
       <div className="flex items-center justify-between border-t border-slate-100 pt-3">
         <button onClick={()=>{files.forEach(f=>URL.revokeObjectURL(f.preview));setFiles([]);setZipUrl(null);setStage('idle');}} className="text-xs text-slate-400 hover:text-slate-600">Clear all</button>
         {zipUrl
-          ? <a href={zipUrl} download="processed_images.zip" data-testid="batch-download"
-              className="flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600"><Download className="h-4 w-4"/>Download ZIP</a>
+          ? <span className="flex items-center gap-1.5 text-sm font-semibold text-emerald-600"><Download className="h-4 w-4"/>Redirecting…</span>
           : <button onClick={handleProcess} disabled={!files.length||stage==='processing'} data-testid="batch-process"
               className="flex items-center gap-1.5 rounded-xl bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-600 disabled:opacity-40 transition-colors">
               {stage==='processing'?<><Loader2 className="h-4 w-4 animate-spin"/>Processing…</>:`Process ${files.length} Image${files.length!==1?'s':''}`}

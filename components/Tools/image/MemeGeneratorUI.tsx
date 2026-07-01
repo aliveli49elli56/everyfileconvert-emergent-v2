@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 /**
  * MemeGeneratorUI — Canvas-based meme creator
  * Top/bottom text with Impact font, real-time preview, download PNG
@@ -9,6 +10,8 @@ import { Image, Download, Type } from 'lucide-react';
 interface Props { toolName?: string; onFileSelected?: (f: File) => void }
 
 export default function MemeGeneratorUI({ onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [imgSrc, setImgSrc]     = useState<string | null>(null);
   const [topText, setTopText]   = useState('TOP TEXT');
   const [botText, setBotText]   = useState('BOTTOM TEXT');
@@ -66,9 +69,15 @@ export default function MemeGeneratorUI({ onFileSelected }: Props) {
     canvasRef.current?.toBlob((blob) => {
       if (!blob) return;
       const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'meme.png';
-      a.click();
+      storeAndRedirect(blob, {
+        inputFilename:  'meme.png',
+        outputFilename: 'meme.png',
+        inputFormat:    'png',
+        outputFormat:   'png',
+        inputSizeBytes: 0,
+        providerId:     'CanvasProcessor',
+        libraryId:      'canvas-api',
+      });
     }, 'image/png');
   };
 

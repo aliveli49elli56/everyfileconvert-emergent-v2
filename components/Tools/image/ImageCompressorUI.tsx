@@ -1,10 +1,13 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Upload, Download } from 'lucide-react';
 
 interface Props { toolName?: string; onFileSelected?: (f: File) => void }
 
 export default function ImageCompressorUI({ toolName, onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [file,     setFile]    = useState<File|null>(null);
   const [objUrl,   setObjUrl]  = useState<string|null>(null);
   const [quality,  setQuality] = useState(80);
@@ -47,8 +50,15 @@ export default function ImageCompressorUI({ toolName, onFileSelected }: Props) {
         if (!blob) return;
         setNewSize(blob.size);
         if (resultUrl) URL.revokeObjectURL(resultUrl);
-        setResultUrl(URL.createObjectURL(blob));
-        setResultBlob(blob);
+        storeAndRedirect(blob, {
+        inputFilename:  file.name,
+        outputFilename: `compressed_${file.name}`,
+        inputFormat:    file.name.split('.').pop()?.toLowerCase() ?? 'jpg',
+        outputFormat:   file.name.split('.').pop()?.toLowerCase() ?? 'jpg',
+        inputSizeBytes: file.size,
+        providerId:     'CanvasProcessor',
+        libraryId:      'canvas-api',
+      });
         setBusy(false);
       }, 'image/jpeg', quality / 100);
     };
@@ -106,32 +116,8 @@ export default function ImageCompressorUI({ toolName, onFileSelected }: Props) {
       </div>
 
       {/* Before / After slider */}
-      {resultUrl && objUrl && (
-        <div className="split-container relative overflow-hidden rounded-xl border border-slate-200 select-none" style={{aspectRatio:'16/9',maxHeight:360}}>
-          {/* After (compressed) */}
-          <img src={resultUrl} alt="after" className="absolute inset-0 w-full h-full object-contain bg-slate-900" draggable={false} />
-          {/* Before (original) clipped */}
-          <div className="absolute inset-0 overflow-hidden" style={{width:`${splitPos}%`}}>
-            <img src={objUrl} alt="before" className="absolute inset-0 w-full h-full object-contain bg-slate-900" draggable={false} style={{width:`${100/splitPos*100}%`,maxWidth:'none'}} />
-          </div>
-          {/* Divider */}
-          <div ref={splitRef} onPointerDown={onSplitPointerDown} onPointerMove={onSplitPointerMove} onPointerUp={onSplitPointerUp}
-            className="absolute top-0 bottom-0 w-1 bg-white shadow-lg cursor-ew-resize flex items-center justify-center"
-            style={{left:`${splitPos}%`,transform:'translateX(-50%)'}}>
-            <div className="h-8 w-4 rounded-full bg-white shadow-md flex items-center justify-center text-slate-400">⇔</div>
-          </div>
-          <div className="absolute top-2 left-2 rounded-md bg-black/50 px-2 py-0.5 text-[10px] text-white">Before</div>
-          <div className="absolute top-2 right-2 rounded-md bg-black/50 px-2 py-0.5 text-[10px] text-white">After</div>
-        </div>
-      )}
 
-      <div className="flex items-center justify-between border-t border-slate-100 pt-3">
-        <button onClick={()=>{setFile(null);if(objUrl)URL.revokeObjectURL(objUrl);if(resultUrl)URL.revokeObjectURL(resultUrl);setObjUrl(null);setResultUrl(null);}} className="text-xs text-slate-400 hover:text-slate-600">← Change image</button>
-        {resultBlob && <a href={resultUrl!} download={`compressed_${file.name.replace(/\.[^.]+$/,'.jpg')}`} data-testid="compress-download"
-          className="flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600 transition-colors">
-          <Download className="h-4 w-4"/>{busy?'Processing…':'Download'}
-        </a>}
-      </div>
+      {/* Compress triggers automatically via useEffect */}
     </div>
   );
 }

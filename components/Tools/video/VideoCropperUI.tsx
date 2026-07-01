@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef, useCallback } from 'react';
 import { Upload, Download, Loader2 } from 'lucide-react';
 interface Props { toolName?: string; onFileSelected?: (f: File) => void }
@@ -6,6 +7,8 @@ type Stage = 'idle'|'processing'|'done'|'error';
 type Rect = { x:number; y:number; w:number; h:number };
 
 export default function VideoCropperUI({ toolName, onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [file,setFile]=useState<File|null>(null);
   const [objUrl,setObjUrl]=useState<string|null>(null);
   const [cropBox,setCropBox]=useState<Rect|null>(null);
@@ -57,7 +60,25 @@ export default function VideoCropperUI({ toolName, onFileSelected }: Props) {
         options:{ crop: { x: Math.round(cropBox.x/cw*100)/100, y: Math.round(cropBox.y/ch*100)/100, w: Math.round(cropBox.w/cw*100)/100, h: Math.round(cropBox.h/ch*100)/100 } },
         onProgress:pct=>{setProgress(pct);setStageMsg(pct<25?'Loading FFmpeg…':'Cropping…');},
       });
-      setResultUrl(URL.createObjectURL(res.blob));setStage('done');
+      storeAndRedirect(res.blob, {
+
+        inputFilename:   file.name,
+
+        outputFilename:  `cropped_${file.name}`,
+
+        inputFormat:     file.name.split('.').pop()?.toLowerCase() ?? 'mp4',
+
+        outputFormat:    file.name.split('.').pop()?.toLowerCase() ?? 'mp4',
+
+        inputSizeBytes:  file.size,
+
+        providerId:      'Transcoder',
+
+        libraryId:       'ffmpeg-wasm',
+
+      });
+
+      setStage('done');
     }catch(e){setError(e instanceof Error?e.message:'Failed');setStage('error');}
   };
 

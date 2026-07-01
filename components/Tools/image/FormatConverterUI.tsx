@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 /**
  * FormatConverterUI — Canvas-based image aspect ratio converter
  * Square, Landscape, Portrait with fill color for empty areas
@@ -18,6 +19,8 @@ const RATIOS = [
 ];
 
 export default function FormatConverterUI({ onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [imgSrc, setImgSrc]   = useState<string | null>(null);
   const [ratio, setRatio]     = useState(RATIOS[0]);
   const [fill, setFill]       = useState('#ffffff');
@@ -66,9 +69,15 @@ export default function FormatConverterUI({ onFileSelected }: Props) {
     canvasRef.current?.toBlob(blob => {
       if (!blob) return;
       const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `image_${ratio.label.split(' ')[0].replace(':', 'x')}.jpg`;
-      a.click();
+      storeAndRedirect(blob, {
+        inputFilename:  'image.jpg',
+        outputFilename: 'converted.jpg',
+        inputFormat:    'png',
+        outputFormat:   'jpg',
+        inputSizeBytes: 0,
+        providerId:     'CanvasProcessor',
+        libraryId:      'canvas-api',
+      });
     }, 'image/jpeg', 0.92);
   };
 

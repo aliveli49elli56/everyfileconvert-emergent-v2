@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { getHreflangLinks } from "@/lib/i18n/config";
 import type { TranscodeOp } from "@/lib/engine/Transcoder";
 import ToolPageClient from "@/components/Studio/ToolPageClient";
+import UniversalLandingExtras from "@/components/UniversalLandingExtras";
+import type { FormatCategory } from "@/lib/types/formats";
 
 interface PageProps {
   params: Promise<{ locale: string; toolPath: string[] }>;
@@ -714,19 +716,17 @@ export default async function ToolPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* Back to parent CTA */}
-      <section className="py-12 bg-white border-t border-slate-100">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-slate-500 text-sm mb-3">Looking for more {tool.badge.toLowerCase()}?</p>
-          <Link
-            href={`/${locale}/${tool.parentPath}`}
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-${accentColor}-50 text-${accentColor}-700 font-medium text-sm hover:bg-${accentColor}-100 border border-${accentColor}-200 transition-all`}
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to {tool.parentLabel}
-          </Link>
-        </div>
-      </section>
+      {/* Landing extras — registry-driven universal sections */}
+      <UniversalLandingExtras
+        variant="tool"
+        locale={locale}
+        toolKey={key}
+        toolName={tool.name}
+        toolMode={tool.mode}
+        toolParentPath={tool.parentPath}
+        toolParentLabel={tool.parentLabel}
+        category={(tool.mode === "all" ? "document" : tool.mode) as FormatCategory}
+      />
     </div>
     </>
   );

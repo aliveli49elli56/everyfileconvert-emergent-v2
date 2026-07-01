@@ -1,10 +1,12 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { FileAudio, Download } from 'lucide-react';
 
 interface Props { toolName?: string; onFileSelected?: (f: File) => void }
 
 export default function WaveformUI({ onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
   const [file, setFile]     = useState<File | null>(null);
   const [objUrl, setObjUrl] = useState<string | null>(null);
   const [duration, setDur]  = useState(0);
@@ -139,10 +141,26 @@ export default function WaveformUI({ onFileSelected }: Props) {
         <button onClick={() => { setFile(null); if (objUrl) URL.revokeObjectURL(objUrl); setObjUrl(null); setDecoded(false); }}
           className="text-xs text-slate-400 hover:text-slate-600">← Change file</button>
         {objUrl && (
-          <a href={objUrl} download={file?.name} data-testid="waveform-download"
-            className="flex items-center gap-1.5 rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-600">
+          <button
+            onClick={() => {
+              if (!file) return;
+              fetch(objUrl).then(r => r.blob()).then(blob => {
+                storeAndRedirect(blob, {
+                  inputFilename:  file.name,
+                  outputFilename: file.name,
+                  inputFormat:    file.name.split('.').pop()?.toLowerCase() ?? 'mp3',
+                  outputFormat:   file.name.split('.').pop()?.toLowerCase() ?? 'mp3',
+                  inputSizeBytes: file.size,
+                  providerId:     'PassThrough',
+                  libraryId:      'browser',
+                });
+              });
+            }}
+            className="flex items-center gap-1.5 rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-600"
+            data-testid="waveform-download"
+          >
             <Download className="h-4 w-4" />Download Original
-          </a>
+          </button>
         )}
       </div>
     </div>

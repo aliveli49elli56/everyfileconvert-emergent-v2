@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef } from 'react';
 import { FileAudio, Download, Loader2, Gauge } from 'lucide-react';
 
@@ -8,6 +9,8 @@ type Stage = 'idle' | 'processing' | 'done' | 'error';
 const SPEED_PRESETS = [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0];
 
 export default function AudioSpeedChangerUI({ onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [file, setFile]         = useState<File | null>(null);
   const [objUrl, setObjUrl]     = useState<string | null>(null);
   const [speed, setSpeed]       = useState(1.0);
@@ -44,7 +47,15 @@ export default function AudioSpeedChangerUI({ onFileSelected }: Props) {
         options: { speed },
         onProgress: (pct) => { setProgress(pct); setStageMsg(pct < 25 ? 'Loading FFmpeg…' : `Changing speed to ${speed}x…`); },
       });
-      setResult(URL.createObjectURL(res.blob));
+      storeAndRedirect(res.blob, {
+        inputFilename:   file.name,
+        outputFilename:  `speed_${speed}x_${file.name}`,
+        inputFormat:     file.name.split('.').pop()?.toLowerCase() ?? 'mp3',
+        outputFormat:    file.name.split('.').pop()?.toLowerCase() ?? 'mp3',
+        inputSizeBytes:  file.size,
+        providerId:      'Transcoder',
+        libraryId:       'ffmpeg-wasm',
+      });
       setStage('done');
     } catch (e) { setError(e instanceof Error ? e.message : 'Failed'); setStage('error'); }
   };
@@ -116,8 +127,7 @@ export default function AudioSpeedChangerUI({ onFileSelected }: Props) {
         <button onClick={() => { setFile(null); if (objUrl) URL.revokeObjectURL(objUrl); setObjUrl(null); setResult(null); setStage('idle'); }}
           className="text-xs text-slate-400 hover:text-slate-600">← Change file</button>
         {resultUrl
-          ? <a href={resultUrl} download={`speed_${speed}x_${file?.name}`} data-testid="speed-download"
-            className="flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600"><Download className="h-4 w-4" />Download</a>
+          ? <span className="flex items-center gap-1.5 text-sm font-semibold text-emerald-600"><Download className="h-4 w-4"/>Redirecting…</span>
           : <button onClick={handleProcess} disabled={stage === 'processing' || speed === 1} data-testid="speed-process"
             className="flex items-center gap-1.5 rounded-xl bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-600 disabled:opacity-40 transition-colors">
             {stage === 'processing' ? <><Loader2 className="h-4 w-4 animate-spin" />Processing…</> : <><Gauge className="h-4 w-4" />Change Speed</>}

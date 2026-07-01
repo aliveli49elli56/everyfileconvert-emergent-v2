@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 /**
  * ReverseVideoUI — Reverses video using FFmpeg.wasm via Transcoder
  */
@@ -9,6 +10,8 @@ interface Props { toolName?: string; onFileSelected?: (f: File) => void }
 type Stage = 'idle' | 'processing' | 'done' | 'error';
 
 export default function ReverseVideoUI({ onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [file, setFile]         = useState<File | null>(null);
   const [objUrl, setObjUrl]     = useState<string | null>(null);
   const [stage, setStage]       = useState<Stage>('idle');
@@ -40,7 +43,15 @@ export default function ReverseVideoUI({ onFileSelected }: Props) {
           setStageMsg(pct < 20 ? 'Loading FFmpeg…' : pct < 90 ? 'Reversing video…' : 'Finalizing…');
         },
       });
-      setResult(URL.createObjectURL(res.blob));
+      storeAndRedirect(res.blob, {
+        inputFilename:   file.name,
+        outputFilename:  `reversed_${file.name}`,
+        inputFormat:     file.name.split('.').pop()?.toLowerCase() ?? 'mp4',
+        outputFormat:    file.name.split('.').pop()?.toLowerCase() ?? 'mp4',
+        inputSizeBytes:  file.size,
+        providerId:      'Transcoder',
+        libraryId:       'ffmpeg-wasm',
+      });
       setStage('done');
     } catch (e) { setError(e instanceof Error ? e.message : 'Failed'); setStage('error'); }
   };
@@ -93,8 +104,7 @@ export default function ReverseVideoUI({ onFileSelected }: Props) {
         <button onClick={() => { setFile(null); if (objUrl) URL.revokeObjectURL(objUrl); setObjUrl(null); setResult(null); setStage('idle'); }}
           className="text-xs text-slate-400 hover:text-slate-600">← Change video</button>
         {resultUrl
-          ? <a href={resultUrl} download={`reversed_${file?.name}`} data-testid="reverse-download"
-            className="flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600"><Download className="h-4 w-4" />Download</a>
+          ? <span className="flex items-center gap-1.5 text-sm font-semibold text-emerald-600"><Download className="h-4 w-4"/>Redirecting…</span>
           : <button onClick={handleProcess} disabled={stage === 'processing'} data-testid="reverse-process"
             className="flex items-center gap-1.5 rounded-xl bg-rose-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-rose-600 disabled:opacity-40 transition-colors">
             {stage === 'processing' ? <><Loader2 className="h-4 w-4 animate-spin" />Reversing…</> : <><RotateCcw className="h-4 w-4" />Reverse Video</>}

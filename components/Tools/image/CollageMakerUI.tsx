@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 /**
  * CollageMakerUI — Canvas-based multi-image collage
  * Grid layout templates, real-time preview, download PNG
@@ -18,6 +19,8 @@ const LAYOUTS: { label: string; cols: number; rows: number }[] = [
 ];
 
 export default function CollageMakerUI({ onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [images, setImages]   = useState<string[]>([]);
   const [layout, setLayout]   = useState(LAYOUTS[2]);
   const [gap, setGap]         = useState(8);
@@ -77,9 +80,15 @@ export default function CollageMakerUI({ onFileSelected }: Props) {
       canvasRef.current?.toBlob(blob => {
         if (!blob) return;
         const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'collage.png';
-        a.click();
+        storeAndRedirect(blob, {
+        inputFilename:  'collage.png',
+        outputFilename: 'collage.png',
+        inputFormat:    'png',
+        outputFormat:   'png',
+        inputSizeBytes: 0,
+        providerId:     'CanvasProcessor',
+        libraryId:      'canvas-api',
+      });
       }, 'image/png');
     }, 300);
   };

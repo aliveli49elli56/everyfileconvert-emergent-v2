@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import UniversalLandingExtras from "@/components/UniversalLandingExtras";
 import {
   ArrowRight,
   Sparkles,
@@ -193,6 +194,7 @@ export default async function LocaleBackgroundRemoverPage({ params }: PageProps)
         </div>
       </section>
     </div>
+    <UniversalLandingExtras variant="tool" locale={locale} toolKey="background-remover" toolName="Background Remover" toolMode="image" category="image" />
     </>
   );
 }

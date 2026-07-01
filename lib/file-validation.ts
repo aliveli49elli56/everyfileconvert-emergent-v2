@@ -135,25 +135,3 @@ export function createDownloadUrl(blob: Blob): string {
   }
 }
 
-export function triggerFileDownload(
-  downloadUrl: string,
-  fileName: string,
-): void {
-  try {
-    const link = document.createElement('a');
-    link.href = downloadUrl;
-    link.download = fileName;
-    link.style.display = 'none';
-
-    document.body.appendChild(link);
-    link.click();
-
-    // Clean up after a short delay to ensure download starts
-    setTimeout(() => {
-      document.body.removeChild(link);
-    }, 100);
-  } catch (error) {
-    console.error('Failed to trigger download:', error);
-    throw new Error('Failed to download file');
-  }
-}

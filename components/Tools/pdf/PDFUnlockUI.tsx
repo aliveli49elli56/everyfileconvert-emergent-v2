@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef } from 'react';
 import { FileText, Download, Loader2, Unlock } from 'lucide-react';
 
@@ -6,6 +7,8 @@ interface Props { toolName?: string; onFileSelected?: (f: File) => void }
 type Stage = 'idle' | 'processing' | 'done' | 'error';
 
 export default function PDFUnlockUI({ onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [file, setFile]         = useState<File | null>(null);
   const [password, setPassword] = useState('');
   const [showPwd, setShowPwd]   = useState(false);
@@ -32,7 +35,15 @@ export default function PDFUnlockUI({ onFileSelected }: Props) {
         options: { password },
         onProgress: (pct) => { setProgress(pct); setStageMsg(pct < 20 ? 'Loading pdf-lib…' : 'Unlocking PDF…'); },
       });
-      setResult(URL.createObjectURL(res.blob));
+      storeAndRedirect(res.blob, {
+        inputFilename:   file.name,
+        outputFilename:  `unlocked_${file?.name}`,
+        inputFormat:     'pdf',
+        outputFormat:    'pdf',
+        inputSizeBytes:  file.size,
+        providerId:      'Transcoder',
+        libraryId:       'pdf-lib',
+      });
       setStage('done');
     } catch (e) { setError(e instanceof Error ? e.message : 'Incorrect password or failed to unlock'); setStage('error'); }
   };
@@ -103,8 +114,7 @@ export default function PDFUnlockUI({ onFileSelected }: Props) {
         <button onClick={() => { setFile(null); setResult(null); setStage('idle'); }}
           className="text-xs text-slate-400 hover:text-slate-600">← Change file</button>
         {resultUrl
-          ? <a href={resultUrl} download={`unlocked_${file?.name}`} data-testid="pdf-unlock-download"
-            className="flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600"><Download className="h-4 w-4" />Download Unlocked PDF</a>
+          ? <span className="flex items-center gap-1.5 text-sm font-semibold text-emerald-600"><Download className="h-4 w-4"/>Redirecting…</span>
           : <button onClick={handleProcess} disabled={stage === 'processing'} data-testid="pdf-unlock-process"
             className="flex items-center gap-1.5 rounded-xl bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-cyan-600 disabled:opacity-40 transition-colors">
             {stage === 'processing' ? <><Loader2 className="h-4 w-4 animate-spin" />Unlocking…</> : <><Unlock className="h-4 w-4" />Unlock PDF</>}

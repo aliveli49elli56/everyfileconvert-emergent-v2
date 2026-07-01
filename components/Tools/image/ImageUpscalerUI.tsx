@@ -1,10 +1,13 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef } from 'react';
 import { Upload, Download, ZoomIn } from 'lucide-react';
 
 interface Props { toolName?: string; onFileSelected?: (f: File) => void }
 
 export default function ImageUpscalerUI({ toolName, onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [file,   setFile]  = useState<File|null>(null);
   const [objUrl, setObjUrl]= useState<string|null>(null);
   const [scale,  setScale] = useState(2);
@@ -35,10 +38,15 @@ export default function ImageUpscalerUI({ toolName, onFileSelected }: Props) {
       ctx.drawImage(img,0,0,canvas.width,canvas.height);
       canvas.toBlob(b=>{
         if(!b)return;
-        const url=URL.createObjectURL(b);
-        const a=document.createElement('a');
-        a.href=url; a.download=`upscaled_${scale}x_${file.name}`; a.click();
-        URL.revokeObjectURL(url); setBusy(false);
+        storeAndRedirect(b, {
+        inputFilename:  file.name,
+        outputFilename: `upscaled_${scale}x_${file.name}`,
+        inputFormat:    file.name.split('.').pop()?.toLowerCase() ?? 'png',
+        outputFormat:   file.name.split('.').pop()?.toLowerCase() ?? 'png',
+        inputSizeBytes: file.size,
+        providerId:     'CanvasProcessor',
+        libraryId:      'canvas-api',
+      }); setBusy(false);
       }, file.type==='image/gif'?'image/png':file.type, 0.95);
     };
     img.src=objUrl;

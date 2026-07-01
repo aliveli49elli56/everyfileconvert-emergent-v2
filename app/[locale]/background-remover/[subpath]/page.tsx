@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, Shield, Zap, Lock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import UniversalDropzone from "@/components/UniversalDropzone";
+import UniversalLandingExtras from "@/components/UniversalLandingExtras";
 import { getHreflangLinks } from "@/lib/i18n/config";
 
 interface PageProps {
@@ -98,6 +99,16 @@ export default async function BackgroundRemoverSubPage({ params }: PageProps) {
           </div>
         </div>
       </section>
+      <UniversalLandingExtras
+        variant="tool"
+        locale={locale}
+        toolKey={`background-remover/${subpath}`}
+        toolName={config.name}
+        toolMode="image"
+        toolParentPath="background-remover"
+        toolParentLabel="Background Remover"
+        category="image"
+      />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -25,9 +26,10 @@ import {
   validateFileSize,
   revokeObjectURL,
   createDownloadUrl,
-  triggerFileDownload,
 } from "@/lib/file-validation";
 import { convertImage } from "@/lib/image-converter";
+import { downloadWorkflowManager } from "@/lib/engine/download-workflow-manager";
+import type { ConversionSummary } from "@/lib/types/download-workflow";
 import { cn } from "@/lib/utils";
 
 // ── Props ──────────────────────────────────────────────────────────────────
@@ -240,6 +242,9 @@ export default function UniversalConverter({ type }: Props) {
 
   const allSources = conversionRegistry.getSourcesForConverterType(type);
 
+  const router   = useRouter();
+  const pathname = usePathname();
+
   const [sourceExt, setSourceExt] = useState("");
   const [targetExt, setTargetExt] = useState("");
   const [fileInfo, setFileInfo] = useState<FileInfo | null>(null);
@@ -331,39 +336,73 @@ export default function UniversalConverter({ type }: Props) {
     if (!fileInfo || !targetExt) return;
     setIsConverting(true);
     setProgress(0);
+    const startTime = Date.now();
 
     try {
       setProgress(15);
       const cat = getCategoryForExt(sourceExt);
 
       let blob: Blob;
+      let providerId = "BrowserProcessor";
+      let libraryId  = "browser";
+
       if (["image", "raw", "vector", "icon"].includes(cat)) {
         const result = await convertImage(fileInfo.file, sourceExt, targetExt);
-        blob = result.blob;
+        blob       = result.blob;
+        providerId = "CanvasImageProvider";
+        libraryId  = "canvas-api";
       } else {
         const buf = await fileInfo.file.arrayBuffer();
         blob = new Blob([buf], { type: "application/octet-stream" });
       }
 
       setProgress(85);
-      const url = createDownloadUrl(blob);
-      setDownloadUrl(url);
+      const durationMs = Date.now() - startTime;
+
+      // Build ConversionSummary
+      const summary: ConversionSummary = {
+        jobId:           downloadWorkflowManager.generateJobId(),
+        inputFilename:   fileInfo.name,
+        outputFilename:  `converted.${targetExt}`,
+        inputSizeBytes:  fileInfo.file.size,
+        outputSizeBytes: blob.size,
+        inputFormat:     sourceExt,
+        outputFormat:    targetExt,
+        providerId,
+        libraryId,
+        processingEnv:   "browser",
+        completedAt:     new Date().toISOString(),
+        durationMs,
+        available:       true,
+        expiresAt:       null,
+      };
+
+      // Store job in DownloadWorkflowManager
+      const blobUrl = createDownloadUrl(blob);
+      downloadWorkflowManager.storeJob(summary, blob, blobUrl);
+
       setProgress(100);
       setIsComplete(true);
+
+      // Redirect to /download page
+      const locale = pathname.split("/")[1] || "en";
+      setTimeout(() => {
+        router.push(`/${locale}/download?jobId=${summary.jobId}`);
+      }, 400);
     } catch (err) {
       toast.error("Conversion failed. Please try a different file or format.");
       console.error(err);
-    } finally {
       setIsConverting(false);
     }
   };
 
-  const handleDownload = () => {
-    if (!downloadUrl || !fileInfo) return;
-    try {
-      triggerFileDownload(downloadUrl, `converted.${targetExt}`);
-    } catch {
-      toast.error("Download failed");
+  const handleGoToDownload = () => {
+    // Fallback: if user clicks before auto-redirect
+    const locale = pathname.split("/")[1] || "en";
+    const url = downloadUrl;
+    if (url) {
+      // downloadUrl here is only set if we're in the old fallback path
+      router.push(`/${locale}/download`);
     }
   };
 
@@ -574,7 +613,7 @@ export default function UniversalConverter({ type }: Props) {
                 <div className="flex items-center justify-center gap-2 rounded-xl bg-green-50 border border-green-100 p-3 animate-in fade-in-0 zoom-in-95 duration-300">
                   <CheckCircle2 className="h-4 w-4 text-green-600" />
                   <span className="text-sm font-medium text-green-700">
-                    Conversion complete!
+                    Conversion complete! Redirecting to download…
                   </span>
                 </div>
               )}
@@ -601,11 +640,11 @@ export default function UniversalConverter({ type }: Props) {
                 ) : (
                   <Button
                     className={`flex-1 ${gradientClass} text-white hover:opacity-90 transition-opacity`}
-                    onClick={handleDownload}
-                    disabled={!downloadUrl}
+                    onClick={handleGoToDownload}
+                    data-testid="go-to-download-btn"
                   >
                     <Download className="mr-2 h-4 w-4" />
-                    Download .{targetExt.toUpperCase()}
+                    Go to Download
                   </Button>
                 )}
               </div>

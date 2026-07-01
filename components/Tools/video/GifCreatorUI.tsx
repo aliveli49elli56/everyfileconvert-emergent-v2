@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef } from 'react';
 import { Upload, Download, Loader2 } from 'lucide-react';
 interface Props { toolName?: string; onFileSelected?: (f: File) => void }
@@ -6,6 +7,8 @@ type Stage = 'idle'|'processing'|'done'|'error';
 function fmt(s:number){const m=Math.floor(s/60),sec=Math.floor(s%60);return`${m}:${String(sec).padStart(2,'0')}`;}
 
 export default function GifCreatorUI({ toolName, onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [file,setFile]=useState<File|null>(null);
   const [objUrl,setObjUrl]=useState<string|null>(null);
   const [duration,setDuration]=useState(10);
@@ -41,7 +44,25 @@ export default function GifCreatorUI({ toolName, onFileSelected }: Props) {
         options:{startTime: start, endTime: end, fps, width},
         onProgress:pct=>{setProgress(pct);setStageMsg(pct<25?'Loading FFmpeg…':'Creating GIF…');},
       });
-      setResultUrl(URL.createObjectURL(res.blob));setStage('done');
+      storeAndRedirect(res.blob, {
+
+        inputFilename:   file.name,
+
+        outputFilename:  `animated_${file.name.replace(/\.[^.]+$/,'.gif')}`,
+
+        inputFormat:     file.name.split('.').pop()?.toLowerCase() ?? 'mp4',
+
+        outputFormat:    'gif',
+
+        inputSizeBytes:  file.size,
+
+        providerId:      'Transcoder',
+
+        libraryId:       'ffmpeg-wasm',
+
+      });
+
+      setStage('done');
     }catch(e){setError(e instanceof Error?e.message:'Failed');setStage('error');}
   };
 

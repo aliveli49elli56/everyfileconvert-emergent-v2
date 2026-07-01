@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef } from 'react';
 import { FileAudio, Download, Loader2, Layers, X, GripVertical } from 'lucide-react';
 
@@ -6,6 +7,8 @@ interface Props { toolName?: string; onFileSelected?: (f: File) => void }
 type Stage = 'idle' | 'processing' | 'done' | 'error';
 
 export default function AudioMergerUI({ onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [files, setFiles]       = useState<File[]>([]);
   const [mode, setMode]         = useState<'concat' | 'overlay'>('concat');
   const [stage, setStage]       = useState<Stage>('idle');
@@ -40,7 +43,15 @@ export default function AudioMergerUI({ onFileSelected }: Props) {
         options: { mergeMode: mode },
         onProgress: (pct) => { setProgress(pct); setStageMsg(pct < 25 ? 'Loading FFmpeg…' : `Merging ${files.length} tracks…`); },
       });
-      setResult(URL.createObjectURL(res.blob));
+      storeAndRedirect(res.blob, {
+        inputFilename:  files[0]?.name ?? 'audio',
+        outputFilename: 'merged.mp3',
+        inputFormat:    files[0]?.name.split('.').pop()?.toLowerCase() ?? 'mp3',
+        outputFormat:   'mp3',
+        inputSizeBytes: files.reduce((s,f)=>s+f.size,0),
+        providerId:     'Transcoder',
+        libraryId:      'ffmpeg-wasm',
+      });
       setStage('done');
     } catch (e) { setError(e instanceof Error ? e.message : 'Failed'); setStage('error'); }
   };
@@ -122,8 +133,7 @@ export default function AudioMergerUI({ onFileSelected }: Props) {
         <button onClick={() => { setFiles([]); setResult(null); setStage('idle'); }}
           className="text-xs text-slate-400 hover:text-slate-600">← Clear all</button>
         {resultUrl
-          ? <a href={resultUrl} download="merged_audio.mp3" data-testid="merge-download"
-            className="flex items-center gap-1.5 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600"><Download className="h-4 w-4" />Download</a>
+          ? <span className="flex items-center gap-1.5 text-sm font-semibold text-emerald-600"><Download className="h-4 w-4"/>Redirecting…</span>
           : <button onClick={handleProcess} disabled={stage === 'processing' || files.length < 2} data-testid="merge-process"
             className="flex items-center gap-1.5 rounded-xl bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-cyan-600 disabled:opacity-40 transition-colors">
             {stage === 'processing' ? <><Loader2 className="h-4 w-4 animate-spin" />Merging…</> : <><Layers className="h-4 w-4" />Merge {files.length} Files</>}

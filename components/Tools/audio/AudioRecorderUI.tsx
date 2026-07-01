@@ -1,4 +1,5 @@
 'use client';
+import { useDownloadWorkflow } from '@/lib/hooks/useDownloadWorkflow';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Mic, Square, Download, Play, Pause } from 'lucide-react';
 
@@ -6,6 +7,8 @@ interface Props { toolName?: string; onFileSelected?: (f: File) => void }
 type Stage = 'idle' | 'recording' | 'paused' | 'done';
 
 export default function AudioRecorderUI({ onFileSelected }: Props) {
+  const { storeAndRedirect } = useDownloadWorkflow();
+
   const [stage, setStage]       = useState<Stage>('idle');
   const [time, setTime]         = useState(0);
   const [resultUrl, setResult]  = useState<string | null>(null);
@@ -61,8 +64,16 @@ export default function AudioRecorderUI({ onFileSelected }: Props) {
       rec.ondataavailable = e => { if (e.data.size > 0) chunksRef.current.push(e.data); };
       rec.onstop = () => {
         const blob = new Blob(chunksRef.current, { type: mimeType });
-        const url = URL.createObjectURL(blob);
-        setResult(url);
+        storeAndRedirect(blob, {
+          inputFilename:  `recording.${format.includes('webm') ? 'webm' : 'ogg'}`,
+          outputFilename: `recording.${format.includes('webm') ? 'webm' : 'ogg'}`,
+          inputFormat:    format.includes('webm') ? 'webm' : 'ogg',
+          outputFormat:   format.includes('webm') ? 'webm' : 'ogg',
+          inputSizeBytes: blob.size,
+          providerId:     'MediaRecorder',
+          libraryId:      'browser',
+        });
+        setStage('done');
         const file = new File([blob], `recording.${mimeType.includes('webm') ? 'webm' : 'ogg'}`, { type: mimeType });
         onFileSelected?.(file);
         setStage('done');
@@ -137,11 +148,7 @@ export default function AudioRecorderUI({ onFileSelected }: Props) {
               Record Again
             </button>
             {resultUrl && (
-              <a href={resultUrl} download={`recording.${format.includes('webm') ? 'webm' : 'ogg'}`}
-                data-testid="recorder-download"
-                className="flex items-center gap-2 rounded-2xl bg-emerald-500 px-6 py-3 text-sm font-semibold text-white hover:bg-emerald-600 transition-colors">
-                <Download className="h-4 w-4" />Download
-              </a>
+              <span className="flex items-center gap-1.5 text-sm font-semibold text-emerald-600"><Download className="h-4 w-4"/>Redirecting…</span>
             )}
           </>
         )}
