@@ -1,0 +1,65 @@
+# EveryFileConvert — Caddy Reverse Proxy Configuration
+# Automatic HTTPS with Let's Encrypt / ZeroSSL
+#
+# Usage:
+#   caddy run --config deployment/Caddyfile
+#   Or place in /etc/caddy/Caddyfile
+#
+# Replace: everyfileconvert.com with your actual domain
+# Caddy handles SSL renewal automatically.
+
+everyfileconvert.com, www.everyfileconvert.com {
+    # Automatic HTTPS — no certificate management needed
+    tls {
+        # Uses ZeroSSL by default, or Let's Encrypt
+        # To specify: issuer letsencrypt
+    }
+
+    # REQUIRED for EveryFileConvert WASM/SharedArrayBuffer:
+    header {
+        Cross-Origin-Opener-Policy  "same-origin"
+        Cross-Origin-Embedder-Policy "require-corp"
+        Cross-Origin-Resource-Policy "cross-origin"
+        Strict-Transport-Security    "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options       "nosniff"
+        X-Frame-Options              "DENY"
+        Referrer-Policy              "strict-origin-when-cross-origin"
+    }
+
+    # Next.js immutable static assets — long cache
+    @static {
+        path /_next/static/*
+    }
+    header @static Cache-Control "public, max-age=31536000, immutable"
+
+    # Large file uploads
+    request_body {
+        max_size 500MB
+    }
+
+    # Proxy to Next.js
+    reverse_proxy app:3000 {
+        header_up Host              {host}
+        header_up X-Real-IP         {remote_host}
+        header_up X-Forwarded-For   {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+
+        # Health checks
+        health_uri      /en
+        health_interval 30s
+        health_timeout  5s
+
+        # Load balancing (add more backends for horizontal scaling)
+        # to app_2:3000
+        # to app_3:3000
+    }
+
+    # Logs
+    log {
+        output file /var/log/caddy/everyfileconvert.log {
+            roll_size     100mb
+            roll_keep     5
+            roll_keep_for 720h
+        }
+    }
+}

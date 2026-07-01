@@ -1,0 +1,31 @@
+# EveryFileConvert — Development Dockerfile
+# Optimised for hot-reload development inside a container.
+#
+# Usage:
+#   docker compose -f docker-compose.dev.yml up
+#
+# Note: Docker is completely optional.
+# Running locally: npm install && npm run dev  (no Docker needed)
+
+FROM node:18-alpine
+
+RUN apk add --no-cache libc6-compat
+
+WORKDIR /app
+
+# Install dependencies first (cached layer)
+COPY package.json yarn.lock ./
+RUN yarn install --ignore-engines
+
+# Copy source (overridden by volume mount in docker-compose.dev.yml)
+COPY . .
+
+ENV NODE_ENV=development
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+EXPOSE 3000
+
+# Dev server with hot reload
+CMD ["node_modules/.bin/next", "dev", "-p", "3000"]

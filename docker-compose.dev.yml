@@ -1,0 +1,69 @@
+# EveryFileConvert — Development Docker Compose
+# Extends docker-compose.yml for local development with hot reload.
+#
+# Usage:
+#   docker compose -f docker-compose.dev.yml up
+#
+# NOTE: Running without Docker is preferred for development:
+#   npm install && npm run dev
+
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      NEXT_TELEMETRY_DISABLED: "1"
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      # All infrastructure flags false by default (browser mode)
+      NEXT_PUBLIC_ENABLE_AUTH: "false"
+      NEXT_PUBLIC_ENABLE_PAYMENTS: "false"
+      NEXT_PUBLIC_ENABLE_DB: "false"
+      NEXT_PUBLIC_ENABLE_REDIS: "false"
+      NEXT_PUBLIC_ENABLE_QUEUE: "false"
+      NEXT_PUBLIC_ENABLE_STORAGE: "false"
+      NEXT_PUBLIC_ENABLE_SEARCH: "false"
+      NEXT_PUBLIC_ENABLE_AI: "false"
+      NEXT_PUBLIC_ENABLE_CDN: "false"
+      NEXT_PUBLIC_ENABLE_NOTIFICATIONS: "false"
+      NEXT_PUBLIC_ENABLE_SERVER_PROVIDERS: "false"
+      NEXT_PUBLIC_ENABLE_MONITORING: "false"
+    volumes:
+      # Hot reload: mount source code as volume
+      - .:/app
+      # Exclude node_modules from the volume (use container's copy)
+      - /app/node_modules
+      # Exclude build output
+      - /app/.next
+    restart: unless-stopped
+
+  # Optional Postgres for local development
+  postgres:
+    image: postgres:16-alpine
+    profiles: ["postgres"]
+    environment:
+      POSTGRES_DB: everyfileconvert_dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: devpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - dev_postgres_data:/var/lib/postgresql/data
+
+  # Optional Redis for local development
+  redis:
+    image: redis:7-alpine
+    profiles: ["redis"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - dev_redis_data:/data
+
+volumes:
+  dev_postgres_data:
+  dev_redis_data:

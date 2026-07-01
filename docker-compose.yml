@@ -1,0 +1,141 @@
+# EveryFileConvert — Production Docker Compose
+# Version: Phase 6D-1
+#
+# Core services always start: app
+# Optional services use Docker Compose profiles:
+#   --profile postgres   → Start PostgreSQL
+#   --profile redis      → Start Redis
+#   --profile monitoring → Start monitoring stack
+#
+# Examples:
+#   docker compose up                              # App only (browser mode)
+#   docker compose --profile postgres up          # App + PostgreSQL
+#   docker compose --profile redis up             # App + Redis
+#   docker compose --profile postgres --profile redis up  # Full stack
+#
+# NOTE: The application runs in browser-only mode by default.
+# All ENABLE_* flags default to false unless explicitly set in .env
+
+version: '3.8'
+
+services:
+  # ── Application ─────────────────────────────────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+        NEXT_PUBLIC_ENABLE_AUTH: ${NEXT_PUBLIC_ENABLE_AUTH:-false}
+        NEXT_PUBLIC_ENABLE_PAYMENTS: ${NEXT_PUBLIC_ENABLE_PAYMENTS:-false}
+        NEXT_PUBLIC_ENABLE_DB: ${NEXT_PUBLIC_ENABLE_DB:-false}
+        NEXT_PUBLIC_ENABLE_REDIS: ${NEXT_PUBLIC_ENABLE_REDIS:-false}
+        NEXT_PUBLIC_ENABLE_SEARCH: ${NEXT_PUBLIC_ENABLE_SEARCH:-false}
+        NEXT_PUBLIC_ENABLE_AI: ${NEXT_PUBLIC_ENABLE_AI:-false}
+        NEXT_PUBLIC_ENABLE_CDN: ${NEXT_PUBLIC_ENABLE_CDN:-false}
+        NEXT_PUBLIC_ENABLE_QUEUE: ${NEXT_PUBLIC_ENABLE_QUEUE:-false}
+        NEXT_PUBLIC_ENABLE_STORAGE: ${NEXT_PUBLIC_ENABLE_STORAGE:-false}
+        NEXT_PUBLIC_ENABLE_NOTIFICATIONS: ${NEXT_PUBLIC_ENABLE_NOTIFICATIONS:-false}
+        NEXT_PUBLIC_ENABLE_SERVER_PROVIDERS: ${NEXT_PUBLIC_ENABLE_SERVER_PROVIDERS:-false}
+        NEXT_PUBLIC_ENABLE_MONITORING: ${NEXT_PUBLIC_ENABLE_MONITORING:-false}
+        NEXT_PUBLIC_ENABLE_LOCAL_STORAGE: ${NEXT_PUBLIC_ENABLE_LOCAL_STORAGE:-false}
+        NEXT_PUBLIC_ENABLE_DOCKER: ${NEXT_PUBLIC_ENABLE_DOCKER:-false}
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      # Infrastructure flags — all default to false (browser mode)
+      NEXT_PUBLIC_ENABLE_AUTH: ${NEXT_PUBLIC_ENABLE_AUTH:-false}
+      NEXT_PUBLIC_ENABLE_PAYMENTS: ${NEXT_PUBLIC_ENABLE_PAYMENTS:-false}
+      NEXT_PUBLIC_ENABLE_DB: ${NEXT_PUBLIC_ENABLE_DB:-false}
+      NEXT_PUBLIC_ENABLE_REDIS: ${NEXT_PUBLIC_ENABLE_REDIS:-false}
+      NEXT_PUBLIC_ENABLE_QUEUE: ${NEXT_PUBLIC_ENABLE_QUEUE:-false}
+      NEXT_PUBLIC_ENABLE_STORAGE: ${NEXT_PUBLIC_ENABLE_STORAGE:-false}
+      NEXT_PUBLIC_ENABLE_SEARCH: ${NEXT_PUBLIC_ENABLE_SEARCH:-false}
+      NEXT_PUBLIC_ENABLE_AI: ${NEXT_PUBLIC_ENABLE_AI:-false}
+      NEXT_PUBLIC_ENABLE_CDN: ${NEXT_PUBLIC_ENABLE_CDN:-false}
+      NEXT_PUBLIC_ENABLE_NOTIFICATIONS: ${NEXT_PUBLIC_ENABLE_NOTIFICATIONS:-false}
+      NEXT_PUBLIC_ENABLE_SERVER_PROVIDERS: ${NEXT_PUBLIC_ENABLE_SERVER_PROVIDERS:-false}
+      NEXT_PUBLIC_ENABLE_MONITORING: ${NEXT_PUBLIC_ENABLE_MONITORING:-false}
+      NEXT_PUBLIC_ENABLE_LOCAL_STORAGE: ${NEXT_PUBLIC_ENABLE_LOCAL_STORAGE:-false}
+      NEXT_PUBLIC_ENABLE_DOCKER: ${NEXT_PUBLIC_ENABLE_DOCKER:-false}
+      # Database (only used when ENABLE_DB=true)
+      DATABASE_URL: ${DATABASE_URL:-}
+      # Redis (only used when ENABLE_REDIS=true)
+      REDIS_URL: ${REDIS_URL:-}
+      # Server Provider API (only used when ENABLE_SERVER_PROVIDERS=true)
+      SERVER_PROVIDER_API_URL: ${SERVER_PROVIDER_API_URL:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+        required: false
+      redis:
+        condition: service_healthy
+        required: false
+    restart: unless-stopped
+    networks:
+      - everyfileconvert
+
+  # ── PostgreSQL (optional — profile: postgres) ──────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    profiles: ["postgres"]
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-everyfileconvert}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme_in_production}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./deployment/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - everyfileconvert
+
+  # ── Redis (optional — profile: redis) ─────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    profiles: ["redis"]
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - everyfileconvert
+
+  # ── Nginx Reverse Proxy (optional — profile: nginx) ───────────────────────
+  nginx:
+    image: nginx:alpine
+    profiles: ["nginx"]
+    volumes:
+      - ./deployment/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - app
+    restart: unless-stopped
+    networks:
+      - everyfileconvert
+
+networks:
+  everyfileconvert:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
